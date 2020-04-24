@@ -27,6 +27,11 @@ git remote set-url origin git@github.com:xxx/xxx.git
 git remote -v
 ```
 
+**Get latest tag/version**
+```bash
+git describe --tags --abbrev=0
+```
+
 
 #### Bump version
 
