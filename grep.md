@@ -3,8 +3,7 @@
 > 👋Errors, improvements or other cool stuff? Let me know! 😀
 
 
-**Extract only the part that matches.**
-
+**Extract only the part that matches**
 ```bash
 grep -oP "@version \K.+$" file                    # Keep only the part after the \K.
 grep -oP "(?<=text before).+(?=text after)" file  # Extract the part in between.

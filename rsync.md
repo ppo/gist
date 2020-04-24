@@ -3,22 +3,20 @@
 > 👋Errors, improvements or other cool stuff? Let me know! 😀
 
 
-**Rsync update and delete, recursive, and preserve all (times, permissions, owner/group).**  
+**Rsync update and delete, recursive, and preserve all (times, permissions, owner/group)**  
 `rsync -au --delete --progress <FROM> <TO>`
 
-
-**Rsync only the specified files and folders (with their content).**  
+**Rsync only the specified files and folders (with their content)**  
 `rsync --include-from=rsync-files.txt <FROM> <TO>`
 
 With `rsync-files.txt`:
-
 ```
 my-dir/
 my-file.txt
 - /*
 ```
 
-**Short/clean output format (opeation and short filename).**  
+**Short/clean output format (operation and short filename)**  
 `rsync --out-format="%o %n"`
 
 [Syntax reference](https://download.samba.org/pub/rsync/rsyncd.conf.html) (under "log format")  

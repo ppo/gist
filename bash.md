@@ -3,24 +3,22 @@
 > 👋Errors, improvements or other cool stuff? Let me know! 😀
 
 
-**Real path of current file.**
+**Real path of current file**
 ```bash
 __FILE__=$(realpath "${BASH_SOURCE[0]}")
 ```
 
-**Directory of current file.**
+**Directory of current file**
 ```bash
 __DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 ```
 
-**Script is being executed or sourced?**
+**Is script being executed or sourced?**
 ```bash
 [ "${BASH_SOURCE}" == "$0" ] && echo "Executed" || echo "Sourced"
 ```
 
-
-**Positional and special parameters.**
-
+**Positional and special parameters**  
 See https://www.tldp.org/LDP/abs/html/internalvariables.html
 
 | Expr    | Description                                                                               |
@@ -41,31 +39,30 @@ See https://www.tldp.org/LDP/abs/html/internalvariables.html
 | --      | Means the end of options; allowing positional arguments beginning with a dash.            |
 
 
-**Abort script if command execution failed.**  
+**Abort script if command execution failed**
 ```bash
 [ $? != 0 ] && { echo -e "Command failed, abort."; exit $?; }
 ```
 
-**Change folder.**  
+**Change folder**  
 ```bash
 mkdir -p foo/bar && cd "$_"  # Create and go to folder.
 cd - &>/dev/null             # Return to previous folder.
 ```
 
-
-**Iterate/loop over parameters.**  
+**Iterate/loop over parameters**  
 ```bash
 for arg in "$@"; do echo $arg; done
 ```
 
-**Shift parameters (i.e. remove the first one).**  
+**Shift parameters (i.e. remove the first one)**  
 _Calling `script.sh a b c` outputs `Before: 3 a b c / After: 2 b c`._
 
 ```bash
 echo -n "Before: $# $@"; shift; echo " / After: $# $@"
 ```  
 
-**Iterate/loop over parameters, emptying them.**  
+**Iterate/loop over parameters, emptying them**  
 _Calling `script.sh a b c` outputs `Before: 3 a b c / After: 0`._
 
 ```bash
@@ -74,7 +71,7 @@ while (( "$#" )); do echo -n " $1"; shift; done
 echo " / After: $# $@"
 ```
 
-**Iterate/loop over lines of a file / Read file line by line.**  
+**Iterate/loop over lines of a file / Read file line by line**  
 1. Simple but last line skipped if no `LF`.  
 2. `|| [[ -n $line ]]` avoids the last line of the file to be skipped if there is no trailing line feed.
 
@@ -83,13 +80,12 @@ while read line; do echo "$line"; done < file.txt                        # 1
 cat file.txt | while read line || [[ -n $line ]]; do echo "$line"; done  # 2
 ```
 
-**Ternary operator.**  
+**Ternary operator**  
 ```bash
 [ condition ] && echo "yes" || echo "no"
 ```
 
-
-**Switch/case statement.**
+**Switch/case statement**
 ```bash
 shopt -s extglob  # Required only for extended pattern matching, see below.
 case expression in
@@ -121,7 +117,7 @@ See: https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html#Pa
 | `!()` | anything except the pattern         |
 
 
-**Compound comparison.**  
+**Compound comparison**  
 `!` (not): Reverses the test.
 
 ```bash
@@ -129,7 +125,7 @@ See: https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html#Pa
 [[ condition1 || condition2 ]] or [ "$expr1" -o "$expr2" ]  # OR   
 ```
 
-**File test operators.**  
+**File test operators**  
 See: https://tldp.org/LDP/abs/html/fto.html
 
 | Expr        | Description                                                  |
@@ -150,15 +146,16 @@ See: https://tldp.org/LDP/abs/html/fto.html
 | `f1 -ot f2` | File f1 is older than f2.                                    |
 
 
-**Integer and string operators.**  
-See: https://tldp.org/LDP/abs/html/comparison-ops.html  
+**Integer and string operators**  
+See: https://tldp.org/LDP/abs/html/comparison-ops.html
+
 Integer comparisons: equal, not equal, greater, greater or equal, less, less or equal.
 ```bash
 -eq, -ne, -gt, -ge, -lt, -le  # With [ "$a" -eq "$b" ]
 <, <=, >, >=  # With (("$a" < "$b"))
 ```
 
-**String comparison.**
+**String comparison**
 
 | Expr               | Description                                                                          |
 | ------------------ | ------------------------------------------------------------------------------------ |
@@ -174,7 +171,7 @@ Integer comparisons: equal, not equal, greater, greater or equal, less, less or 
 | `-n`               | String is not null. String MUST be quoted.                                           |
 
 
-**Parameter substitution.**
+**Parameter substitution**  
 See: https://www.tldp.org/LDP/abs/html/parameter-substitution.html
 
 | Expr                   | Description                                                |
@@ -185,7 +182,7 @@ See: https://www.tldp.org/LDP/abs/html/parameter-substitution.html
 | `${variable:-default}` | With `":[-=+]"`, condition takes also "declared but null". |
 
 
-**String manipulations.**  
+**String manipulations**  
 See: https://www.tldp.org/LDP/abs/html/string-manipulation.html
 
 | Expr                               | Description                                                 |
@@ -210,7 +207,8 @@ See: https://www.tldp.org/LDP/abs/html/string-manipulation.html
 | `${var,}`                          | Lowercase first char.                                       |
 | `${var,,}`                         | Lowercase all chars.                                        |
 
-**Sequences.**  
+
+**Sequences**  
 
 | Expr                 | Description                                 |
 | -------------------- | ------------------------------------------- |
@@ -225,7 +223,7 @@ See: https://www.tldp.org/LDP/abs/html/string-manipulation.html
 | `{000..10}`          | 000 001 002 003 004 005 006 007 008 009 010 |
 
 
-**Extract directory, filename and extension.**
+**Extract directory, filename and extension**
 ```bash
 path="/path/to/foo.txt"
 directory=$(dirname "$path")  # /path/to
@@ -234,8 +232,7 @@ filename="${file%.*}"         # foo
 extension="${file##*.}"       # txt
 ```
 
-
-**Arithmetic expansion and evaluation.**
+**Arithmetic expansion and evaluation**
 ```bash
 (( a = 23 ))
 (( t = a < 45 ? 7 : 11 ))  # Assignment with ternary operator.
@@ -243,8 +240,7 @@ extension="${file##*.}"       # txt
 (( --a ))
 ```
 
-
-**Execute command(s) on multiple items.**
+**Execute command(s) on multiple items**
 ```bash
 for f in `ls *.jpeg`; do mv $f ${f/%.jpeg/.jpg}; done
 for e in a b c; do command1 $e; command2; done
@@ -254,8 +250,7 @@ for i in {1..10}; do wget -o $i.txt https://example.com/data?id=$i; done
 find . -name "*.png" -print0 | while read -d $'\0' f; do mv "$f" "${f/find/replace}"; done
 ```
 
-
-**Heredoc, allowing to pass a multiline text to an interactive command.**  
+**Heredoc, allowing to pass a multiline text to an interactive command**  
 ⚠️ Inside the `EOF`s, the first character is a `\t` (tab).
 
 ```bash
@@ -266,14 +261,14 @@ find . -name "*.png" -print0 | while read -d $'\0' f; do mv "$f" "${f/find/repla
 EOF
 ```
 
-**To append a multine text to a file.**
+**To append a multiline text to a file**
 ```bash
 cat >> /path/to/file <<EOF
 ...
 EOF
 ```
 
-**To pass a multine text as argument.**
+**To pass a multiline text as argument**
 ```bash
 <COMMAND> --arg="$(cat <<EOF
 ...
@@ -281,19 +276,18 @@ EOF
 )"
 ```
 
-
-**Ask the user for input.**
+**Ask the user for input**
 ```bash
 read -p "Username: " username_var
 read -sp "Password: " password_var
 ```
 
-**Ask a question and answer below (with a leading `>`).**
+**Ask a question and answer below (with a leading `>`)**
 ```bash
 echo -ne "Question?\n> "; read
 ```
 
-**With `-n 1`, return/submit automatically when a/one character is typed.**  
+**With `-n 1`, return/submit automatically when a/one character is typed**  
 As user's input is displayed, use an `echo` to go to a new line after read  
 but only if the answer is not empty (empty means user pressed enter).
 
@@ -315,7 +309,7 @@ ask_yesno "Do you want to do this?"
 ```
 
 
-**Loop on a question until it's valid.**
+**Loop on a question until it's valid**
 ```bash
 REPLY=
 while [ -z "$REPLY" ]; do  # Here simply if not empty.
@@ -323,8 +317,7 @@ while [ -z "$REPLY" ]; do  # Here simply if not empty.
 done
 ```
 
-
-**Current date/time.**
+**Current date/time**
 ```bash
 date +"%y%m%d-%H%M%S"
 ```

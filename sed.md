@@ -2,6 +2,7 @@
 
 > 👋Errors, improvements or other cool stuff? Let me know! 😀
 
+
 ```bash
 sed 's/find/replace/g'         # Find & replace.
 sed '/filter/s/find/replace/'  # Find & replace in lines matching filter.
@@ -18,14 +19,14 @@ sed 's/^/replace/'  # Prepend to file.
 sed '\$atext'       # Append to file.
 ```
 
-**Find & replace in place.**
+**Find & replace in place**
 ```bash
 sed -i 's/find/replace/g' -i file
 sed -i '' -e 's/find/replace/g' file          # If error with previous command on Mac.
 sed -i'.original' -e 's/find/replace/g' file  # Creates a backup "file.original". /!\ No space between -i and ''.
 ```
 
-**Find & replace in multiple files.**
+**Find & replace in multiple files**
 ```bash
 find . -type f -name "*.py" -exec sed -i "s/find/replace/g" {} \;
 grep -rl "list files containing this" . | xargs sed -i "" -e "s/find/replace/g"

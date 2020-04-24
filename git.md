@@ -3,23 +3,22 @@
 > 👋Errors, improvements or other cool stuff? Let me know! 😀
 
 
-**Clone a repository in a folder.**
+**Clone a repository in a folder**
 ```bash
 git clone git@github.com:xxx/xxx.git dst_dir
 ```
 
-**Initialize a folder.**
+**Initialize a folder**
 ```bash
 git init
 ```
 
-**Add a repository to an initialized folder.**
+**Add a repository to an initialized folder**
 ```bash
 git remote add origin git@github.com:xxx/xxx.git
 git pull origin master
 git branch --set-upstream-to=origin/master master
 ```
-
 
 **Change remote URLs**
 ```bash
