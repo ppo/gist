@@ -3,86 +3,48 @@
 > 👋Errors, improvements or other cool stuff? Let me know! 😀
 
 
-**Real path of current file**
-```bash
-__FILE__=$(realpath "${BASH_SOURCE[0]}")
-```
-
-**Directory of current file**
-```bash
-__DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
-```
-
-**Is script being executed or sourced?**
-```bash
-[ "${BASH_SOURCE}" == "$0" ] && echo "Executed" || echo "Sourced"
-```
-
-**Positional and special parameters**  
-See https://www.tldp.org/LDP/abs/html/internalvariables.html
-
-| Expr    | Description                                                                               |
-| ------- | ----------------------------------------------------------------------------------------- |
-| $0      | Script name.                                                                              |
-| $1, $2… | Positional parameter, passed from command line or to a function, or set to a variable.    |
-| $#      | Number of positional parameters.                                                          |
-| "$*"    | All of the positional parameters, seen as a single word. MUST be quoted.                  |
-| "$@"    | Same as "$*" but each parameter is passed on intact, without interpretation or expansion. |
-|         |                                                                                           |
-| $?      | Most recent foreground pipeline exit status.                                              |
-| $_      | The last argument of the previous command.                                                |
-| $-      | Flags passed to script (using set).                                                       |
-|         |                                                                                           |
-| $$      | PID of the current shell (not subshell).                                                  |
-| $!      | Is the PID of the most recent background command.                                         |
-|         |                                                                                           |
-| --      | Means the end of options; allowing positional arguments beginning with a dash.            |
-
-
-**Abort script if command execution failed**
-```bash
-[ $? != 0 ] && { echo -e "Command failed, abort."; exit $?; }
-```
-
 **Change folder**  
 ```bash
 mkdir -p foo/bar && cd "$_"  # Create and go to folder.
 cd - &>/dev/null             # Return to previous folder.
 ```
 
-**Iterate/loop over parameters**  
-```bash
-for arg in "$@"; do echo $arg; done
-```
-
-**Shift parameters (i.e. remove the first one)**  
-_Calling `script.sh a b c` outputs `Before: 3 a b c / After: 2 b c`._
-
-```bash
-echo -n "Before: $# $@"; shift; echo " / After: $# $@"
-```  
-
-**Iterate/loop over parameters, emptying them**  
-_Calling `script.sh a b c` outputs `Before: 3 a b c / After: 0`._
-
-```bash
-echo -n "Before: $#"
-while (( "$#" )); do echo -n " $1"; shift; done
-echo " / After: $# $@"
-```
-
-**Iterate/loop over lines of a file / Read file line by line**  
-1. Simple but last line skipped if no `LF`.  
-2. `|| [[ -n $line ]]` avoids the last line of the file to be skipped if there is no trailing line feed.
-
-```bash
-while read line; do echo "$line"; done < file.txt                        # 1
-cat file.txt | while read line || [[ -n $line ]]; do echo "$line"; done  # 2
-```
-
 **Ternary operator**  
 ```bash
 [ condition ] && echo "yes" || echo "no"
+```
+
+**String comparison**
+
+| Expr               | Description                                                                          |
+| ------------------ | ------------------------------------------------------------------------------------ |
+| `=`, `==`, `!=`    | With `[ "$a" == "$b" ]` or `[ "$a" = "$b" ]` (whitespaces around `=` in single `[]`) |
+|                    | ⚠️ `==` behaves differently within `[[ ]]` and `[ ]`                                 |
+| `[[ $a == z* ]]`   | True if `$a` starts with an `"z"` (pattern matching).                                |
+| `[[ $a == "z*" ]]` | True if `$a` is equal to `z*` (literal matching).                                    |
+| `[ $a == z* ]`     | File globbing and word splitting take place.                                         |
+| `[ "$a" == "z*" ]` | True if `$a` is equal to `z*` (literal matching).                                    |
+| `<`, `>`           | In ASCII alphabetical order. Must be escaped in `[ "$a" \< "$b" ]`                   |
+|                    |                                                                                      |
+| `-z`               | String is null, i.e. zero length.                                                    |
+| `-n`               | String is not null. String MUST be quoted.                                           |
+
+
+**Integer and string operators**  
+See: https://tldp.org/LDP/abs/html/comparison-ops.html
+
+Integer comparisons: equal, not equal, greater, greater or equal, less, less or equal.
+```bash
+-eq, -ne, -gt, -ge, -lt, -le  # With [ "$a" -eq "$b" ]
+<, <=, >, >=  # With (("$a" < "$b"))
+```
+
+**Compound comparison**  
+`!` (not): Reverses the test.
+
+```bash
+[[ condition1 && condition2 ]] or [ "$expr1" -a "$expr2" ]  # AND
+[[ condition1 || condition2 ]] or [ "$expr1" -o "$expr2" ]  # OR   
 ```
 
 **Switch/case statement**
@@ -115,60 +77,6 @@ See: https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html#Pa
 | `+()` | one or more occurrences of pattern  |
 | `@()` | one occurrence of pattern           |
 | `!()` | anything except the pattern         |
-
-
-**Compound comparison**  
-`!` (not): Reverses the test.
-
-```bash
-[[ condition1 && condition2 ]] or [ "$expr1" -a "$expr2" ]  # AND
-[[ condition1 || condition2 ]] or [ "$expr1" -o "$expr2" ]  # OR   
-```
-
-**File test operators**  
-See: https://tldp.org/LDP/abs/html/fto.html
-
-| Expr        | Description                                                  |
-| ----------- | ------------------------------------------------------------ |
-| `-e`        | File exists.                                                 |
-| `-f`        | File is a regular file.                                      |
-| `-d`        | File is a directory.                                         |
-| `-s`        | File is not zero size.                                       |
-|             |                                                              |
-| `-h`        | File is a symbolic link                                      |
-| `-L`        | File is a symbolic link                                      |
-|             |                                                              |
-| `-r`        | File has read permission (for the user running the test).    |
-| `-w`        | File has write permission (for the user running the test).   |
-| `-x`        | File has execute permission (for the user running the test). |
-|             |                                                              |
-| `f1 -nt f2` | File f1 is newer than f2.                                    |
-| `f1 -ot f2` | File f1 is older than f2.                                    |
-
-
-**Integer and string operators**  
-See: https://tldp.org/LDP/abs/html/comparison-ops.html
-
-Integer comparisons: equal, not equal, greater, greater or equal, less, less or equal.
-```bash
--eq, -ne, -gt, -ge, -lt, -le  # With [ "$a" -eq "$b" ]
-<, <=, >, >=  # With (("$a" < "$b"))
-```
-
-**String comparison**
-
-| Expr               | Description                                                                          |
-| ------------------ | ------------------------------------------------------------------------------------ |
-| `=`, `==`, `!=`    | With `[ "$a" == "$b" ]` or `[ "$a" = "$b" ]` (whitespaces around `=` in single `[]`) |
-|                    | ⚠️ `==` behaves differently within `[[ ]]` and `[ ]`                                 |
-| `[[ $a == z* ]]`   | True if `$a` starts with an `"z"` (pattern matching).                                |
-| `[[ $a == "z*" ]]` | True if `$a` is equal to `z*` (literal matching).                                    |
-| `[ $a == z* ]`     | File globbing and word splitting take place.                                         |
-| `[ "$a" == "z*" ]` | True if `$a` is equal to `z*` (literal matching).                                    |
-| `<`, `>`           | In ASCII alphabetical order. Must be escaped in `[ "$a" \< "$b" ]`                   |
-|                    |                                                                                      |
-| `-z`               | String is null, i.e. zero length.                                                    |
-| `-n`               | String is not null. String MUST be quoted.                                           |
 
 
 **Parameter substitution**  
@@ -238,6 +146,7 @@ extension="${file##*.}"       # txt
 (( t = a < 45 ? 7 : 11 ))  # Assignment with ternary operator.
 (( a++ ))
 (( --a ))
+v=$(( a++ % 3 ))
 ```
 
 **Execute command(s) on multiple items**
@@ -245,9 +154,6 @@ extension="${file##*.}"       # txt
 for f in `ls *.jpeg`; do mv $f ${f/%.jpeg/.jpg}; done
 for e in a b c; do command1 $e; command2; done
 for i in {1..10}; do wget -o $i.txt https://example.com/data?id=$i; done
-
-# If file names contain spaces.
-find . -name "*.png" -print0 | while read -d $'\0' f; do mv "$f" "${f/find/replace}"; done
 ```
 
 **Heredoc, allowing to pass a multiline text to an interactive command**  
@@ -261,60 +167,12 @@ find . -name "*.png" -print0 | while read -d $'\0' f; do mv "$f" "${f/find/repla
 EOF
 ```
 
-**To append a multiline text to a file**
-```bash
-cat >> /path/to/file <<EOF
-...
-EOF
-```
-
 **To pass a multiline text as argument**
 ```bash
 <COMMAND> --arg="$(cat <<EOF
 ...
 EOF
 )"
-```
-
-**Ask the user for input**
-```bash
-read -p "Username: " username_var
-read -sp "Password: " password_var
-```
-
-**Ask a question and answer below (with a leading `>`)**
-```bash
-echo -ne "Question?\n> "; read
-```
-
-**With `-n 1`, return/submit automatically when a/one character is typed**  
-As user's input is displayed, use an `echo` to go to a new line after read  
-but only if the answer is not empty (empty means user pressed enter).
-
-```bash
-ask_yesno() {
-  REPLY=
-  printf "$1 (y/n) "
-  while [ -z "$REPLY" ]; do
-    read -n 1
-    [[ "${REPLY,,}" =~ ^(y|n)$ ]] \
-      && { [ "${REPLY,,}" == "y" ] || REPLY="n"; } \
-      || { [ -n "$REPLY" ] && echo; REPLY=; printf "y or n? "; }
-  done
-  echo
-}
-
-ask_yesno "Do you want to do this?"
-[ $REPLY == "y" ] && echo "yes" || echo "no"
-```
-
-
-**Loop on a question until it's valid**
-```bash
-REPLY=
-while [ -z "$REPLY" ]; do  # Here simply if not empty.
-  read -p "Question: "
-done
 ```
 
 **Current date/time**
