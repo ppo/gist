@@ -3,7 +3,8 @@
 > 👋Errors, improvements or other cool stuff? Let me know! 😀
 
 
-**File test operators**  
+### File test operators
+
 See: https://tldp.org/LDP/abs/html/fto.html
 
 | Expr        | Description                                                  |
@@ -24,7 +25,9 @@ See: https://tldp.org/LDP/abs/html/fto.html
 | `f1 -ot f2` | File f1 is older than f2.                                    |
 
 
-**Iterate/loop over lines of a file / Read file line by line**  
+
+### Iterate/loop over lines of a file / Read file line by line
+
 1. Simple but last line skipped if no `LF`.  
 2. `|| [[ -n $line ]]` avoids the last line of the file to be skipped if there is no trailing line feed.
 
@@ -33,12 +36,16 @@ while read line; do echo "$line"; done < file.txt                        # 1
 cat file.txt | while read line || [[ -n $line ]]; do echo "$line"; done  # 2
 ```
 
-**Iterate/loop over files with filename containing spaces.**
+
+### Iterate/loop over files with filename containing spaces
+
 ```bash
 find . -maxdepth 1 -name '*.txt' | while read f; do echo $f; done
 ```
 
-**Rename daily files with week/day `W00D0`.**
+
+### Rename daily files with week/day `W00D0`
+
 ```bash
 w=1; d=1
 find . -maxdepth 1 -name '*.mp3' | sort | while read f; do
@@ -48,7 +55,9 @@ find . -maxdepth 1 -name '*.mp3' | sort | while read f; do
 done
 ```
 
-**Append a multiline text to a file**
+
+### Append a multiline text to a file
+
 ```bash
 cat >> /path/to/file <<EOF
 ...

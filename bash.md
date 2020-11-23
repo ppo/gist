@@ -3,18 +3,22 @@
 > 👋Errors, improvements or other cool stuff? Let me know! 😀
 
 
-**Change folder**  
+### Change folder
+
 ```bash
 mkdir -p foo/bar && cd "$_"  # Create and go to folder.
 cd - &>/dev/null             # Return to previous folder.
 ```
 
-**Ternary operator**  
+
+### Ternary operator
+
 ```bash
 [ condition ] && echo "yes" || echo "no"
 ```
 
-**String comparison**
+
+### String comparison
 
 | Expr               | Description                                                                          |
 | ------------------ | ------------------------------------------------------------------------------------ |
@@ -30,7 +34,8 @@ cd - &>/dev/null             # Return to previous folder.
 | `-n`               | String is not null. String MUST be quoted.                                           |
 
 
-**Integer and string operators**  
+### Integer and string operators
+
 See: https://tldp.org/LDP/abs/html/comparison-ops.html
 
 Integer comparisons: equal, not equal, greater, greater or equal, less, less or equal.
@@ -39,7 +44,9 @@ Integer comparisons: equal, not equal, greater, greater or equal, less, less or 
 <, <=, >, >=  # With (("$a" < "$b"))
 ```
 
-**Compound comparison**  
+
+### Compound comparison
+
 `!` (not): Reverses the test.
 
 ```bash
@@ -47,7 +54,9 @@ Integer comparisons: equal, not equal, greater, greater or equal, less, less or 
 [[ condition1 || condition2 ]] or [ "$expr1" -o "$expr2" ]  # OR   
 ```
 
-**Switch/case statement**
+
+### Switch/case statement
+
 ```bash
 shopt -s extglob  # Required only for extended pattern matching, see below.
 case expression in
@@ -79,7 +88,8 @@ See: https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html#Pa
 | `!()` | anything except the pattern         |
 
 
-**Parameter substitution**  
+### Parameter substitution
+
 See: https://www.tldp.org/LDP/abs/html/parameter-substitution.html
 
 | Expr                   | Description                                                |
@@ -90,7 +100,8 @@ See: https://www.tldp.org/LDP/abs/html/parameter-substitution.html
 | `${variable:-default}` | With `":[-=+]"`, condition takes also "declared but null". |
 
 
-**String manipulations**  
+### String manipulations
+
 See: https://www.tldp.org/LDP/abs/html/string-manipulation.html
 
 | Expr                               | Description                                                 |
@@ -116,7 +127,7 @@ See: https://www.tldp.org/LDP/abs/html/string-manipulation.html
 | `${var,,}`                         | Lowercase all chars.                                        |
 
 
-**Sequences**  
+### Sequences
 
 | Expr                 | Description                                 |
 | -------------------- | ------------------------------------------- |
@@ -131,7 +142,8 @@ See: https://www.tldp.org/LDP/abs/html/string-manipulation.html
 | `{000..10}`          | 000 001 002 003 004 005 006 007 008 009 010 |
 
 
-**Extract directory, filename and extension**
+### Extract directory, filename and extension
+
 ```bash
 path="/path/to/foo.txt"
 directory=$(dirname "$path")  # /path/to
@@ -140,7 +152,9 @@ filename="${file%.*}"         # foo
 extension="${file##*.}"       # txt
 ```
 
-**Arithmetic expansion and evaluation**
+
+### Arithmetic expansion and evaluation
+
 ```bash
 (( a = 23 ))
 (( t = a < 45 ? 7 : 11 ))  # Assignment with ternary operator.
@@ -149,14 +163,18 @@ extension="${file##*.}"       # txt
 v=$(( a++ % 3 ))
 ```
 
-**Execute command(s) on multiple items**
+
+### Execute command(s) on multiple items
+
 ```bash
 for f in `ls *.jpeg`; do mv $f ${f/%.jpeg/.jpg}; done
 for e in a b c; do command1 $e; command2; done
 for i in {1..10}; do wget -o $i.txt https://example.com/data?id=$i; done
 ```
 
-**Heredoc, allowing to pass a multiline text to an interactive command**  
+
+### Heredoc, allowing to pass a multiline text to an interactive command
+
 ⚠️ Inside the `EOF`s, the first character is a `\t` (tab).
 
 ```bash
@@ -167,7 +185,9 @@ for i in {1..10}; do wget -o $i.txt https://example.com/data?id=$i; done
 EOF
 ```
 
-**To pass a multiline text as argument**
+
+### To pass a multiline text as argument
+
 ```bash
 <COMMAND> --arg="$(cat <<EOF
 ...
@@ -175,7 +195,9 @@ EOF
 )"
 ```
 
-**Current date/time**
+
+### Current date/time
+
 ```bash
 date +"%y%m%d-%H%M%S"
 ```

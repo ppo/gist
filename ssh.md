@@ -24,7 +24,6 @@ UseKeychain yes
 # Default identity.
 IdentityFile ~/.ssh/KEYNAME
 
-
 # My server
 Host my-shortcut example.com 123.123.123.123
   HostName example.com

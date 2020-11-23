@@ -6,12 +6,15 @@
 [MKVToolNix](https://mkvtoolnix.download/) – Matroska tools for Linux/Unix and Windows
 
 
-**View info about a file**
+### View info about a file
+
 ```bash
 mkvinfo <filename.mkv>
 ```
 
-**Modify default audio &amp; subtitle tracks**
+
+### Modify default audio &amp; subtitle tracks
+
 _The track identifier is not the track number but (a|s) and its index starting from 1._
 
 ```bash
@@ -21,7 +24,9 @@ mkvpropedit <filename.mkv> \
   --edit track:s1 --set flag-default=0    # Disable first subtitles (s1).
 ```
 
-**Extract subtitles:**  
+
+### Extract subtitles
+
 _Use `mkvinfo` to retrieve `track_number` (use the value specified for mkvextract)._
 ```bash
 mkvextract tracks <filename.mkv> <track_number>:<subtitles.srt>
