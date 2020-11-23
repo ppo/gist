@@ -41,13 +41,19 @@ See https://www.tldp.org/LDP/abs/html/internalvariables.html
 
 **Abort script if command execution failed**
 ```bash
+set -e  # Exit if any command fails. Use `set +e` to turn it off.
 [ $? != 0 ] && { echo -e "Command failed, abort."; exit $?; }
 ```
 
 
 ### Parameters
 
-**Iterate/loop over parameters**  
+**Easy check for a given parameter**
+```bash
+[[ "$*" =~ "--force" ]] && FORCE=true || FORCE=false
+```
+
+**Iterate/loop over parameters**
 ```bash
 for arg in "$@"; do echo $arg; done
 ```
@@ -84,11 +90,28 @@ read -sp "Password: " password_var
 echo -ne "Question?\n> "; read
 ```
 
+
+```bash
+# Ask user for input.
+# Usage: `ask_input "<question>" ["<comment>" [<blank>]]; name="$REPLY"`
+# Options: Define `<blank>` as `1` to not allow empty answers.
+ask_input() {
+  _read_input() { printf "\e[32m> "; read; printf "\e[0m"; }
+  printf "\e[1;37m${1}\e[0m\n"; [ -n "$2" ] && printf "${2}\e[0m\n"
+  [ "$3" == "1" ] \
+    && { REPLY=; while [ -z "$REPLY" ]; do _read_input; done; } \
+    || _read_input
+}
+```
+
+
 **With `-n 1`, return/submit automatically when a/one character is typed**  
 As user's input is displayed, use an `echo` to go to a new line after read  
 but only if the answer is not empty (empty means user pressed enter).
 
 ```bash
+# Ask user to answer either yes or no.
+# Usage: `ask_yesno "Do you want to do this?"; [ $REPLY == "y" ] && echo "yes" || echo "no"`
 ask_yesno() {
   REPLY=
   printf "$1 (y/n) "
@@ -100,9 +123,6 @@ ask_yesno() {
   done
   echo
 }
-
-ask_yesno "Do you want to do this?"
-[ $REPLY == "y" ] && echo "yes" || echo "no"
 ```
 
 **Loop on a question until it's valid**

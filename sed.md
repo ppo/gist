@@ -22,11 +22,11 @@ sed '\$atext'       # Append to file.
 **Find & replace in place**
 ```bash
 sed -i 's/find/replace/g' -i file
-sed -i '' -e 's/find/replace/g' file          # If error with previous command on Mac.
-sed -i'.original' -e 's/find/replace/g' file  # Creates a backup "file.original". /!\ No space between -i and ''.
+sed -i '' -e 's/find/replace/g' file           # If error with previous command on Mac.
+sed -i '.original' -e 's/find/replace/g' file  # Creates a backup "file.original". /!\ No space between -i and ''.
 ```
 
-**Find & replace in multiple files**
+**Find & replace in multiple files** 
 ```bash
 find . -type f -name "*.py" -exec sed -i "s/find/replace/g" {} \;
 grep -rl "list files containing this" . | xargs sed -i "" -e "s/find/replace/g"
@@ -36,4 +36,17 @@ grep -rl "list files containing this" . | xargs sed -i "" -e "s/find/replace/g"
 ```bash
 sed -e 'cmd1' -e 'cmd2' -i file
 sed 'cmd1,cmd2' file
+```
+
+**Replace from-to**
+```bash
+sed -i '/from_pattern/, /to_pattern/ s/find/replace/' file
+sed -i '/VARNAME = {/, /^}/ s/^/# /' file  # Example: Commenting a dictionary defined on several lines.
+```
+
+**Replace a block of text with the content of a file**  
+_Source: https://stackoverflow.com/a/2700594/101831_
+
+```bash
+sed -i '' -ne '/BEGIN_PATTERN/ {' -e 'p; r replace_file.txt' -e ':a; n; /END_PATTERN/ {p; b}; ba' -e '}; p' file
 ```

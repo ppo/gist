@@ -32,6 +32,29 @@ git remote -v
 git describe --tags --abbrev=0
 ```
 
+**Remove files from Git index (without removing them from filesystem)**
+```bash
+git rm --cached path/to/file
+git rm --cached 'path/to/*'  # Or "*" must be escaped: path/to/\*
+```
+
+**Diff binary `.plist` files**  
+*See: https://confusatory.org/post/133141617492/git-diff-for-binary-apple-property-list-files*
+
+Local:
+
+```bash
+git config diff.plist.textconv 'plutil -convert xml1 -o -'
+echo '*.plist diff=plist' >> .gitattributes
+```
+
+Global:
+```bash
+git config --global diff.plist.textconv 'plutil -convert xml1 -o -'
+git config --global core.attributesfile $HOME/.gitattributes
+echo '*.plist diff=plist' >> $HOME/.gitattributes
+```
+
 
 #### Bump version
 
@@ -44,7 +67,7 @@ oldVersion=$(grep -E -m 1 "@version (.+)$" file | sed -E "s/^.+@version (.+)$/\1
 
 **Find all files containing the old version (/!\) and replace it.**
 ```bash
-grep -rl "v${oldVersion//./\\.}" . | xargs sed -i "" -e "s/v${oldVersion//./\\.}/v${newVersion//./\\.}/g"
+grep -rl "${oldVersion//./\\.}" . | xargs sed -i "" -e "s/${oldVersion//./\\.}/${newVersion//./\\.}/g"
 ```
 
 **Describe changes.**  
@@ -54,11 +77,11 @@ Update `CHANGELOG.md`
 ```bash
 git add VERSION CHANGELOG.md
 git commit -m "Short description of changes.\n\nMore details…"
-git tag -a "v${newVersion}" -m "Bump version: $oldVersion → $newVersion"
+git tag -a "${newVersion}" -m "Bump version: $oldVersion → $newVersion"
 ```
 
 **Push to repo.**
 ```bash
 git push origin master
-git push origin "v${newVersion}"
+git push origin "${newVersion}"
 ```
