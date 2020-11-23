@@ -3,13 +3,13 @@
 > 👋Errors, improvements or other cool stuff? Let me know! 😀
 
 
-#### Initialize SSH folder
+### Initialize SSH folder
 ```bash
 mkdir ~/.ssh
 chmod 700 ~/.ssh
 ```
 
-#### Config file
+### Config file
 
 Path: `~/.ssh/config`
 
@@ -39,7 +39,7 @@ Host github
 ```
 
 
-#### Generate SSH key for current user on local machine
+### Generate SSH key for current user on local machine
 
 ```bash
 keyname=$(echo "`whoami`@`hostname`" | cut -d'.' -f 1)
@@ -48,7 +48,7 @@ ssh-add ~/.ssh/$keyname
 ```
 
 
-#### SSH key-based authentication on remote server
+### SSH key-based authentication on remote server
 
 **Option 1:**
 
@@ -73,7 +73,7 @@ pbcopy < ~/.ssh/${keyname}.pub
 ```
 
 
-#### Remote diff
+### Remote diff
 
 ```bash
 diff local-file.txt <(ssh user@remote "cat remote-file.txt")
