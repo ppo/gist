@@ -152,3 +152,16 @@ while [ -z "$REPLY" ]; do  # Here simply if not empty.
   read -p "Question: "
 done
 ```
+
+
+### Sudo keep-alive
+
+_Source: https://gist.github.com/cowboy/3118588_
+
+```bash
+# Ask for the administrator password upfront.
+sudo -v
+
+# Sudo keep-alive: update existing sudo timestamp if set, otherwise do nothing.
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+```
