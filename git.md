@@ -30,6 +30,7 @@ git branch --set-upstream-to=origin/master master
 
 ```bash
 git remote -v  # Show remote URLs (fetch & push)
+# Or: git remote get-url origin
 git remote set-url origin git@github.com:xxx/xxx.git
 git remote -v
 ```

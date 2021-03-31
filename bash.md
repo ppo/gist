@@ -183,6 +183,12 @@ for i in {1..10}; do wget -o $i.txt https://example.com/data?id=$i; done
 	The optional "-" in "<<-EOF" allow to ignore leading tabs.
 	Can include $variable, ${variable}, `command`.
 EOF
+
+cat <<EOT > output.txt
+To create a file with
+multiple lines
+use `cat`.
+EOT
 ```
 
 
