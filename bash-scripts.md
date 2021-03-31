@@ -23,8 +23,18 @@ __DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 [ "${BASH_SOURCE}" == "$0" ] && echo "Executed" || echo "Sourced"
 ```
 
+### Source a `.env` file
 
-### Positional and special parameters
+[Bash `set -a`](https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html)
+
+Each variable or function that is created or modified is given the export attribute and marked for
+export to the environment of subsequent commands.
+
+```bash
+set -a; source .env; set +a
+```
+
+### Positional and special arguments
 
 See https://www.tldp.org/LDP/abs/html/internalvariables.html
 
@@ -54,23 +64,23 @@ set -e  # Exit if any command fails. Use `set +e` to turn it off.
 ```
 
 
-## Parameters
+## Script arguments
 
-### Easy check for a given parameter
+### Easy check for a given argument
 
 ```bash
 [[ "$*" =~ "--force" ]] && FORCE=true || FORCE=false
 ```
 
 
-### Iterate/loop over parameters
+### Iterate/loop over arguments
 
 ```bash
 for arg in "$@"; do echo $arg; done
 ```
 
 
-### Shift parameters (i.e. remove the first one)
+### Shift arguments (i.e. remove the first one)
 
 _Calling `script.sh a b c` outputs `Before: 3 a b c / After: 2 b c`._
 
@@ -79,7 +89,7 @@ echo -n "Before: $# $@"; shift; echo " / After: $# $@"
 ```  
 
 
-### Iterate/loop over parameters, emptying them
+### Iterate/loop over arguments, emptying them
 
 _Calling `script.sh a b c` outputs `Before: 3 a b c / After: 0`._
 
@@ -90,6 +100,15 @@ echo " / After: $# $@"
 ```
 
 **@TODO** `getopts`
+
+
+### Modifying arguments
+
+Basically you set all arguments to their current values, except for the one(s) you want to change.
+
+```bash
+set -- "${@:1:2}" "new" "${@:4}"
+```
 
 
 ## User Input
@@ -110,14 +129,19 @@ echo -ne "Question?\n> "; read
 
 ```bash
 # Ask user for input.
-# Usage: `ask_input "<question>" ["<comment>" [<blank>]]; name="$REPLY"`
-# Options: Define `<blank>` as `1` to not allow empty answers.
+# Usage: `ask_input "<question>" ["<comment>" ["<default>" [blank]]]; myvar="$REPLY"`
+# Options: If no `default` and must allow empty answers, use `"" blank`.
 ask_input() {
-  _read_input() { printf "\e[32m> "; read; printf "\e[0m"; }
-  printf "\e[1;37m${1}\e[0m\n"; [ -n "$2" ] && printf "${2}\e[0m\n"
-  [ "$3" == "1" ] \
-    && { REPLY=; while [ -z "$REPLY" ]; do _read_input; done; } \
-    || _read_input
+  _read_input() {
+    printf "\e[32m› "; read
+    [ -z "$REPLY" ] && [ -n "$1" ] && { REPLY="$1"; echo -e "\e[1A\e[2C$REPLY"; }
+    printf "\e[0m"
+  }
+  printf "\e[1;37m${1}\e[0m"; [ -n "$3" ] && printf " [\e[32m${3}\e[0m]"; echo
+  [ -n "$2" ] && echo -e "\e[3m${2}\e[0m"
+  if [ -n "$3" ] || [ "$4" = "blank" ]
+    then _read_input "$3"
+    else REPLY=; while [ -z "$REPLY" ]; do _read_input; done; fi
 }
 ```
 
@@ -129,17 +153,27 @@ but only if the answer is not empty (empty means user pressed enter).
 
 ```bash
 # Ask user to answer either yes or no.
-# Usage: `ask_yesno "Do you want to do this?"; [ $REPLY == "y" ] && echo "yes" || echo "no"`
+# Usage: `ask_yesno "Do you want to do this?" [<default=y|n>]; [ $REPLY == "y" ] && echo "yes" || echo "no"`
 ask_yesno() {
   REPLY=
-  printf "$1 (y/n) "
+  local offset=$(( ${#1} + 7 ))
+  case "$2" in
+    "y") values="\e[32mY/\e[0mn";;
+    "n") values="y/\e[32mN\e[0m";;
+    *) values="y/n";;
+  esac
+  printf "\e[1;37m${1}\e[0m (${values}) \e[32m"
   while [ -z "$REPLY" ]; do
     read -n 1
-    [[ "${REPLY,,}" =~ ^(y|n)$ ]] \
-      && { [ "${REPLY,,}" == "y" ] || REPLY="n"; } \
-      || { [ -n "$REPLY" ] && echo; REPLY=; printf "y or n? "; }
+    if [[ "${REPLY,,}" =~ ^(y|n)$ ]]; then
+      [ "${REPLY,,}" == "y" ] || REPLY="n"
+      echo
+    else if [ -z "$REPLY" ] && [ -n "$2" ]
+      then REPLY="$2"; echo -e "\e[1A\e[${offset}C$REPLY"
+      else [ -n "$REPLY" ] && echo; REPLY=; printf "\e[0my or n? \e[32m"; fi
+    fi
   done
-  echo
+  printf "\e[0m"
 }
 ```
 
