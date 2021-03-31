@@ -1,0 +1,48 @@
+# Define coding styles for editors.
+# See: https://editorconfig.org/#file-format-details
+# See: https://github.com/editorconfig/editorconfig/wiki/EditorConfig-Properties
+
+# Stop looking for other ``.editorconfig`` files in parent folders.
+root = true
+
+# DEFAULT VALUES
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+max_line_length = 100
+trim_trailing_whitespace = true
+
+# DIFF FILES
+[*.{diff,patch}]
+indent_size = 4
+trim_trailing_whitespace = false
+
+# INI FILES
+[{*.ini,setup.cfg}]
+indent_size = 4
+
+# MAKEFILES
+[Makefile]
+indent_size = 4
+indent_style = tab
+
+# MARKDOWN
+[*.md]
+indent_size = 4
+trim_trailing_whitespace = false
+
+# MINIFIED FILES (they shouldn't be changed)
+[**.min.{css,js}]
+indent_style = ignore
+insert_final_newline = ignore
+
+# PYTHON
+[*.py]
+indent_size = 4
+
+# RESTRUCTUREDTEXT
+[*.rst]
+indent_size = 4
