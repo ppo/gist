@@ -9,6 +9,14 @@
 __FILE__=$(realpath "${BASH_SOURCE[0]}")
 ```
 
+**Polyfill:**
+
+```bash
+if [ -z "$( which realpath )" ]; then
+  function realpath() { printf "$( cd "${1}" >/dev/null 2>&1 && pwd )"; }
+fi
+```
+
 
 ### Directory of current file
 
