@@ -1,69 +1,80 @@
 // Poor man's tests 😁
+// Usage: node true-typeof.test.js [1]
 
-const test = (report=false) => {
+const trueTypeOf = require('./true-typeof.js');
+
+
+function test(report=false) {
+  // Material for tests.
   class MyClass {
     static staticMethod() {}
   }
   function myFunction() {}
   const foo = 'foo';
 
-  const EXCEPTION = 8;  // See in tests...
-
-  const tests = [  // id, expected, value
+  // Define tests to perform.
+  const tests = [  // value, expected, value for display
     // Base types OK via `typeof`
-    [  01,  'undefined',   undefined             ],
-    [  02,  'boolean',     true                  ],
-    [  03,  'boolean',     false                 ],
-    [  04,  'string',      ''                    ],
-    [  05,  'string',      'abc'                 ],
-    [  06,  'string',      `${foo}-bar`          ],
+    [ undefined,              'undefined',    'undefined'    ],
+    [ true,                   'boolean',      'true'         ],
+    [ false,                  'boolean',      'false'        ],
+    [ '',                     'string',       "''"           ],
+    [ 'abc',                  'string',       "'abc'"        ],
+    [ `${foo}-bar`,           'string',       '`${foo}-bar`' ],
 
     // Numbers
-    [  07,  'integer',     1                     ],
-    [  08,  'integer',     1.0                   ],  // EXCEPTION below...
-    [  09,  'float',       1.1                   ],
+    [ 1,                      'integer',      '1'   ],
+    [ 1.0,                    'integer',      '1.0' ],
+    [ 1.1,                    'float',        '1.1' ],
 
     // Functions & classes
-    [  11,  'function',    function() {}         ],
-    [  12,  'function',    myFunction            ],
-    [  13,  'class',       class A {}            ],
-    [  14,  'class',       MyClass               ],
-    [  15,  'object',      new MyClass()         ],
-    [  16,  'function',    MyClass.staticMethod  ],
+    [ function() {},          'function',     'function() {}'        ],
+    [ myFunction,             'function',     'myFunction'           ],
+    [ class A {},             'class',        'class A {}'           ],
+    [ MyClass,                'class',        'MyClass'              ],
+    [ new MyClass(),          'object',       'new MyClass()'        ],
+    [ MyClass.staticMethod,   'function',     'MyClass.staticMethod' ],
 
     // Base types not OK via `typeof`
-    [  17,  'null',        null                  ],
-    [  18,  'array',       []                    ],
-    [  19,  'dictionary',  {}                    ],
+    [ null,                   'null',         'null' ],
+    [ [],                     'array',        '[]'   ],
+    [ {},                     'dictionary',   '{}'   ],
 
-    // Any class implementing `Object.prototype.toString()`
-    [  20,  'set',         new Set()             ],
-    [  21,  'date',        new Date()            ],
-    [  22,  'regexp',      /test/i               ],
-    [  23,  'regexp',      new RegExp('test')    ],
-    [  24,  'error',       new Error()           ],
-    [  25,  'error',       new TypeError()       ],
+    // Objects of any class
+    [ new Set(),              'set',          'new Set()'  ],
+    [ new Date(),             'date',         'new Date()' ],
+    [ /test/i,                'regexp',       '/test/i' ],
+    [ new RegExp('test'),     'regexp',       "new RegExp('test')" ],
+    [ new Error(),            'error',        'new Error()'        ],
+    [ new TypeError(),        'error',        'new TypeError()'    ],
   ];
 
-  const results = tests.reduce((accumulator, [ id, expected, value ]) => {
+  // Perform tests.
+  const results = tests.reduce((accumulator, [ value, expected, display ]) => {
     const type = trueTypeOf(value);
     const ok = type === expected;
 
-    if (report) accumulator.push([ id, expected, value, ok, type ]);
-    else console.assert(ok, `${id}: ${expected} !== ${type}`);
-
+    accumulator.push([ ok, display, expected, type ]);
     return accumulator;
   }, []);
 
+  // Display results.
   if (report) {
-    console.group('Test Results:');
-    results.forEach(([ id, expected, value, ok, type ]) => {
-      if (expected === 'string') value = `'${value}'`;
-      if (id === EXCEPTION) value = value.toFixed(1);  // EXCEPTION
-
-      if (ok) console.log(`🟢 ${id}: ${expected} →`, value);
-      else console.log(`❌ ${id}: ${expected} !== ${type} →`, value);
+    console.table(
+      results.map(([ ok, value, expected, type ]) => {
+        const result = ok ? '🟢' : `❌ ${type}`;
+        return { result, expected, value };
+      }),
+      ['result', 'expected', 'value']
+    );
+  } else {
+    results.forEach(([ ok, value, expected, type ], index) => {
+      console.assert(ok, `${index}: ${type} !== ${expected}, using: ${value}`);
     });
-    console.groupEnd();
   }
-};
+}
+
+
+// Execute the test.
+const args = process.argv.slice(2);
+test(!!args[0]);

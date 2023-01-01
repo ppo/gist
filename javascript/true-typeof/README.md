@@ -1,5 +1,17 @@
 # JavaScript `trueTypeOf` Helper
 
+**Return the true type of a value.**
+
+**Types:**
+
+- `undefined`, `null`
+- `boolean`, `string`
+- `integer`, `float`
+- `array`, `dictionary`
+- `function`, `class`, `object`
+- `<classname>` (in lowercase)
+
+
 ```javascript
   // Base types OK via `typeof`
   undefined             → 'undefined'

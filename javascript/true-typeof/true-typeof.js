@@ -1,4 +1,13 @@
-export const trueTypeOf = value => {
+// Return the true type of a value.
+// Types:
+//     undefined, null
+//     boolean, string
+//     integer, float
+//     array, dictionary
+//     function, class, object
+//     <classname> (in lowercase)
+
+const trueTypeOf = (value) => {
   const type = typeof value;
 
   if (type === 'number') {
@@ -15,3 +24,6 @@ export const trueTypeOf = value => {
   if (value.constructor.name === 'Object') return 'dictionary';
   return Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
 };
+
+
+module.exports = trueTypeOf;
