@@ -3,7 +3,7 @@
 const test = (report=false) => {
   const foo = 'foo';
   const tests = [
-  //  id,  expected,     value
+  //  id   expected      value
     [ 01,  'undefined',  undefined     ],
     [ 02,  'null',       null          ],
     [ 03,  'boolean',    true          ],
