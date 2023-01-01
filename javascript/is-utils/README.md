@@ -1,4 +1,4 @@
-# Javascript "is" Utils
+# JavaScript "is" Utils
 
 - `isEmpty()` (see [StackOverflow](https://stackoverflow.com/a/60908867/101831))
 - `isObject()`
