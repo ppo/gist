@@ -1,25 +1,48 @@
 // Poor man's tests 😁
 
 const test = (report=false) => {
+  class MyClass {
+    static staticMethod() {}
+  }
+  function myFunction() {}
   const foo = 'foo';
-  const tests = [
-  //  id   expected      value
-    [ 01,  'undefined',  undefined     ],
-    [ 02,  'null',       null          ],
-    [ 03,  'boolean',    true          ],
-    [ 04,  'boolean',    false         ],
-    [ 05,  'string',     ''            ],
-    [ 06,  'string',     'abc'         ],
-    [ 07,  'string',     `${foo}-bar`  ],
-    [ 10,  'integer',    1             ],
-    [ 11,  'integer',    1.0           ],  // EXCEPTION below!
-    [ 12,  'float',      1.1           ],
-    [ 13,  'array',      []            ],
-    [ 14,  'object',     {}            ],
-    [ 15,  'date',       new Date()    ],
-    [ 16,  'regexp',     /test/i       ],
-    [ 17,  'function',   function() {} ],
-    [ 18,  'class',      class A {}    ],
+
+  const EXCEPTION = 8;  // See in tests...
+
+  const tests = [  // id, expected, value
+    // Base types OK via `typeof`
+    [  01,  'undefined',   undefined             ],
+    [  02,  'boolean',     true                  ],
+    [  03,  'boolean',     false                 ],
+    [  04,  'string',      ''                    ],
+    [  05,  'string',      'abc'                 ],
+    [  06,  'string',      `${foo}-bar`          ],
+
+    // Numbers
+    [  07,  'integer',     1                     ],
+    [  08,  'integer',     1.0                   ],  // EXCEPTION below...
+    [  09,  'float',       1.1                   ],
+
+    // Functions & classes
+    [  11,  'function',    function() {}         ],
+    [  12,  'function',    myFunction            ],
+    [  13,  'class',       class A {}            ],
+    [  14,  'class',       MyClass               ],
+    [  15,  'object',      new MyClass()         ],
+    [  16,  'function',    MyClass.staticMethod  ],
+
+    // Base types not OK via `typeof`
+    [  17,  'null',        null                  ],
+    [  18,  'array',       []                    ],
+    [  19,  'dictionary',  {}                    ],
+
+    // Any class implementing `Object.prototype.toString()`
+    [  20,  'set',         new Set()             ],
+    [  21,  'date',        new Date()            ],
+    [  22,  'regexp',      /test/i               ],
+    [  23,  'regexp',      new RegExp('test')    ],
+    [  24,  'error',       new Error()           ],
+    [  25,  'error',       new TypeError()       ],
   ];
 
   const results = tests.reduce((accumulator, [ id, expected, value ]) => {
@@ -36,7 +59,7 @@ const test = (report=false) => {
     console.group('Test Results:');
     results.forEach(([ id, expected, value, ok, type ]) => {
       if (expected === 'string') value = `'${value}'`;
-      if (id === 11 && expected === 'integer') value = value.toFixed(1);  // EXCEPTION
+      if (id === EXCEPTION) value = value.toFixed(1);  // EXCEPTION
 
       if (ok) console.log(`🟢 ${id}: ${expected} →`, value);
       else console.log(`❌ ${id}: ${expected} !== ${type} →`, value);
