@@ -1,4 +1,5 @@
-export const isEmpty = value => (
+// Return whether a value is truly empty.
+const isEmpty = (value) => (
   (!value && value !== 0 && value !== false)
   || (Array.isArray(value) && value.length === 0)
   || (isObject(value) && Object.keys(value).length === 0)
@@ -9,5 +10,9 @@ export const isEmpty = value => (
 );
 
 
+// Return where a value is truly an object.
 // Source: https://levelup.gitconnected.com/javascript-check-if-a-variable-is-an-object-and-nothing-else-not-an-array-a-set-etc-a3987ea08fd7
-export const isObject = value => Object.prototype.toString.call(value) === '[object Object]';
+const isObject = (value) => Object.prototype.toString.call(value) === '[object Object]';
+
+
+module.exports = { isEmpty, isObject };
