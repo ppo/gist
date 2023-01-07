@@ -23,7 +23,7 @@ cd - &>/dev/null             # Return to previous folder.
 | Expr               | Description                                                                          |
 | ------------------ | ------------------------------------------------------------------------------------ |
 | `=`, `==`, `!=`    | With `[ "$a" == "$b" ]` or `[ "$a" = "$b" ]` (whitespaces around `=` in single `[]`) |
-|                    | ⚠️ `==` behaves differently within `[[ ]]` and `[ ]`                                 |
+|                    | ⚠️ `==` behaves differently within `[[ ]]` and `[ ]`                                  |
 | `[[ $a == z* ]]`   | True if `$a` starts with an `"z"` (pattern matching).                                |
 | `[[ $a == "z*" ]]` | True if `$a` is equal to `z*` (literal matching).                                    |
 | `[ $a == z* ]`     | File globbing and word splitting take place.                                         |
@@ -206,4 +206,282 @@ EOF
 
 ```bash
 date +"%y%m%d-%H%M%S"
+```
+
+
+---
+
+
+## Files
+
+### File test operators
+
+See: https://tldp.org/LDP/abs/html/fto.html
+
+| Expr        | Description                                                  |
+| ----------- | ------------------------------------------------------------ |
+| `-e`        | File exists.                                                 |
+| `-f`        | File is a regular file.                                      |
+| `-d`        | File is a directory.                                         |
+| `-s`        | File is not zero size.                                       |
+|             |                                                              |
+| `-h`        | File is a symbolic link                                      |
+| `-L`        | File is a symbolic link                                      |
+|             |                                                              |
+| `-r`        | File has read permission (for the user running the test).    |
+| `-w`        | File has write permission (for the user running the test).   |
+| `-x`        | File has execute permission (for the user running the test). |
+|             |                                                              |
+| `f1 -nt f2` | File f1 is newer than f2.                                    |
+| `f1 -ot f2` | File f1 is older than f2.                                    |
+
+
+
+### Iterate/loop over lines of a file / Read file line by line
+
+1. Simple but last line skipped if no `LF`.  
+2. `|| [[ -n $line ]]` avoids the last line of the file to be skipped if there is no trailing line feed.
+
+```bash
+while read line; do echo "$line"; done < file.txt                        # 1
+cat file.txt | while read line || [[ -n $line ]]; do echo "$line"; done  # 2
+```
+
+
+### Iterate/loop over files with filename containing spaces
+
+```bash
+find . -maxdepth 1 -name '*.txt' | while read f; do echo $f; done
+```
+
+
+### Rename daily files with week/day `W00D0`
+
+```bash
+w=1; d=1
+find . -maxdepth 1 -name '*.mp3' | sort | while read f; do
+  nf=$(echo "$f" | sed -E "s/^\.\/20([0-9]{2})-([0-9]{2})-([0-9]{2}) (.*)\.mp3$/W0${w}D${d} \4.\1\2\3.mp3/;s/W0([0-9]{2})/W\1/")
+  mv "$f" "$nf"
+  (( d++ % 5 )) || { d=1; (( w++ )); }
+done
+```
+
+
+### Append a multiline text to a file
+
+```bash
+cat >> /path/to/file <<EOF
+...
+EOF
+```
+
+
+---
+
+
+## Scripts
+
+### Real path of current file
+
+```bash
+__FILE__=$(realpath "${BASH_SOURCE[0]}")
+```
+
+**Polyfill:**
+
+```bash
+if [ -z "$( which realpath )" ]; then
+  function realpath() { [ -d "${1}" ] && printf "$( cd "${1}" >/dev/null 2>&1 && pwd )" || printf "${1}"; }
+fi
+```
+
+
+### Directory of current file
+
+```bash
+__DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+```
+
+
+### Is script being executed or sourced?
+
+```bash
+[ "${BASH_SOURCE}" == "$0" ] && echo "Executed" || echo "Sourced"
+```
+
+### Source a `.env` file
+
+[Bash `set -a`](https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html)
+
+Each variable or function that is created or modified is given the export attribute and marked for
+export to the environment of subsequent commands.
+
+```bash
+set -a; source .env; set +a
+```
+
+### Positional and special arguments
+
+See https://www.tldp.org/LDP/abs/html/internalvariables.html
+
+| Expr    | Description                                                                               |
+| ------- | ----------------------------------------------------------------------------------------- |
+| $0      | Script name.                                                                              |
+| $1, $2… | Positional parameter, passed from command line or to a function, or set to a variable.    |
+| $#      | Number of positional parameters.                                                          |
+| "$*"    | All of the positional parameters, seen as a single word. MUST be quoted.                  |
+| "$@"    | Same as "$*" but each parameter is passed on intact, without interpretation or expansion. |
+|         |                                                                                           |
+| $?      | Most recent foreground pipeline exit status.                                              |
+| $_      | The last argument of the previous command.                                                |
+| $-      | Flags passed to script (using set).                                                       |
+|         |                                                                                           |
+| $$      | PID of the current shell (not subshell).                                                  |
+| $!      | Is the PID of the most recent background command.                                         |
+|         |                                                                                           |
+| --      | Means the end of options; allowing positional arguments beginning with a dash.            |
+
+
+### Abort script if command execution failed
+
+```bash
+set -e  # Exit if any command fails. Use `set +e` to turn it off.
+[ $? != 0 ] && { echo -e "Command failed, abort."; exit $?; }
+```
+
+
+## Script arguments
+
+### Easy check for a given argument
+
+```bash
+[[ "$*" =~ "--force" ]] && FORCE=true || FORCE=false
+```
+
+
+### Iterate/loop over arguments
+
+```bash
+for arg in "$@"; do echo $arg; done
+```
+
+
+### Shift arguments (i.e. remove the first one)
+
+_Calling `script.sh a b c` outputs `Before: 3 a b c / After: 2 b c`._
+
+```bash
+echo -n "Before: $# $@"; shift; echo " / After: $# $@"
+```  
+
+
+### Iterate/loop over arguments, emptying them
+
+_Calling `script.sh a b c` outputs `Before: 3 a b c / After: 0`._
+
+```bash
+echo -n "Before: $#"
+while (( "$#" )); do echo -n " $1"; shift; done
+echo " / After: $# $@"
+```
+
+**@TODO** `getopts`
+
+
+### Modifying arguments
+
+Basically you set all arguments to their current values, except for the one(s) you want to change.
+
+```bash
+set -- "${@:1:2}" "new" "${@:4}"
+```
+
+
+## User Input
+
+### Ask the user for input
+
+```bash
+read -p "Username: " username_var
+read -sp "Password: " password_var
+```
+
+
+### Ask a question and answer below (with a leading `>`)
+
+```bash
+echo -ne "Question?\n> "; read
+```
+
+```bash
+# Ask user for input.
+# Usage: `ask_input "<question>" ["<comment>" ["<default>" [blank]]]; myvar="$REPLY"`
+# Options: If no `default` and must allow empty answers, use `"" blank`.
+ask_input() {
+  _read_input() {
+    printf "\e[32m› "; read
+    [ -z "$REPLY" ] && [ -n "$1" ] && { REPLY="$1"; echo -e "\e[1A\e[2C$REPLY"; }
+    printf "\e[0m"
+  }
+  printf "\e[1;37m${1}\e[0m"; [ -n "$3" ] && printf " [\e[32m${3}\e[0m]"; echo
+  [ -n "$2" ] && echo -e "\e[3m${2}\e[0m"
+  if [ -n "$3" ] || [ "$4" = "blank" ]
+    then _read_input "$3"
+    else REPLY=; while [ -z "$REPLY" ]; do _read_input; done; fi
+}
+```
+
+
+### With `-n 1`, return/submit automatically when a/one character is typed
+
+As user's input is displayed, use an `echo` to go to a new line after read  
+but only if the answer is not empty (empty means user pressed enter).
+
+```bash
+# Ask user to answer either yes or no.
+# Usage: `ask_yesno "Do you want to do this?" [<default=y|n>]; [ $REPLY == "y" ] && echo "yes" || echo "no"`
+ask_yesno() {
+  REPLY=
+  local offset=$(( ${#1} + 7 ))
+  case "$2" in
+    "y") values="\e[32mY/\e[0mn";;
+    "n") values="y/\e[32mN\e[0m";;
+    *) values="y/n";;
+  esac
+  printf "\e[1;37m${1}\e[0m (${values}) \e[32m"
+  while [ -z "$REPLY" ]; do
+    read -n 1
+    if [[ "${REPLY,,}" =~ ^(y|n)$ ]]; then
+      [ "${REPLY,,}" == "y" ] || REPLY="n"
+      echo
+    else if [ -z "$REPLY" ] && [ -n "$2" ]
+      then REPLY="$2"; echo -e "\e[1A\e[${offset}C$REPLY"
+      else [ -n "$REPLY" ] && echo; REPLY=; printf "\e[0my or n? \e[32m"; fi
+    fi
+  done
+  printf "\e[0m"
+}
+```
+
+
+### Loop on a question until it's valid
+
+```bash
+REPLY=
+while [ -z "$REPLY" ]; do  # Here simply if not empty.
+  read -p "Question: "
+done
+```
+
+
+### Sudo keep-alive
+
+_Source: https://gist.github.com/cowboy/3118588_
+
+```bash
+# Ask for the administrator password upfront.
+sudo -v
+
+# Sudo keep-alive: update existing sudo timestamp if set, otherwise do nothing.
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ```
