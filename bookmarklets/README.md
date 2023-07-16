@@ -2,8 +2,9 @@
 
 Available here:
 
-* **[Gmail Clean Print](gmail-clean-print.js):** Removes the email header to print only the body part.
+* **[Gmail Clean Print](gmail-clean-print.js):** Remove the email header to print only the body part.
 * **[Spotify Clean Receipt](spotify-clean-receipt.js):** Fix the broken print format of Spotify’s receipts.
+* **[YouTube Video Link](youtube-video-link.js):** Create a Mardown text with all the information about the video and copy it to the clipboard.
 
 > _**Note:** The files `*.bookmarklet.js` contain the ready to use one-line code;
 > i.e. the result of steps 1 & 2 described below in "Source → Bookmarklet"._
