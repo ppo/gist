@@ -439,27 +439,39 @@ but only if the answer is not empty (empty means user pressed enter).
 
 ```bash
 # Ask user to answer either yes or no.
-# Usage: `ask_yesno "Do you want to do this?" [<default=y|n>]; [ $REPLY == "y" ] && echo "yes" || echo "no"`
+# Parameters:
+#   $1: The question.
+#   $2: (optional) Default value, used when pressing enter.
+# Usage:
+#   - `if ask_yesno "Do you want to do this?" "y"; then echo "yes"; else echo "no"; fi`
+#   - `(ask_yesno "Do you want to do this?") && echo "yes" || echo "no"`
 ask_yesno() {
-  REPLY=
-  local offset=$(( ${#1} + 7 ))
+  local prefix="▷ "
+  local answer=
+  local offset=$( expr length "${prefix}${1} (y/n) " )
   case "$2" in
-    "y") values="\e[32mY/\e[0mn";;
-    "n") values="y/\e[32mN\e[0m";;
+    "y") values="\e[36mY\e[0m/n";;
+    "n") values="y/\e[36mN\e[0m";;
     *) values="y/n";;
   esac
-  printf "\e[1;37m${1}\e[0m (${values}) \e[32m"
-  while [ -z "$REPLY" ]; do
-    read -n 1
-    if [[ "${REPLY,,}" =~ ^(y|n)$ ]]; then
-      [ "${REPLY,,}" == "y" ] || REPLY="n"
+  printf "${prefix}\e[1;37m${1}\e[0m (${values}) \e[36m"
+  while [ -z "$answer" ]; do
+    read -n 1 answer
+    if [[ "${answer,,}" =~ ^(y|n)$ ]]; then
+      [ "${answer,,}" == "y" ] || answer="n"
       echo
-    else if [ -z "$REPLY" ] && [ -n "$2" ]
-      then REPLY="$2"; echo -e "\e[1A\e[${offset}C$REPLY"
-      else [ -n "$REPLY" ] && echo; REPLY=; printf "\e[0my or n? \e[32m"; fi
+    elif [ -z "$answer" ] && [ -n "$2" ]; then
+      answer="$2"
+      echo -e "\e[1A\e[${offset}C${answer}"
+    elif [ -n "$answer" ]; then
+      echo
+      answer=
+      offset=$( expr length "${prefix}y or n? " )
+      printf "\e[0m${prefix}y or n? \e[36m"
     fi
   done
   printf "\e[0m"
+  [ "$answer" == "y" ] && return 0 || return 1
 }
 ```
 
