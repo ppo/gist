@@ -52,6 +52,31 @@ sed -i '/VARNAME = {/, /^}/ s/^/# /' file  # Example: Commenting a dictionary de
 ```
 
 
+### Insert a block of text in a file
+_Source: https://www.baeldung.com/linux/file-insert-multiple-lines_
+
+#### Inline
+
+```bash
+sed -i '/from_pattern/anew line 1\nnew line 2' file
+```
+
+#### From a file
+
+```bash
+sed -i '/from_pattern/r new_content_file' file
+```
+
+#### From STDIN
+
+```bash
+cat << EOF | sed -i '/from_pattern/r /dev/stdin' file
+new line 1
+new line 2
+EOF
+```
+
+
 ### Replace a block of text with the content of a file
 
 _Source: https://stackoverflow.com/a/2700594/101831_
