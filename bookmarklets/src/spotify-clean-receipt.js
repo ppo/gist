@@ -1,8 +1,9 @@
 // Fix the broken print format of Spotify’s receipts.
+//
 // USAGE: Spotify › Profile › Receipts › Bookmarklet
-// Or go to this URL and click the bookmarklet:
-//   https://www.spotify.com/account/subscription/receipt/
-
+//   Or go to this URL and click the bookmarklet:
+//     https://www.spotify.com/account/subscription/receipt/
+//
 // 🤔 Is that legal?
 // I’m not actually changing the content, just fixing the print layout 🤷‍♂️
 

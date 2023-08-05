@@ -1,6 +1,9 @@
 // Create a Mardown text with all the information about the video and copy it to the clipboard.
-// FORMAT: [Title of the video](https://youtu.be/video-id) (YYMMDD, 00:00, YT:[Channel Name](channel-url))
+//
 // USAGE: YouTube video page › Bookmarklet
+//
+// Format: [Title of the video](https://youtu.be/video-id) (YYMMDD, 00:00, YT:[Channel Name](channel-url))
+
 
 id = document.querySelector('#primary ytd-watch-metadata').getAttribute('video-id');
 c = document.querySelector('#channel-name yt-formatted-string.ytd-channel-name a');

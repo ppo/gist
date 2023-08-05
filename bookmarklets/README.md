@@ -18,7 +18,7 @@ Available here:
 
 ## Source → Bookmarklet
 
-1. Minify the source code. _With a tool like [JSCompress](https://jscompress.com/)._
+1. Minify the source code. _With a tool like [Minify JS Online](https://minify-js.com/)._
 2. Add `javascript:` at the beginning of the line.
 3. Copy the resulting one-line code.
 4. Create a new bookmark.

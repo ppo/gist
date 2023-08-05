@@ -1,5 +1,7 @@
 // Remove the email header to print only the body part.
+//
 // USAGE: Gmail › Open email › Print › Cancel › Bookmarklet
+
 
 [
   'body > div > table',
