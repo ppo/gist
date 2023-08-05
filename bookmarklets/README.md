@@ -6,6 +6,7 @@ Available here:
 * **[Instagram Account Info CSV](instagram-account-info-csv.js):** Scrape info about the current Instagram account.
 * **[Instagram Download Profile Picture](instagram-download-profile-picture.js):** Download the profile picture of the current account.
 * **[Spotify Clean Receipt](spotify-clean-receipt.js):** Fix the broken print format of Spotify’s receipts.
+* **[Twitter Disable Inerests](twitter-disable-interests.js):** Turn off "Topic Suggestions" and "Interests" at Twitter.
 * **[YouTube Video Link](youtube-video-link.js):** Create a Mardown text with all the information about the video and copy it to the clipboard.
 
 > _**Note:** The files `*.bookmarklet.js` contain the ready to use one-line code;
