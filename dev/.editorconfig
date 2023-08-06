@@ -1,9 +1,12 @@
 # Define coding styles for editors.
-# See: https://editorconfig.org/#file-format-details
-# See: https://github.com/editorconfig/editorconfig/wiki/EditorConfig-Properties
+#
+# Doc: https://editorconfig.org/#file-format-details
+# Ref: https://github.com/editorconfig/editorconfig/wiki/EditorConfig-Properties
 
-# Stop looking for other ``.editorconfig`` files in parent folders.
+
+# Stop looking for other `.editorconfig` files in parent folders.
 root = true
+
 
 # DEFAULT VALUES
 [*]
@@ -12,8 +15,14 @@ end_of_line = lf
 indent_size = 2
 indent_style = space
 insert_final_newline = true
-max_line_length = 100
+max_line_length = 100  # Pylint default.
 trim_trailing_whitespace = true
+
+
+# CSV
+[*.{csv,tsv}]
+indent_size = 50    # Large columns.
+indent_style = tab  # Used as column separator.
 
 # DIFF FILES
 [*.{diff,patch}]
@@ -34,8 +43,9 @@ indent_style = tab
 indent_size = 4
 trim_trailing_whitespace = false
 
-# MINIFIED FILES (they shouldn't be changed)
-[**.min.{css,js}]
+# MINIFIED FILES
+# They shouldn’t be changed.
+[**.min.{css,html,js}]
 indent_style = ignore
 insert_final_newline = ignore
 
