@@ -1,8 +1,11 @@
 // Mark Twitter's suggestion notifications as "See less often".
 //
 // USAGE: https://twitter.com/notifications › Bookmarklet
+//
 // AUTOMATION: Using the extension "User JavaScript and CSS"
-//   https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld
+//   As content is dynamically loaded, the execution of this code must be delayed (for 5s).
+//   Wrap this code in `setTimeout(function () { … }, 5000);`.
+//   Extension: https://chrome.google.com/webstore/detail/user-javascript-and-css/nbhcbdghjpllgmfilhnhkllmkecfmpld
 
 items = document.querySelectorAll('div[aria-haspopup="menu"][aria-label="More"]');
 
