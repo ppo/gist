@@ -349,6 +349,12 @@ set -e  # Exit if any command fails. Use `set +e` to turn it off.
 [ $? != 0 ] && { echo -e "Command failed, abort."; exit $?; }
 ```
 
+**With piped commands:**
+```bash
+# cmd0 | cmd1 | cmd2
+[ ${PIPESTATUS[0]} != 0 ] && { echo -e "Command failed, abort."; exit $?; }
+```
+
 
 ## Script arguments
 
