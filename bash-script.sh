@@ -8,6 +8,8 @@ BASE_DIR="$( realpath "${__DIR__}/.." )"
 
 BASE_DIR="$( realpath "$( dirname "${BASH_SOURCE[0]}" )" )"
 
+_**Note:** Apply `realpath` first to follow/resolve symlinks (i.e. `$(dirname $(realpath $path))`)._
+
 
 # Usage check.
 if (( $# < 1 )); then
