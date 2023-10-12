@@ -481,6 +481,13 @@ ask_yesno() {
 }
 ```
 
+**Basic One-Liner Function:**
+_First with default "no". Second with default "yes".
+```bash
+ask_yesno() { printf "\e[1;33m${1}\e[0m (y/N) \e[36m"; read -n 1; echo -e "\e[0m"; [ "${REPLY,,}" == "y" ] && return 0 || return 1; }
+ask_yesno() { printf "\e[1;33m${1}\e[0m (Y/n) \e[36m"; read -n 1; echo -e "\e[0m"; [ "${REPLY,,}" == "n" ] && return 1 || return 0; }
+```
+
 
 ### Loop on a question until it's valid
 
