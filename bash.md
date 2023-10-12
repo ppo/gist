@@ -501,6 +501,24 @@ done
 
 ### Sudo keep-alive
 
+<details>
+<summary>This is a one-liner used for periodically refreshing a sudo authentication session without performing any actual tasks.</summary>
+
+It keeps the sudo session alive by running a no-op `sudo -n true` command every 60 seconds. This can be useful in situations where you need to maintain sudo privileges for an extended period without having to re-enter your password each time you use a sudo command.
+
+1. `while true; do ...; done`: This is a while loop that runs indefinitely (`true` is always true), creating a loop that will keep running until it's explicitly exited.
+
+2. `sudo -n true`: This is the key part of the command. `sudo` is a command that allows you to execute other commands with elevated privileges (as a superuser). However, in this case, the `-n` option is used, which stands for "non-interactive." When `sudo -n` is used, it attempts to run the command `true` as a superuser without prompting for a password. The `true` command in Unix-like systems is a command that does nothing and always returns a "true" exit status. So essentially, `sudo -n true` is used to perform a no-op sudo command, which is just a way to refresh the sudo credentials without actually executing any real commands.
+
+3. `sleep 60`: This part makes the script wait for 60 seconds.
+
+4. `kill -0 "$$" || exit`: This part checks if the script is still running. `$$` is a special variable in Bash that holds the process ID (PID) of the current script. `kill -0` is used to check if a process with the given PID exists. If the process still exists, the `kill` command returns successfully (exit status 0), and the `||` operator ensures that the `exit` command is not executed. If the process does not exist (i.e., if the script has been terminated), the `kill` command returns a non-zero exit status, and the `exit` command is executed, which terminates the script.
+
+5. `2>/dev/null`: This part redirects any error messages (file descriptor 2) to `/dev/null`, effectively suppressing error output.
+
+6. `&`: This runs the entire loop in the background, allowing it to continue running in the background while you can interact with the terminal.
+</details>
+
 _Source: https://gist.github.com/cowboy/3118588_
 
 ```bash
@@ -509,4 +527,9 @@ sudo -v
 
 # Sudo keep-alive: update existing sudo timestamp if set, otherwise do nothing.
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+```
+
+**One-Liner Function:**
+```bash
+sudo_forever() { sudo -v; while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null & }
 ```
