@@ -1,6 +1,6 @@
 # sed
 
-> 👋Errors, improvements or other cool stuff? Let me know! 😀
+> 👋 Errors, improvements or other cool stuff? Let me know! 😀
 
 ```bash
 sed 's/find/replace/g'         # Find & replace.

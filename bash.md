@@ -1,6 +1,6 @@
 # Bash
 
-> 👋Errors, improvements or other cool stuff? Let me know! 😀
+> 👋 Errors, improvements or other cool stuff? Let me know! 😀
 
 
 ### Change folder

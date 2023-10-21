@@ -1,6 +1,6 @@
 # Regular Expressions
 
-> 👋Errors, improvements or other cool stuff? Let me know! 😀
+> 👋 Errors, improvements or other cool stuff? Let me know! 😀
 
 
 ### Add thousand separators

@@ -1,6 +1,6 @@
 # grep
 
-> 👋Errors, improvements or other cool stuff? Let me know! 😀
+> 👋 Errors, improvements or other cool stuff? Let me know! 😀
 
 
 ### Extract only the part that matches

@@ -1,6 +1,6 @@
 # rsync
 
-> 👋Errors, improvements or other cool stuff? Let me know! 😀
+> 👋 Errors, improvements or other cool stuff? Let me know! 😀
 
 
 ### Rsync update and delete, recursive, and preserve all (times, permissions, owner/group)

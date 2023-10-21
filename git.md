@@ -1,6 +1,6 @@
 # Git
 
-> 👋Errors, improvements or other cool stuff? Let me know! 😀
+> 👋 Errors, improvements or other cool stuff? Let me know! 😀
 
 
 ### Clone a repository in a folder

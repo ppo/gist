@@ -1,6 +1,6 @@
 # Linux
 
-> 👋Errors, improvements or other cool stuff? Let me know! 😀
+> 👋 Errors, improvements or other cool stuff? Let me know! 😀
 
 
 ### List processes listening on a particular port
