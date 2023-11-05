@@ -43,6 +43,13 @@ git describe --tags --abbrev=0
 ```
 
 
+### Reset local branch to exactly match remote branch
+
+```bash
+git fetch origin && git reset --hard origin/main
+```
+
+
 ### Remove files from Git index (without removing them from filesystem)
 
 ```bash
