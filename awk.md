@@ -12,6 +12,16 @@ echo "a b c d" | awk '{print $2}'  # Output: b
 ```
 
 
+### Print specific lines of a file
+
+```bash
+cat file.txt | awk '{if (NR>=123 && NR<=125) print}'
+```
+
+**`NR`:** The ordinal number of the current record from the start of input.  Inside a BEGIN action the value shall be 
+zero. Inside an END action the value shall be the number of the last record processed.
+
+
 ### Print date and time columns
 
 ```bash
