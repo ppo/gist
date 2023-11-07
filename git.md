@@ -114,3 +114,11 @@ git tag -a "${newVersion}" -m "Bump version: $oldVersion → $newVersion"
 git push origin master
 git push origin "${newVersion}"
 ```
+
+
+### Fix detached HEAD.
+
+1. _(optional)_ To keep the changes associated with the detached HEAD: `git branch tmp`
+2. Activate (point `HEAD` at) the `main` branch: `git checkout main`
+3. _(optional)_ To incorporate the changes into `main`: `git merge tmp`
+
