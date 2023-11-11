@@ -127,6 +127,19 @@ See: https://www.tldp.org/LDP/abs/html/string-manipulation.html
 | `${var,,}`                         | Lowercase all chars.                                        |
 
 
+### Dynamic variables
+
+See: https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html#Shell-Parameter-Expansion
+
+```bash
+suffix=bar
+foo_$suffix="foo bar"
+
+varname=foo_$suffix
+echo ${!varname}
+```
+
+
 ### Sequences
 
 | Expr                 | Description                                 |
