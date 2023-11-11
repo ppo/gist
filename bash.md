@@ -140,6 +140,75 @@ echo ${!varname}
 ```
 
 
+### Arrays
+
+See: https://www.gnu.org/software/bash/manual/html_node/Arrays.html
+
+For read-only, use `declare -r*`.
+
+```bash
+declare -a array
+declare -a array=( "value1" "value2" )
+
+# Set
+array+=( "value1" )
+# ⚠️ `array+="foo"` appends to the first item => "value1foo"
+
+# Get
+echo "$array"       # First item, same as `${array[0]}`
+echo "${array[1]}"  # Second item
+
+echo "${array[@]}"   # List of values: `value1 value2`
+echo "${!array[@]}"  # List of indexes: `0 1`
+echo "${#array[@]}"  # Length: 2
+```
+
+**Associative Arrays:**
+_⚠️ Order is not respected! Even when setting values directly in the `declare`._
+
+```bash
+declare -A dictionary
+declare -A dictionary=( ["key1"]="value1" ["key2"]="value2" )
+
+# Set
+dictionary["key1"]="value1"
+dictionary["key2"]="value2"
+# Or…
+dictionary+=(["key2"]="value2")
+
+# Get
+echo "${dictionary["key1"]}"
+
+echo "$dictionary"        # ⚠️ Empty!
+echo "${dictionary[@]}"   # List of values: `value1 value2`
+echo "${!dictionary[@]}"  # List of keys: `key1 key2`
+echo "${#dictionary[@]}"  # Length: 2
+
+(( ${#dictionary[@]} == 0 )) && echo "empty"
+
+# ⚠️ Order is not respected!
+for key in ${!dictionary[@]}; do
+  echo "${key}: ${dictionary[$key]}"
+done
+
+unset dictionary["key1"]  # Remove a given item
+unset dictionary          # "Empty all values"
+```
+
+To keep order:
+
+```bash
+declare -a ordered_keys=( "key1" "key2" )
+# Or…
+dictionary["key1"]="value1"; ordered_keys+=( "key1" )
+dictionary["key2"]="value2"; ordered_keys+=( "key2" )
+
+for key in ${ordered_keys[@]}; do
+  echo "${key}: ${dictionary[$key]}"
+done
+```
+
+
 ### Sequences
 
 | Expr                 | Description                                 |
