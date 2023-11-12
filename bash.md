@@ -195,7 +195,7 @@ unset dictionary["key1"]  # Remove a given item
 unset dictionary          # "Empty all values"
 ```
 
-To keep order:
+**Keep order in associative arrays:**
 
 ```bash
 declare -a ordered_keys=( "key1" "key2" )
@@ -207,6 +207,18 @@ for key in ${ordered_keys[@]}; do
   echo "${key}: ${dictionary[$key]}"
 done
 ```
+
+**Check if value in array:**  
+_Source: https://stackoverflow.com/a/47541882/101831_
+
+```bash
+printf '%s\0' "${myarray[@]}" | grep -F -x -z -- 'myvalue'
+```
+
+- `-z/--null-data` - Lines are terminated by a zero byte instead of a newline.
+- `-F/--fixed-strings` - Interpret PATTERNS as fixed strings, not regular expressions.
+- `-x/--line-regexp` - Select only those matches that exactly match the whole line.
+- `--` - marks the end of command-line options, making Grep process "myvalue" as a non-option argument even if it starts with a dash
 
 
 ### Sequences
