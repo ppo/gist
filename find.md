@@ -25,10 +25,18 @@ Format: `-exec <command> <terminator>`
     Result: `1`
 
 
+### Regex
+
+```bash
+find . -regextype posix-extended -regex "<regex>"
+```
+
+
 ### Find & delete
 
 ```bash
 find . -name ".DS_Store" -delete
+find . -type d -name "foo" -exec rm -fr {} +
 ```
 
 
