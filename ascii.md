@@ -71,5 +71,6 @@ printf "\u200B" | pbcopy
 
 ### More…
 
+[Traf's Glyphs](https://tr.af/glyphs)  
 [Browse all of the unicodes](https://unicodes.jessetane.com/)  
 [More arrows](https://www.alt-codes.net/arrow_alt_codes.php)
