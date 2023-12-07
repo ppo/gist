@@ -9,7 +9,7 @@ id = document.querySelector('#primary ytd-watch-metadata').getAttribute('video-i
 c = document.querySelector('#channel-name yt-formatted-string.ytd-channel-name a');
 cn = c.textContent;
 cu = c.href;
-t = document.querySelector('#title h1 yt-formatted-string').textContent;
+t = document.querySelector('#title h1 yt-formatted-string').textContent.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
 d = document.querySelector('#info-strings yt-formatted-string.ytd-video-primary-info-renderer').textContent;
 l = document.querySelector('.ytp-time-duration').textContent;
 
