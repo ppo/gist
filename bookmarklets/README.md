@@ -2,6 +2,7 @@
 
 Available here:
 
+* **[Article Link](article-link.js):** Create a Markdown string with information about the article, and copy it to the clipboard.
 * **[Gmail Clean Print](gmail-clean-print.js):** Remove the email header to print only the body part.
 * **[Instagram Account Info CSV](instagram-account-info-csv.js):** Scrape info about the current Instagram account.
 * **[Instagram Download Picture](instagram-download-picture.js):** Download the picture of the current post.
