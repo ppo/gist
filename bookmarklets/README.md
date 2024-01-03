@@ -10,7 +10,7 @@ Available here:
 * **[Spotify Clean Receipt](spotify-clean-receipt.js):** Fix the broken print format of Spotify’s receipts.
 * **[Twitter Disable Inerests](twitter-disable-interests.js):** Turn off "Topic Suggestions" and "Interests" at Twitter.
 * **[Twitter Notifications See Less Often](twitter-notifications-see-less-often.js):** Mark Twitter's suggestion notifications as "See less often".
-* **[YouTube Video Link](youtube-video-link.js):** Create a Mardown text with all the information about the video and copy it to the clipboard.
+* **[YouTube Video Link](youtube-video-link.js):** Create a Markdown string with information about the video, and copy it to the clipboard.
 
 > _**Note:** The files `*.bookmarklet.js` contain the ready to use one-line code;
 > i.e. the result of steps 1 & 2 described below in "Source → Bookmarklet"._
@@ -18,7 +18,7 @@ Available here:
 
 ## Bookmarklet Usage
 
-1. Go to the concerned page.
+1. Go to the URL concerned.
 2. Click on the bookmarklet.
 
 

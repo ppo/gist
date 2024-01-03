@@ -1,6 +1,6 @@
 // Scrape info about the current LinkedIn group.
 //
-// USAGE: LinkedIn Group page › Bookmarklet
+// USAGE: Go to the LinkedIn Group page. Execute this bookmarklet.
 //
 // Columns: Name, URL, Description, Members.
 

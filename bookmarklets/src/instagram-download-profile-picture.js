@@ -1,6 +1,6 @@
 // Download the profile picture of the current account.
 //
-// USAGE: Instagram profile page › Bookmarklet
+// USAGE: Go to the Instagram profile page. Execute this bookmarklet.
 //
 // Download Filename: <handle>.YYMMDD-HHSSMM-000Z.jpg
 

@@ -1,6 +1,6 @@
-// Create a Mardown text with all the information about the video and copy it to the clipboard.
+// Create a Markdown string with information about the video, and copy it to the clipboard.
 //
-// USAGE: YouTube video page › Bookmarklet
+// USAGE: Go to the YouTube video page. Execute this bookmarklet.
 //
 // Format: [Title of the video](https://youtu.be/video-id) (YYMMDD, 00:00, YT:[Channel Name](channel-url))
 
