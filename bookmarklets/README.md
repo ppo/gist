@@ -13,7 +13,7 @@ Available here:
 * **[Twitter Notifications See Less Often](twitter-notifications-see-less-often.js):** Mark Twitter's suggestion notifications as "See less often".
 * **[YouTube Video Link](youtube-video-link.js):** Create a Markdown string with information about the video, and copy it to the clipboard.
 
-> _**Note:** The files `*.bookmarklet.js` contain the ready to use one-line code;
+> _**Note:** The files `*.bml.js` contain the ready to use one-line code;
 > i.e. the result of steps 1 & 2 described below in "Source → Bookmarklet"._
 
 
