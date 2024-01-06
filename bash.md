@@ -403,17 +403,6 @@ __DIR__="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 [ "${BASH_SOURCE}" == "$0" ] && echo "Executed" || echo "Sourced"
 ```
 
-### Source a `.env` file
-
-[Bash `set -a`](https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html)
-
-Each variable or function that is created or modified is given the export attribute and marked for
-export to the environment of subsequent commands.
-
-```bash
-set -a; source .env; set +a
-```
-
 ### Positional and special arguments
 
 See https://www.tldp.org/LDP/abs/html/internalvariables.html
@@ -436,12 +425,44 @@ See https://www.tldp.org/LDP/abs/html/internalvariables.html
 | --      | Means the end of options; allowing positional arguments beginning with a dash.            |
 
 
-### Abort script if command execution failed
+### Set
+
+`set` allows to change the values of shell options, set the positional parameters, or to display
+the names and values of shell variables.
+
+Enable: `set -a`. Disable: `set +a`.
+
+|     | Description                                                                             |
+| --- | --------------------------------------------------------------------------------------- |
+|  a  | Auto export each variable or function. Equivalent to prepending them all with `export`. |
+|  e  | Exit if any command fails (i.e. returns a non-zero status).                             |
+|  x  | Print a trace (debug).                                                                  |
+|  f  | Disable filename expansion (globbing).                                                  |
+|  n  | Read commands but do not execute them.                                                  |
+|  t  | Exit after reading and executing one command.                                           |
+|  v  | Print shell input lines as they are read.                                               |
+|  B  | [Brace expansion][brace-expansion]. Default: on.                                        |
+|  C  | Prevent output redirection using `>`, `>&`, and `<>` from overwriting existing files.   |
+
+[brace-expansion]: https://www.gnu.org/software/bash/manual/html_node/Brace-Expansion.html
+
+More in the [doc](https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html).
+
+
+#### Abort script if any command execution fails
 
 ```bash
 set -e  # Exit if any command fails. Use `set +e` to turn it off.
 [ $? != 0 ] && { echo -e "Command failed, abort."; exit $?; }
 ```
+
+
+#### Export variables in a `.env` file
+
+```bash
+set -a; source .env; set +a
+```
+
 
 **With piped commands:**
 ```bash
