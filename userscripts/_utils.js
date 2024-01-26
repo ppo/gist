@@ -1,27 +1,22 @@
 // Shared helpers for userscripts.
 
-
 function copyToClipboard(value) {
   // Copies the given value to the clipboard.
   // _utils.js / version: 24012601
-  let e = document.createElement('textarea');
+  const e = document.createElement('textarea');
   e.value = value;
   document.body.appendChild(e);
   e.select();
   document.execCommand('copy');
 }
 
-
 function dateFormat(value) {
   // Formats a date (Date or string) as YYMMDD.
-  // _utils.js / version: 24012601
-  let d = new Date(value);
-  return [d.getUTCFullYear(), d.getUTCMonth()+1, d.getUTCDate()].reduce(
-    (accumulator, chunk) => accumulator + `0${chunk}`.slice(-2),
-    ''
-  );
+  // _utils.js / version: 24012602
+  if (!value) return;
+  const d = new Date(value);
+  return d.toISOString().replace(/^(\d{2})(\d{2})-(\d{2})-(\d{2}).*/, '$2$3$4');
 }
-
 
 function findFirstElement(selectors, namespaces) {
   // Finds the first element matching a series of selectors, located under a series of namespaces.
@@ -34,11 +29,10 @@ function findFirstElement(selectors, namespaces) {
   }
 }
 
-
 function sleep(ms, callback) {
   // Waits for the given time then executes the callback
   // Or returns immediately a Promise if no callback provided.
   // _utils.js / version: 24012601
-  let p = new Promise(resolve => setTimeout(resolve, ms));
+  const p = new Promise(resolve => setTimeout(resolve, ms));
   return callback ? p.then(callback) : p;
 }

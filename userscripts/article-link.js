@@ -35,7 +35,7 @@ const TIME_TAGS = ['time'];
 function copyToClipboard(value) {
   // Copies the given value to the clipboard.
   // _utils.js / version: 24012601
-  let e = document.createElement('textarea');
+  const e = document.createElement('textarea');
   e.value = value;
   document.body.appendChild(e);
   e.select();
@@ -44,12 +44,10 @@ function copyToClipboard(value) {
 
 function dateFormat(value) {
   // Formats a date (Date or string) as YYMMDD.
-  // _utils.js / version: 24012601
-  let d = new Date(value);
-  return [d.getUTCFullYear(), d.getUTCMonth()+1, d.getUTCDate()].reduce(
-    (accumulator, chunk) => accumulator + `0${chunk}`.slice(-2),
-    ''
-  );
+  // _utils.js / version: 24012602
+  if (!value) return;
+  const d = new Date(value);
+  return d.toISOString().replace(/^(\d{2})(\d{2})-(\d{2})-(\d{2}).*/, '$2$3$4');
 }
 
 function findFirstElement(selectors, namespaces) {
@@ -67,12 +65,12 @@ function findFirstElement(selectors, namespaces) {
 // LOCAL HELPERS ===================================================================================
 
 function getHeading() {
-  let e = findFirstElement(HEADING_TAGS, NAMESPACES);
+  const e = findFirstElement(HEADING_TAGS, NAMESPACES);
   if (e) return e.innerText.trim();
 }
 
 function getTime() {
-  let e = findFirstElement(TIME_TAGS, NAMESPACES);
+  const e = findFirstElement(TIME_TAGS, NAMESPACES);
   if (e) return dateFormat(e.dateTime);
 }
 
@@ -82,13 +80,13 @@ function getTime() {
 (function() {
   'use strict';
 
-  let title = window.getSelection().toString().trim() || getHeading();
+  const title = window.getSelection().toString().trim() || getHeading();
   if (!title) {
     alert('Article title not found. Select it.');
   } else {
-    let url = window.location.href;
-    let date = getTime();
-    let result = `[${title}](${url})` + (date ? ` (${date})` : '');
+    const url = window.location.href;
+    const date = getTime();
+    const result = `[${title}](${url})` + (date ? ` (${date})` : '');
     copyToClipboard(result);
   }
 
