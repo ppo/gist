@@ -2,7 +2,7 @@
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
 // @icon         data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>
-// @version      240126
+// @version      24012601
 // @namespace    ppo
 // @author       ppo
 // @match        *://*/*
