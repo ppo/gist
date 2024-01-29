@@ -39,7 +39,7 @@ indent_size = 4
 indent_style = tab
 
 # MARKDOWN
-[*.md]
+[*.{md,mdx}]
 indent_size = 4
 trim_trailing_whitespace = false
 
