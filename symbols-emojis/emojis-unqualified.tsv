@@ -1,0 +1,243 @@
+Emoji	Name	Group	Subgroup	Code Point	Code	Status
+☺	Smiling face	Smileys & Emotion	Face Affection	263A	E0.6	Unqualified
+☹	Frowning face	Smileys & Emotion	Face Concerned	2639	E0.7	Unqualified
+☠	Skull and crossbones	Smileys & Emotion	Face Negative	2620	E1.0	Unqualified
+❣	Heart exclamation	Smileys & Emotion	Heart	2763	E1.0	Unqualified
+❤‍🔥	Heart on fire	Smileys & Emotion	Heart	2764 200D 1F525	E13.1	Unqualified
+❤‍🩹	Mending heart	Smileys & Emotion	Heart	2764 200D 1FA79	E13.1	Unqualified
+❤	Red heart	Smileys & Emotion	Heart	2764	E0.6	Unqualified
+🕳	Hole	Smileys & Emotion	Emotion	1F573	E0.7	Unqualified
+👁‍🗨️	Eye in speech bubble	Smileys & Emotion	Emotion	1F441 200D 1F5E8 FE0F	E2.0	Unqualified
+👁‍🗨	Eye in speech bubble	Smileys & Emotion	Emotion	1F441 200D 1F5E8	E2.0	Unqualified
+🗨	Left speech bubble	Smileys & Emotion	Emotion	1F5E8	E2.0	Unqualified
+🗯	Right anger bubble	Smileys & Emotion	Emotion	1F5EF	E0.7	Unqualified
+🖐	Hand with fingers splayed	People & Body	Hand Fingers Open	1F590	E0.7	Unqualified
+✌	Victory hand	People & Body	Hand Fingers Partial	270C	E0.6	Unqualified
+☝	Index pointing up	People & Body	Hand Single Finger	261D	E0.6	Unqualified
+✍	Writing hand	People & Body	Hand Prop	270D	E0.7	Unqualified
+👁	Eye	People & Body	Body Parts	1F441	E0.7	Unqualified
+🕵	Detective	People & Body	Person Role	1F575	E0.7	Unqualified
+🕵‍♂️	Man detective	People & Body	Person Role	1F575 200D 2642 FE0F	E4.0	Unqualified
+🕵‍♂	Man detective	People & Body	Person Role	1F575 200D 2642	E4.0	Unqualified
+🕵‍♀️	Woman detective	People & Body	Person Role	1F575 200D 2640 FE0F	E4.0	Unqualified
+🕵‍♀	Woman detective	People & Body	Person Role	1F575 200D 2640	E4.0	Unqualified
+🕴	Person in suit levitating	People & Body	Person Activity	1F574	E0.7	Unqualified
+⛷	Skier	People & Body	Person Sport	26F7	E0.7	Unqualified
+🏌	Person golfing	People & Body	Person Sport	1F3CC	E0.7	Unqualified
+🏌‍♂️	Man golfing	People & Body	Person Sport	1F3CC 200D 2642 FE0F	E4.0	Unqualified
+🏌‍♂	Man golfing	People & Body	Person Sport	1F3CC 200D 2642	E4.0	Unqualified
+🏌‍♀️	Woman golfing	People & Body	Person Sport	1F3CC 200D 2640 FE0F	E4.0	Unqualified
+🏌‍♀	Woman golfing	People & Body	Person Sport	1F3CC 200D 2640	E4.0	Unqualified
+⛹	Person bouncing ball	People & Body	Person Sport	26F9	E0.7	Unqualified
+⛹‍♂️	Man bouncing ball	People & Body	Person Sport	26F9 200D 2642 FE0F	E4.0	Unqualified
+⛹‍♂	Man bouncing ball	People & Body	Person Sport	26F9 200D 2642	E4.0	Unqualified
+⛹‍♀️	Woman bouncing ball	People & Body	Person Sport	26F9 200D 2640 FE0F	E4.0	Unqualified
+⛹‍♀	Woman bouncing ball	People & Body	Person Sport	26F9 200D 2640	E4.0	Unqualified
+🏋	Person lifting weights	People & Body	Person Sport	1F3CB	E0.7	Unqualified
+🏋‍♂️	Man lifting weights	People & Body	Person Sport	1F3CB 200D 2642 FE0F	E4.0	Unqualified
+🏋‍♂	Man lifting weights	People & Body	Person Sport	1F3CB 200D 2642	E4.0	Unqualified
+🏋‍♀️	Woman lifting weights	People & Body	Person Sport	1F3CB 200D 2640 FE0F	E4.0	Unqualified
+🏋‍♀	Woman lifting weights	People & Body	Person Sport	1F3CB 200D 2640	E4.0	Unqualified
+🗣	Speaking head	People & Body	Person Symbol	1F5E3	E0.7	Unqualified
+🐿	Chipmunk	Animals & Nature	Animal Mammal	1F43F	E0.7	Unqualified
+🕊	Dove	Animals & Nature	Animal Bird	1F54A	E0.7	Unqualified
+🕷	Spider	Animals & Nature	Animal Bug	1F577	E0.7	Unqualified
+🕸	Spider web	Animals & Nature	Animal Bug	1F578	E0.7	Unqualified
+🏵	Rosette	Animals & Nature	Plant Flower	1F3F5	E0.7	Unqualified
+☘	Shamrock	Animals & Nature	Plant Other	2618	E1.0	Unqualified
+🌶	Hot pepper	Food & Drink	Food Vegetable	1F336	E0.7	Unqualified
+🍽	Fork and knife with plate	Food & Drink	Dishware	1F37D	E0.7	Unqualified
+🗺	World map	Travel & Places	Place Map	1F5FA	E0.7	Unqualified
+🏔	Snow-capped mountain	Travel & Places	Place Geographic	1F3D4	E0.7	Unqualified
+⛰	Mountain	Travel & Places	Place Geographic	26F0	E0.7	Unqualified
+🏕	Camping	Travel & Places	Place Geographic	1F3D5	E0.7	Unqualified
+🏖	Beach with umbrella	Travel & Places	Place Geographic	1F3D6	E0.7	Unqualified
+🏜	Desert	Travel & Places	Place Geographic	1F3DC	E0.7	Unqualified
+🏝	Desert island	Travel & Places	Place Geographic	1F3DD	E0.7	Unqualified
+🏞	National park	Travel & Places	Place Geographic	1F3DE	E0.7	Unqualified
+🏟	Stadium	Travel & Places	Place Building	1F3DF	E0.7	Unqualified
+🏛	Classical building	Travel & Places	Place Building	1F3DB	E0.7	Unqualified
+🏗	Building construction	Travel & Places	Place Building	1F3D7	E0.7	Unqualified
+🏘	Houses	Travel & Places	Place Building	1F3D8	E0.7	Unqualified
+🏚	Derelict house	Travel & Places	Place Building	1F3DA	E0.7	Unqualified
+⛩	Shinto shrine	Travel & Places	Place Religious	26E9	E0.7	Unqualified
+🏙	Cityscape	Travel & Places	Place Other	1F3D9	E0.7	Unqualified
+♨	Hot springs	Travel & Places	Place Other	2668	E0.6	Unqualified
+🏎	Racing car	Travel & Places	Transport Ground	1F3CE	E0.7	Unqualified
+🏍	Motorcycle	Travel & Places	Transport Ground	1F3CD	E0.7	Unqualified
+🛣	Motorway	Travel & Places	Transport Ground	1F6E3	E0.7	Unqualified
+🛤	Railway track	Travel & Places	Transport Ground	1F6E4	E0.7	Unqualified
+🛢	Oil drum	Travel & Places	Transport Ground	1F6E2	E0.7	Unqualified
+🛳	Passenger ship	Travel & Places	Transport Water	1F6F3	E0.7	Unqualified
+⛴	Ferry	Travel & Places	Transport Water	26F4	E0.7	Unqualified
+🛥	Motor boat	Travel & Places	Transport Water	1F6E5	E0.7	Unqualified
+✈	Airplane	Travel & Places	Transport Air	2708	E0.6	Unqualified
+🛩	Small airplane	Travel & Places	Transport Air	1F6E9	E0.7	Unqualified
+🛰	Satellite	Travel & Places	Transport Air	1F6F0	E0.7	Unqualified
+🛎	Bellhop bell	Travel & Places	Hotel	1F6CE	E0.7	Unqualified
+⏱	Stopwatch	Travel & Places	Time	23F1	E1.0	Unqualified
+⏲	Timer clock	Travel & Places	Time	23F2	E1.0	Unqualified
+🕰	Mantelpiece clock	Travel & Places	Time	1F570	E0.7	Unqualified
+🌡	Thermometer	Travel & Places	Sky & Weather	1F321	E0.7	Unqualified
+☀	Sun	Travel & Places	Sky & Weather	2600	E0.6	Unqualified
+☁	Cloud	Travel & Places	Sky & Weather	2601	E0.6	Unqualified
+⛈	Cloud with lightning and rain	Travel & Places	Sky & Weather	26C8	E0.7	Unqualified
+🌤	Sun behind small cloud	Travel & Places	Sky & Weather	1F324	E0.7	Unqualified
+🌥	Sun behind large cloud	Travel & Places	Sky & Weather	1F325	E0.7	Unqualified
+🌦	Sun behind rain cloud	Travel & Places	Sky & Weather	1F326	E0.7	Unqualified
+🌧	Cloud with rain	Travel & Places	Sky & Weather	1F327	E0.7	Unqualified
+🌨	Cloud with snow	Travel & Places	Sky & Weather	1F328	E0.7	Unqualified
+🌩	Cloud with lightning	Travel & Places	Sky & Weather	1F329	E0.7	Unqualified
+🌪	Tornado	Travel & Places	Sky & Weather	1F32A	E0.7	Unqualified
+🌫	Fog	Travel & Places	Sky & Weather	1F32B	E0.7	Unqualified
+🌬	Wind face	Travel & Places	Sky & Weather	1F32C	E0.7	Unqualified
+☂	Umbrella	Travel & Places	Sky & Weather	2602	E0.7	Unqualified
+⛱	Umbrella on ground	Travel & Places	Sky & Weather	26F1	E0.7	Unqualified
+❄	Snowflake	Travel & Places	Sky & Weather	2744	E0.6	Unqualified
+☃	Snowman	Travel & Places	Sky & Weather	2603	E0.7	Unqualified
+☄	Comet	Travel & Places	Sky & Weather	2604	E1.0	Unqualified
+🎗	Reminder ribbon	Activities	Event	1F397	E0.7	Unqualified
+🎟	Admission tickets	Activities	Event	1F39F	E0.7	Unqualified
+🎖	Military medal	Activities	Award Medal	1F396	E0.7	Unqualified
+⛸	Ice skate	Activities	Sport	26F8	E0.7	Unqualified
+🕹	Joystick	Activities	Game	1F579	E0.7	Unqualified
+♠	Spade suit	Activities	Game	2660	E0.6	Unqualified
+♥	Heart suit	Activities	Game	2665	E0.6	Unqualified
+♦	Diamond suit	Activities	Game	2666	E0.6	Unqualified
+♣	Club suit	Activities	Game	2663	E0.6	Unqualified
+♟	Chess pawn	Activities	Game	265F	E11.0	Unqualified
+🖼	Framed picture	Activities	Arts & Crafts	1F5BC	E0.7	Unqualified
+🕶	Sunglasses	Objects	Clothing	1F576	E0.7	Unqualified
+🛍	Shopping bags	Objects	Clothing	1F6CD	E0.7	Unqualified
+⛑	Rescue worker’s helmet	Objects	Clothing	26D1	E0.7	Unqualified
+🎙	Studio microphone	Objects	Music	1F399	E0.7	Unqualified
+🎚	Level slider	Objects	Music	1F39A	E0.7	Unqualified
+🎛	Control knobs	Objects	Music	1F39B	E0.7	Unqualified
+☎	Telephone	Objects	Phone	260E	E0.6	Unqualified
+🖥	Desktop computer	Objects	Computer	1F5A5	E0.7	Unqualified
+🖨	Printer	Objects	Computer	1F5A8	E0.7	Unqualified
+⌨	Keyboard	Objects	Computer	2328	E1.0	Unqualified
+🖱	Computer mouse	Objects	Computer	1F5B1	E0.7	Unqualified
+🖲	Trackball	Objects	Computer	1F5B2	E0.7	Unqualified
+🎞	Film frames	Objects	Light & Video	1F39E	E0.7	Unqualified
+📽	Film projector	Objects	Light & Video	1F4FD	E0.7	Unqualified
+🕯	Candle	Objects	Light & Video	1F56F	E0.7	Unqualified
+🗞	Rolled-up newspaper	Objects	Book Paper	1F5DE	E0.7	Unqualified
+🏷	Label	Objects	Book Paper	1F3F7	E0.7	Unqualified
+✉	Envelope	Objects	Mail	2709	E0.6	Unqualified
+🗳	Ballot box with ballot	Objects	Mail	1F5F3	E0.7	Unqualified
+✏	Pencil	Objects	Writing	270F	E0.6	Unqualified
+✒	Black nib	Objects	Writing	2712	E0.6	Unqualified
+🖋	Fountain pen	Objects	Writing	1F58B	E0.7	Unqualified
+🖊	Pen	Objects	Writing	1F58A	E0.7	Unqualified
+🖌	Paintbrush	Objects	Writing	1F58C	E0.7	Unqualified
+🖍	Crayon	Objects	Writing	1F58D	E0.7	Unqualified
+🗂	Card index dividers	Objects	Office	1F5C2	E0.7	Unqualified
+🗒	Spiral notepad	Objects	Office	1F5D2	E0.7	Unqualified
+🗓	Spiral calendar	Objects	Office	1F5D3	E0.7	Unqualified
+🖇	Linked paperclips	Objects	Office	1F587	E0.7	Unqualified
+✂	Scissors	Objects	Office	2702	E0.6	Unqualified
+🗃	Card file box	Objects	Office	1F5C3	E0.7	Unqualified
+🗄	File cabinet	Objects	Office	1F5C4	E0.7	Unqualified
+🗑	Wastebasket	Objects	Office	1F5D1	E0.7	Unqualified
+🗝	Old key	Objects	Lock	1F5DD	E0.7	Unqualified
+⛏	Pick	Objects	Tool	26CF	E0.7	Unqualified
+⚒	Hammer and pick	Objects	Tool	2692	E1.0	Unqualified
+🛠	Hammer and wrench	Objects	Tool	1F6E0	E0.7	Unqualified
+🗡	Dagger	Objects	Tool	1F5E1	E0.7	Unqualified
+⚔	Crossed swords	Objects	Tool	2694	E1.0	Unqualified
+🛡	Shield	Objects	Tool	1F6E1	E0.7	Unqualified
+⚙	Gear	Objects	Tool	2699	E1.0	Unqualified
+🗜	Clamp	Objects	Tool	1F5DC	E0.7	Unqualified
+⚖	Balance scale	Objects	Tool	2696	E1.0	Unqualified
+⛓	Chains	Objects	Tool	26D3	E0.7	Unqualified
+⚗	Alembic	Objects	Science	2697	E1.0	Unqualified
+🛏	Bed	Objects	Household	1F6CF	E0.7	Unqualified
+🛋	Couch and lamp	Objects	Household	1F6CB	E0.7	Unqualified
+⚰	Coffin	Objects	Other Object	26B0	E1.0	Unqualified
+⚱	Funeral urn	Objects	Other Object	26B1	E1.0	Unqualified
+⚠	Warning	Symbols	Warning	26A0	E0.6	Unqualified
+☢	Radioactive	Symbols	Warning	2622	E1.0	Unqualified
+☣	Biohazard	Symbols	Warning	2623	E1.0	Unqualified
+⬆	Up arrow	Symbols	Arrow	2B06	E0.6	Unqualified
+↗	Up-right arrow	Symbols	Arrow	2197	E0.6	Unqualified
+➡	Right arrow	Symbols	Arrow	27A1	E0.6	Unqualified
+↘	Down-right arrow	Symbols	Arrow	2198	E0.6	Unqualified
+⬇	Down arrow	Symbols	Arrow	2B07	E0.6	Unqualified
+↙	Down-left arrow	Symbols	Arrow	2199	E0.6	Unqualified
+⬅	Left arrow	Symbols	Arrow	2B05	E0.6	Unqualified
+↖	Up-left arrow	Symbols	Arrow	2196	E0.6	Unqualified
+↕	Up-down arrow	Symbols	Arrow	2195	E0.6	Unqualified
+↔	Left-right arrow	Symbols	Arrow	2194	E0.6	Unqualified
+↩	Right arrow curving left	Symbols	Arrow	21A9	E0.6	Unqualified
+↪	Left arrow curving right	Symbols	Arrow	21AA	E0.6	Unqualified
+⤴	Right arrow curving up	Symbols	Arrow	2934	E0.6	Unqualified
+⤵	Right arrow curving down	Symbols	Arrow	2935	E0.6	Unqualified
+⚛	Atom symbol	Symbols	Religion	269B	E1.0	Unqualified
+🕉	Om	Symbols	Religion	1F549	E0.7	Unqualified
+✡	Star of David	Symbols	Religion	2721	E0.7	Unqualified
+☸	Wheel of dharma	Symbols	Religion	2638	E0.7	Unqualified
+☯	Yin yang	Symbols	Religion	262F	E0.7	Unqualified
+✝	Latin cross	Symbols	Religion	271D	E0.7	Unqualified
+☦	Orthodox cross	Symbols	Religion	2626	E1.0	Unqualified
+☪	Star and crescent	Symbols	Religion	262A	E0.7	Unqualified
+☮	Peace symbol	Symbols	Religion	262E	E1.0	Unqualified
+▶	Play button	Symbols	Av Symbol	25B6	E0.6	Unqualified
+⏭	Next track button	Symbols	Av Symbol	23ED	E0.7	Unqualified
+⏯	Play or pause button	Symbols	Av Symbol	23EF	E1.0	Unqualified
+◀	Reverse button	Symbols	Av Symbol	25C0	E0.6	Unqualified
+⏮	Last track button	Symbols	Av Symbol	23EE	E0.7	Unqualified
+⏸	Pause button	Symbols	Av Symbol	23F8	E0.7	Unqualified
+⏹	Stop button	Symbols	Av Symbol	23F9	E0.7	Unqualified
+⏺	Record button	Symbols	Av Symbol	23FA	E0.7	Unqualified
+⏏	Eject button	Symbols	Av Symbol	23CF	E1.0	Unqualified
+♀	Female sign	Symbols	Gender	2640	E4.0	Unqualified
+♂	Male sign	Symbols	Gender	2642	E4.0	Unqualified
+⚧	Transgender symbol	Symbols	Gender	26A7	E13.0	Unqualified
+✖	Multiply	Symbols	Math	2716	E0.6	Unqualified
+♾	Infinity	Symbols	Math	267E	E11.0	Unqualified
+‼	Double exclamation mark	Symbols	Punctuation	203C	E0.6	Unqualified
+⁉	Exclamation question mark	Symbols	Punctuation	2049	E0.6	Unqualified
+〰	Wavy dash	Symbols	Punctuation	3030	E0.6	Unqualified
+⚕	Medical symbol	Symbols	Other Symbol	2695	E4.0	Unqualified
+♻	Recycling symbol	Symbols	Other Symbol	267B	E0.6	Unqualified
+⚜	Fleur-de-lis	Symbols	Other Symbol	269C	E1.0	Unqualified
+☑	Check box with check	Symbols	Other Symbol	2611	E0.6	Unqualified
+✔	Check mark	Symbols	Other Symbol	2714	E0.6	Unqualified
+〽	Part alternation mark	Symbols	Other Symbol	303D	E0.6	Unqualified
+✳	Eight-spoked asterisk	Symbols	Other Symbol	2733	E0.6	Unqualified
+✴	Eight-pointed star	Symbols	Other Symbol	2734	E0.6	Unqualified
+❇	Sparkle	Symbols	Other Symbol	2747	E0.6	Unqualified
+©	Copyright	Symbols	Other Symbol	00A9	E0.6	Unqualified
+®	Registered	Symbols	Other Symbol	00AE	E0.6	Unqualified
+™	Trade mark	Symbols	Other Symbol	2122	E0.6	Unqualified
+#⃣	Keycap: #	Symbols	Keycap	0023 20E3	E0.6	Unqualified
+*⃣	Keycap: *	Symbols	Keycap	002A 20E3	E2.0	Unqualified
+0⃣	Keycap: 0	Symbols	Keycap	0030 20E3	E0.6	Unqualified
+1⃣	Keycap: 1	Symbols	Keycap	0031 20E3	E0.6	Unqualified
+2⃣	Keycap: 2	Symbols	Keycap	0032 20E3	E0.6	Unqualified
+3⃣	Keycap: 3	Symbols	Keycap	0033 20E3	E0.6	Unqualified
+4⃣	Keycap: 4	Symbols	Keycap	0034 20E3	E0.6	Unqualified
+5⃣	Keycap: 5	Symbols	Keycap	0035 20E3	E0.6	Unqualified
+6⃣	Keycap: 6	Symbols	Keycap	0036 20E3	E0.6	Unqualified
+7⃣	Keycap: 7	Symbols	Keycap	0037 20E3	E0.6	Unqualified
+8⃣	Keycap: 8	Symbols	Keycap	0038 20E3	E0.6	Unqualified
+9⃣	Keycap: 9	Symbols	Keycap	0039 20E3	E0.6	Unqualified
+🅰	A button (blood type)	Symbols	Alphanum	1F170	E0.6	Unqualified
+🅱	B button (blood type)	Symbols	Alphanum	1F171	E0.6	Unqualified
+ℹ	Information	Symbols	Alphanum	2139	E0.6	Unqualified
+Ⓜ	Circled M	Symbols	Alphanum	24C2	E0.6	Unqualified
+🅾	O button (blood type)	Symbols	Alphanum	1F17E	E0.6	Unqualified
+🅿	P button	Symbols	Alphanum	1F17F	E0.6	Unqualified
+🈂	Japanese “service charge” button	Symbols	Alphanum	1F202	E0.6	Unqualified
+🈷	Japanese “monthly amount” button	Symbols	Alphanum	1F237	E0.6	Unqualified
+㊗	Japanese “congratulations” button	Symbols	Alphanum	3297	E0.6	Unqualified
+㊙	Japanese “secret” button	Symbols	Alphanum	3299	E0.6	Unqualified
+◼	Black medium square	Symbols	Geometric	25FC	E0.6	Unqualified
+◻	White medium square	Symbols	Geometric	25FB	E0.6	Unqualified
+▪	Black small square	Symbols	Geometric	25AA	E0.6	Unqualified
+▫	White small square	Symbols	Geometric	25AB	E0.6	Unqualified
+🏳	White flag	Flags	Flag	1F3F3	E0.7	Unqualified
+🏳‍🌈	Rainbow flag	Flags	Flag	1F3F3 200D 1F308	E4.0	Unqualified
+🏳‍⚧️	Transgender flag	Flags	Flag	1F3F3 200D 26A7 FE0F	E13.0	Unqualified
+🏳‍⚧	Transgender flag	Flags	Flag	1F3F3 200D 26A7	E13.0	Unqualified
