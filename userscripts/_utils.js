@@ -10,6 +10,7 @@ function copyToClipboard(value) {
   document.execCommand('copy');
 }
 
+
 function dateFormat(value) {
   // Formats a date (Date or string) as YYMMDD.
   // _utils.js / version: 24012602
@@ -17,6 +18,7 @@ function dateFormat(value) {
   const d = new Date(value);
   return d.toISOString().replace(/^(\d{2})(\d{2})-(\d{2})-(\d{2}).*/, '$2$3$4');
 }
+
 
 function findFirstElement(selectors, namespaces) {
   // Finds the first element matching a series of selectors, located under a series of namespaces.
@@ -28,6 +30,7 @@ function findFirstElement(selectors, namespaces) {
     }
   }
 }
+
 
 function sleep(ms, callback) {
   // Waits for the given time then executes the callback
