@@ -2,7 +2,7 @@
 // @name         YouTube Video Link
 // @description  Create a Markdown string with information about the video, and copy it to the clipboard.
 // @icon         data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📺</text></svg>
-// @version      24012601
+// @version      24040501
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/watch?*
@@ -48,21 +48,22 @@ function dateFormat(value) {
 
 function getVideoUrl() {
   const e = document.querySelector('ytd-watch-metadata');
-  const videoId = e.getAttribute('video-id');
+  const videoId = e.getAttribute('video-id').trim();
   const url = new URL(`https://youtu.be/${videoId}`);
   return `${url.origin}${url.pathname}`;
 }
 
 function getChannelInfo() {
   const e = document.querySelector('ytd-video-owner-renderer ytd-channel-name a');
-  return { name: e.textContent, url: e.href };
+  return { name: e.textContent.trim(), url: e.href };
 }
 
 function getTitle() {
   const e = document.querySelector('ytd-watch-metadata #title h1 yt-formatted-string');
-  return e.textContent.trim()
-    .toLowerCase().replace(/\b\w/g, s => s.toUpperCase())  // Title case.
-    .replace(/ +/g, s => ' ');  // Remove multiple spaces.
+  let title = e.textContent;
+  // title = title.toLowerCase().replace(/\b\w/g, s => s.toUpperCase()); // Title case.
+  title = title.replace(/ +/g, s => ' '); // Remove multiple spaces.
+  return title.trim();
 }
 
 function getDate() {
@@ -73,7 +74,7 @@ function getDate() {
 
 function getDuration() {
   const e = document.querySelector('ytd-player .ytp-time-duration');
-  return e.textContent;
+  return e.textContent.trim();
 }
 
 
