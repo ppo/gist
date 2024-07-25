@@ -2,7 +2,7 @@
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
 // @icon         data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>
-// @version      24012602
+// @version      24072401
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -25,9 +25,13 @@
 
 // CONSTANTS =======================================================================================
 
-const NAMESPACES = ['main', 'article', 'section', ''];
-const HEADING_TAGS = ['h1', 'h2'];
-const TIME_TAGS = ['time'];
+const NAMESPACES = ['main', 'article', 'section', 'body'];
+const HEADING_SELECTORS = ['h1', 'h2'];
+const TIME_SELECTORS = [
+  'time',
+  '[data-testid="storyPublishDate"]', // Medium
+];
+const HEAD_TIME_SELECTORS = ['meta[itemprop="dateModified"]', 'meta[itemprop="datePublished"]'];
 
 
 // SHARED HELPERS ==================================================================================
@@ -47,6 +51,7 @@ function dateFormat(value) {
   // _utils.js / version: 24012602
   if (!value) return;
   const d = new Date(value);
+  d.setHours(12);  // Fix: UTC date shift.
   return d.toISOString().replace(/^(\d{2})(\d{2})-(\d{2})-(\d{2}).*/, '$2$3$4');
 }
 
@@ -65,13 +70,18 @@ function findFirstElement(selectors, namespaces) {
 // LOCAL HELPERS ===================================================================================
 
 function getHeading() {
-  const e = findFirstElement(HEADING_TAGS, NAMESPACES);
+  const e = findFirstElement(HEADING_SELECTORS, NAMESPACES);
   if (e) return e.innerText.trim();
 }
 
 function getTime() {
-  const e = findFirstElement(TIME_TAGS, NAMESPACES);
-  if (e) return dateFormat(e.dateTime);
+  let e;
+
+  e = findFirstElement(HEAD_TIME_SELECTORS, ['head']);
+  if (e) return dateFormat(e.getAttribute('content'));
+
+  e = findFirstElement(TIME_SELECTORS, NAMESPACES);
+  if (e) return dateFormat(e.dateTime || e.innerText.trim());
 }
 
 
