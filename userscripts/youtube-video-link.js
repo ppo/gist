@@ -2,7 +2,7 @@
 // @name         YouTube Video Link
 // @description  Create a Markdown string with information about the video, and copy it to the clipboard.
 // @icon         data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📺</text></svg>
-// @version      24040501
+// @version      24072601
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/watch?*
@@ -67,9 +67,24 @@ function getTitle() {
 }
 
 function getDate() {
-  const e = document.querySelector('#info-strings yt-formatted-string.ytd-video-primary-info-renderer');
-  const value = e.textContent.replace('Premiered', '').trim();
-  return dateFormat(value) || '?';
+  let e, value;
+  try {
+    e = document.querySelector('#info-strings yt-formatted-string.ytd-video-primary-info-renderer');
+    value = e.textContent.replace('Premiered', '').trim();
+    value = dateFormat(value);
+    console.log('value 1:', value);
+  } catch {
+    value = null;
+  }
+
+  if (!value) {
+    e = document.querySelector('meta[itemprop="datePublished"]');
+    value = e.getAttribute('content');
+    value = dateFormat(value);
+    console.log('value 2:', value);
+  }
+
+  return value || '?';
 }
 
 function getDuration() {
