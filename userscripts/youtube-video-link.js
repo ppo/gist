@@ -2,7 +2,7 @@
 // @name         YouTube Video Link
 // @description  Create a Markdown string with information about the video, and copy it to the clipboard.
 // @icon         data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📺</text></svg>
-// @version      24072601
+// @version      24072701
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/watch?*
@@ -92,6 +92,20 @@ function getDuration() {
   return e.textContent.trim();
 }
 
+function isUpperCase(value) {
+  return value === value.toUpperCase();
+}
+
+function toTitleCase(value) {
+  return value.charAt(0).toUpperCase() + value.substring(1).toLowerCase();
+}
+
+function convertUpperCaseWords(value) {
+  let words = value.split(' ');
+  words = words.map(word => isUpperCase(word) ? toTitleCase(word) : word);
+  return words.join(' ');
+}
+
 
 // MAIN ============================================================================================
 
@@ -100,7 +114,7 @@ function getDuration() {
 
   const videoUrl = getVideoUrl();
   const channel = getChannelInfo();
-  const title = getTitle();
+  const title = convertUpperCaseWords(getTitle());
   const date = getDate();
   const duration = getDuration();
 
