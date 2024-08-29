@@ -2,7 +2,7 @@
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
 // @icon         data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>
-// @version      24072401
+// @version      24083001
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -34,6 +34,11 @@ const TIME_SELECTORS = [
 const HEAD_TIME_SELECTORS = ['meta[itemprop="dateModified"]', 'meta[itemprop="datePublished"]'];
 
 
+// GLOBALS =========================================================================================
+
+let specialSite = null;
+
+
 // SHARED HELPERS ==================================================================================
 
 function copyToClipboard(value) {
@@ -51,7 +56,7 @@ function dateFormat(value) {
   // _utils.js / version: 24012602
   if (!value) return;
   const d = new Date(value);
-  d.setHours(12);  // Fix: UTC date shift.
+  d.setHours(12); // Fix: UTC date shift.
   return d.toISOString().replace(/^(\d{2})(\d{2})-(\d{2})-(\d{2}).*/, '$2$3$4');
 }
 
@@ -69,8 +74,30 @@ function findFirstElement(selectors, namespaces) {
 
 // LOCAL HELPERS ===================================================================================
 
+function checkSpecialSite() {
+  if (/^.*wikipedia\.org$/.test(window.location.host)) {
+    specialSite = 'WIKIPEDIA';
+  }
+}
+
+function formatResult(url, title, date) {
+  let result = `[${title}](${url})` + (date ? ` (${date})` : '');
+
+  switch (specialSite) {
+    case 'WIKIPEDIA': result = `⍵:${result}`; break;
+  }
+
+  return result;
+}
+
 function getHeading() {
-  const e = findFirstElement(HEADING_SELECTORS, NAMESPACES);
+  let e;
+
+  switch (specialSite) {
+    case 'WIKIPEDIA': e = document.querySelector('#firstHeading > span'); break;
+    default: e = findFirstElement(HEADING_SELECTORS, NAMESPACES);
+  }
+
   if (e) return e.innerText.trim();
 }
 
@@ -90,13 +117,14 @@ function getTime() {
 (function() {
   'use strict';
 
+  checkSpecialSite();
   const title = window.getSelection().toString().trim() || getHeading();
   if (!title) {
     alert('Article title not found. Select it.');
   } else {
     const url = window.location.href;
     const date = getTime();
-    const result = `[${title}](${url})` + (date ? ` (${date})` : '');
+    const result = formatResult(url, title, date);
     copyToClipboard(result);
   }
 
