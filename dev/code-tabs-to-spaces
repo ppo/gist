@@ -1,0 +1,36 @@
+#!/usr/bin/env zsh
+# Convert tab indentation to spaces.
+# Args: [IDENT_SIZE=2]
+
+
+INDENT_SIZE=${1:-2}
+PATTERNS=(astro css htm html js jsx json md mdx mjs sass svelte toml ts yaml yml)
+
+
+do_grep() {
+  args=""
+  for ext in "${PATTERNS[@]}"; do
+    args="${args} --${1}=*.${ext}"
+  done
+
+  /usr/bin/grep -rlE \
+    --exclude-dir=.git --exclude-dir=node_modules \
+    --exclude=pnpm-lock.yaml \
+    $( printf -- "--$1=*.%s " "${PATTERNS[@]}" ) \
+    "\t" *
+}
+
+
+spacer=""
+output="$( do_grep include )"
+if [ -n "$output" ]; then
+  echo -e "\e[1;37m=== Processed ===\e[0m"
+  echo "$output" | while read -r file; do
+    echo "$file"
+    expand -t $INDENT_SIZE "$file" > temp && mv temp "$file"
+  done
+  spacer="\n"
+fi
+
+output="$( do_grep exclude )"
+[ -n "$output" ] && echo -e "${spacer}\e[1;37m=== NOT Processed ===\e[0m\n${output}"
