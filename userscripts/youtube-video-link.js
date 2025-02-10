@@ -25,7 +25,7 @@
 // CONSTANTS =======================================================================================
 
 const KEEP_UPPERCASE = [
-  'AI',
+  'AI', 'DIY',
 ];
 
 
@@ -61,7 +61,7 @@ function getVideoUrl() {
 }
 
 function getChannelInfo() {
-  const e = document.querySelector('ytd-video-owner-renderer ytd-channel-name a');
+  const e = document.querySelector('#channel-name .ytd-channel-name a');
   return { name: e.textContent.trim(), url: e.href };
 }
 
