@@ -42,8 +42,9 @@ Host github
 
 ```bash
 keyname=$(echo "`whoami`@`hostname`" | cut -d'.' -f 1)
-ssh-keygen -b 4096 -f ~/.ssh/$keyname -C $keyname -N ""
-ssh-add ~/.ssh/$keyname
+keydir="~/.ssh/${keyname}"
+ssh-keygen -t rsa -b 4096 -f "$keydir" -C "$keyname" -N ""
+ssh-add "$keydir"
 ```
 
 
@@ -58,9 +59,8 @@ ssh-copy-id foo@example.com
 **Option 2:**
 
 ```bash
-cat ~/.ssh/${keyname}.pub | ssh foo@example.com \
-"mkdir ~/.ssh && chmod 700 ~/.ssh && touch ~/.ssh/authorized_keys && \
-chmod 600 ~/.ssh/authorized_keys && cat >>  ~/.ssh/authorized_keys"
+cat "~/.ssh/${keyname}.pub" | ssh foo@example.com \
+  "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cd ~/.ssh && touch authorized_keys && chmod 600 authorized_keys && cat >> authorized_keys"
 ```
 
 **Option 3:**
