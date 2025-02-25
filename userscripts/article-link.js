@@ -2,7 +2,7 @@
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
 // @icon         data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>
-// @version      24083001
+// @version      25022501
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -84,7 +84,7 @@ function formatResult(url, title, date) {
   let result = `[${title}](${url})` + (date ? ` (${date})` : '');
 
   switch (specialSite) {
-    case 'WIKIPEDIA': result = `⍵:${result}`; break;
+    case 'WIKIPEDIA': result = `⍵:[${title}](${url})`; break;
   }
 
   return result;
