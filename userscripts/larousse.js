@@ -2,7 +2,7 @@
 // @name         Larousse
 // @description  Remove blocking modal
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
-// @version      231231
+// @version      231231-01
 // @namespace    ppo
 // @author       ppo
 // @match        https://*.larousse.fr

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         DuckDuckGo Ads
 // @description  Hide ads.
-// @version      24060303
+// @version      240603-03
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        https://duckduckgo.com/*
