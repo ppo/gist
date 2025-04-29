@@ -2,7 +2,7 @@
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
 // @icon         data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>
-// @version      250225-01
+// @version      250429-01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -75,15 +75,18 @@ function findFirstElement(selectors, namespaces) {
 // LOCAL HELPERS ===================================================================================
 
 function checkSpecialSite() {
-  if (/^.*wikipedia\.org$/.test(window.location.host)) {
-    specialSite = 'WIKIPEDIA';
-  }
+  if (window.location.host.includes('github.com'))    specialSite = 'GITHUB';
+  if (window.location.host.includes('wikipedia.org')) specialSite = 'WIKIPEDIA';
 }
 
 function formatResult(url, title, date) {
   let result = `[${title}](${url})` + (date ? ` (${date})` : '');
 
   switch (specialSite) {
+    case 'GITHUB':
+      const about = document.querySelector('.Layout-sidebar .about-margin h2 + p').innerText.trim();
+      result = `GitHub: [${title}](${url}) • ${about}`;
+      break;
     case 'WIKIPEDIA': result = `⍵:[${title}](${url})`; break;
   }
 
@@ -94,6 +97,10 @@ function getHeading() {
   let e;
 
   switch (specialSite) {
+    case 'GITHUB':
+      e = document.querySelector('article .markdown-heading h1.heading-element');
+      if (!e) e = document.querySelector('#repo-title-component a');
+      break;
     case 'WIKIPEDIA': e = document.querySelector('#firstHeading > span'); break;
     default: e = findFirstElement(HEADING_SELECTORS, NAMESPACES);
   }
