@@ -6,7 +6,7 @@
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
-// @run-at       context-menu
+// @run-at       context-menu | document-start | document-end
 // ==/UserScript==
 
 
@@ -19,7 +19,7 @@
 //   Update URL: https://raw.githubusercontent.com/ppo/gist/HEAD/userscripts/{{FILENAME}}.js
 
 
-// CONSTANTS =======================================================================================
+// SETTINGS ========================================================================================
 
 // const waldo = 'constant value';
 
@@ -32,7 +32,7 @@
 // }
 
 
-// LOCAL HELPERS ===================================================================================
+// HELPERS =========================================================================================
 
 // function bar() {
 // }
