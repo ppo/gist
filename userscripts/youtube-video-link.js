@@ -32,8 +32,8 @@ const KEEP_UPPERCASE = [
 // SHARED HELPERS ==================================================================================
 
 function copyToClipboard(value) {
-  // Copies the given value to the clipboard.
-  // _utils.js / version: 24012601
+  // Copy the given value to the clipboard.
+  // _utils.js / version: 240126-01
   const e = document.createElement('textarea');
   e.value = value;
   document.body.appendChild(e);
@@ -43,7 +43,7 @@ function copyToClipboard(value) {
 
 function dateFormat(value) {
   // Formats a date (Date or string) as YYMMDD.
-  // _utils.js / version: 24012602
+  // _utils.js / version: 240126-02
   if (!value) return;
   const d = new Date(value);
   return d.toISOString().replace(/^(\d{2})(\d{2})-(\d{2})-(\d{2}).*/, '$2$3$4');

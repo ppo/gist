@@ -42,8 +42,8 @@ let specialSite = null;
 // SHARED HELPERS ==================================================================================
 
 function copyToClipboard(value) {
-  // Copies the given value to the clipboard.
-  // _utils.js / version: 24012601
+  // Copy the given value to the clipboard.
+  // _utils.js / version: 240126-01
   const e = document.createElement('textarea');
   e.value = value;
   document.body.appendChild(e);
@@ -53,7 +53,7 @@ function copyToClipboard(value) {
 
 function dateFormat(value) {
   // Formats a date (Date or string) as YYMMDD.
-  // _utils.js / version: 24012602
+  // _utils.js / version: 240126-02
   if (!value) return;
   const d = new Date(value);
   d.setHours(12); // Fix: UTC date shift.
@@ -62,7 +62,7 @@ function dateFormat(value) {
 
 function findFirstElement(selectors, namespaces) {
   // Finds the first element matching a series of selectors, located under a series of namespaces.
-  // _utils.js / version: 24012601
+  // _utils.js / version: 240126-01
   for (let selector of selectors) {
     for (let namespace of namespaces) {
       let e = document.querySelector(`${namespace} ${selector}`);

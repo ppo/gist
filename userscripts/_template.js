@@ -28,7 +28,7 @@
 
 // function foo() {
 //   // Description.
-//   // _utils.js / version: YYMMDDnn
+//   // _utils.js / version: YYMMDD-nn
 // }
 
 

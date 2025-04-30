@@ -23,8 +23,8 @@ let specialSite = null;
 // SHARED HELPERS ==================================================================================
 
 function copyToClipboard(value) {
-  // Copies the given value to the clipboard.
-  // _utils.js / version: 24012601
+  // Copy the given value to the clipboard.
+  // _utils.js / version: 240126-01
   const e = document.createElement('textarea');
   e.value = value;
   document.body.appendChild(e);

@@ -1,8 +1,8 @@
 // Shared helpers for userscripts.
 
 function copyToClipboard(value) {
-  // Copies the given value to the clipboard.
-  // _utils.js / version: 24012601
+  // Copy the given value to the clipboard.
+  // _utils.js / version: 240126-01
   const e = document.createElement('textarea');
   e.value = value;
   document.body.appendChild(e);
@@ -12,8 +12,8 @@ function copyToClipboard(value) {
 
 
 function dateFormat(value) {
-  // Formats a date (Date or string) as YYMMDD.
-  // _utils.js / version: 24012602
+  // Format a date (Date or string) as YYMMDD.
+  // _utils.js / version: 240126-02
   if (!value) return;
   const d = new Date(value);
   return d.toISOString().replace(/^(\d{2})(\d{2})-(\d{2})-(\d{2}).*/, '$2$3$4');
@@ -21,8 +21,8 @@ function dateFormat(value) {
 
 
 function findFirstElement(selectors, namespaces) {
-  // Finds the first element matching a series of selectors, located under a series of namespaces.
-  // _utils.js / version: 24012601
+  // Find the first element matching a series of selectors, located under a series of namespaces.
+  // _utils.js / version: 240126-01
   for (let selector of selectors) {
     for (let namespace of namespaces) {
       let e = document.querySelector(`${namespace} ${selector}`);
@@ -33,9 +33,9 @@ function findFirstElement(selectors, namespaces) {
 
 
 function sleep(ms, callback) {
-  // Waits for the given time then executes the callback
-  // Or returns immediately a Promise if no callback provided.
-  // _utils.js / version: 24012601
+  // Wait for the given time (`ms`) then executes the callback.
+  // Or return immediately a Promise if no callback provided.
+  // _utils.js / version: 240126-01
   const p = new Promise(resolve => setTimeout(resolve, ms));
   return callback ? p.then(callback) : p;
 }
