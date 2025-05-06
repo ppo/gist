@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Copy Clean URL
 // @description  Copy the clean URL to clipboard.
-// @version      250429-01
+// @version      250505-01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -11,7 +11,7 @@
 
 // SETTINGS ========================================================================================
 
-const RE_AMAZON_PRODUCT_ID = /\/dp\/([A-Z0-9]+)/;
+const RE_AMAZON_PRODUCT_ID = [ /\/dp\/([A-Z0-9]+)/, /\/gp\/product\/([A-Z0-9]+)/ ];
 const RE_YOUTUBE_VIDEO_ID = /\/watch\?v=([^&]+)/;
 
 
@@ -96,7 +96,10 @@ function getCleanUrl() {
 
   switch (specialSite) {
     case 'AMAZON':
-      match = window.location.pathname.match(RE_AMAZON_PRODUCT_ID);
+      RE_AMAZON_PRODUCT_ID.forEach(regex => {
+        if (match) return;
+        match = window.location.pathname.match(regex);
+      });
       if (match) {
         const url = new URL(window.location.href);
         url.pathname = `/dp/${match[1]}`;
