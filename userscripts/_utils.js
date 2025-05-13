@@ -61,6 +61,20 @@ function sleep(ms, callback) {
 }
 
 
+function slugify(value) {
+  // Generate a slug based on the given value.
+  // _utils.js / version: 250514-01
+  return value
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')      // Replace spaces with -
+    .replace(/&/g, '-and-')    // Replace & with 'and'
+    .replace(/[^\w\-]+/g, '')  // Remove all non-word chars except -
+    .replace(/\-\-+/g, '-');   // Replace multiple - with single -
+}
+
+
 function snackbar(message, timeout=2000) {
   // Display a temporary message.
   // Or fixed until clicked if `!timeout`.
