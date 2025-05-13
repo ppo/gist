@@ -33,17 +33,26 @@ RE_FILE_HEADER = re.compile(r"^=== ([^:]+): (.*) ===$")
 IGNORE_PATTERNS = f"""
 __pycache__/
 .astro/
+.coverage
 .GI/
 .git/
 .mypy_cache/
+.pytest_cache/
+.ruff_cache/
 .venv/
 .vercel/
-.vscode/
+build/
 cache/
+dist/
+htmlcov/
 log/
 logs/
 node_modules/
 var/
+
+*.egg-info/
+*.GI/
+*.GI.*
 
 {DEFAULT_CODEBASE_FILE}
 .DS_Store
