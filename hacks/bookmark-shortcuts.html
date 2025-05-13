@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    // FORMAT:
+    //   'Group Heading': [
+    //     [keyword: string|null, link text: string, URL: string, custom classes: string?],
+    //     null, // divider
+    //     [ […], … ]  // inline links
+    //   ],
+    const bookmarks = {
+      'Demo': [ // ---------------------------------------------------------------------------------
+        ['reg', 'Regular Link', 'https://example.com/'],
+        ['hl', 'Highlighted', 'https://example.com/', 'highlight'],
+        [
+          [null, 'Inline', 'https://example.com/'],
+          [null, 'Links', 'https://example.com/'],
+        ],
+        null,
+        [null, 'With a separator', 'https://example.com/'],
+        ['q', 'Type Q', 'https://example.com/'],
+      ],
+
+      'Self Promotion': [ // -----------------------------------------------------------------------
+        [
+          ['ppo', 'Pascal Polleunus', 'https://pascal.polleunus.be/'],
+          ['pp', 'Blog', 'https://pascal.polleunus.be/blog'],
+        ],
+        [
+          ['fb', 'Facebook', 'https://www.facebook.com/'],
+          ['fb@', 'Me', 'https://www.facebook.com/pascal.polleunus.be'],
+        ],
+        [
+          ['ig', 'Instagram', 'https://www.instagram.com/'],
+          ['ig@', 'Me', 'https://www.instagram.com/ppolleunus/'],
+        ],
+        [
+          ['li', 'LinkedIn', 'https://www.linkedin.com/'],
+          ['li@', 'Me', 'https://www.linkedin.com/in/pascal-polleunus/'],
+        ],
+        [
+          ['tw', 'X', 'https://x.com/'],
+          ['tw@', 'Me', 'https://x.com/ppolleunus'],
+        ],
+      ],
+    };
+    // Some random links for demo…
+    for (let i = 1; i <= 10; i++) {
+      const name = `Group ${i}`;
+      const numLinks = Math.floor(Math.random() * 3) + 2;
+      bookmarks[name] = [];
+      for (let j = 1; j <= numLinks; j++) {
+        bookmarks[name].push([`${i}${j}`, `Link ${i}-${j}`, 'https://example.com/']);
+      }
+    }
+  </script>
+
+  <style>
+    /* Theme */
+    :root {
+      --spacing: 10px;
+      --text-padding: 8px; /* Around texts */
+      --text-padding-sm: 4px 6px; /* For tooltip and keyb */
+      --card-padding: 16px; /* Card content */
+      --border-radius: 8px;
+      --columns: 4; /* Number of columns for cards */
+
+      --color-body-bg: #f5f5f5; /* Page background */
+      --color-content-bg: #fff; /* Top bar and card */
+      --color-dim: #999; /* Dimmed text */
+      --color-separator: #eee; /* Separator lines */
+
+      --color-heading: #607d8b; /* Card heading */
+
+      --color-link: #1e88e5; /* Blue 600 */
+      --color-link-hover: #43a047; /* Green 600 */
+      --color-link-highlight: #9c27b0; /* Purple 500 */
+      --color-link-found: var(--color-link-hover);
+      --color-link-found-bg: #ffecb3; /* Amber 100 */
+
+      --color-command: #8bc34a; /* Light Green 500 */
+      --color-command-bg: #000;
+      --color-help-key: #f0f0f0;
+
+      --color-tooltip: #eceff1; /* Blue Grey 50 */
+      --color-tooltip-bg: #607d8b; /* Blue Grey 500 */
+    }
+    @media (max-width: 1400px) { :root { --columns: 3; } }
+    @media (max-width: 1050px) { :root { --columns: 2; } }
+    @media (max-width: 700px)  { :root { --columns: 1; } }
+
+    /* Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    /* Main Layout */
+    body {
+      background-color: var(--color-body-bg);
+      display: flex;
+      flex-direction: column;
+      font-family: sans-serif;
+    }
+
+    main { /* Cards Container */
+      align-content: flex-start;
+      display: flex;
+      flex-wrap: wrap;
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--spacing);
+    }
+
+    /* Command Bar */
+    form {
+      align-items: center;
+      background-color: var(--color-content-bg);
+      border-bottom: 1px solid var(--color-separator);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      padding: var(--spacing);
+    }
+
+    form input {
+      background-color: transparent;
+      border-radius: 20px;
+      border: 1px solid var(--color-separator);
+      font-size: 1rem;
+      outline: none;
+      padding: var(--text-padding);
+      text-align: center;
+      width: 250px;
+    }
+
+    form input:focus,
+    form input:hover {
+      background-color: var(--color-command-bg);
+      border-color: transparent;
+      color: var(--color-command);
+    }
+
+    form div { /* Help */
+      color: var(--color-dim);
+      font-size: 0.75rem;
+      font-weight: 300;
+      padding: 0 var(--spacing);
+      text-transform: uppercase;
+    }
+
+    form div:first-of-type  { margin-right: var(--spacing); text-align: right; }
+    form div:last-of-type   { margin-left:  var(--spacing); text-align: left; }
+
+    form keyb {
+      background-color: var(--color-help-key);
+      border-radius: calc(0.5 * var(--border-radius));
+      font-family: monospace;
+      font-weight: 400;
+      margin-right: 2px;
+      padding: var(--text-padding-sm);
+    }
+    form span:not(:first-of-type) {
+      margin-left: var(--spacing);
+    }
+
+    /* Card */
+    section {
+      background-color: var(--color-content-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      flex: 0 0 calc(100% / var(--columns) - var(--spacing) * 2);
+      margin: var(--spacing);
+      position: relative;
+    }
+
+    h1 { /* Card header */
+      border-bottom: 1px solid var(--color-separator);
+      color: var(--color-heading);
+      font-size: 1rem;
+      font-weight: 300;
+      margin: 0;
+      padding: var(--text-padding);
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    ul { /* Card content */
+      list-style: none;
+      padding: var(--card-padding);
+    }
+    li {
+      color: var(--color-dim); /* For inline separators */
+    }
+
+    hr {
+      border: none; border-bottom: 1px solid var(--color-separator);
+      margin: var(--text-padding);
+    }
+
+    /* Link */
+    a {
+      border-radius: var(--border-radius);
+      color: var(--color-link);
+      display: inline-block;
+      padding: var(--text-padding);
+      text-decoration: none;
+    }
+    a:hover {
+      background-color: rgba(0, 0, 0, 0.03);
+      color: var(--color-link-hover);
+    }
+
+    a.highlight {
+      color: var(--color-link-highlight);
+      font-weight: bold;
+    }
+
+    a.found {
+      background-color: var(--color-link-found-bg);
+      color: var(--color-link-found);
+      font-size: 120%;
+      font-weight: bold;
+    }
+
+    /* Tooltip */
+    body.show-tooltip .tooltip {
+      display: inline-block;
+      vertical-align: text-top;
+    }
+
+    .tooltip {
+      background-color: var(--color-tooltip-bg);
+      border-radius: calc(0.5 * var(--border-radius));
+      color: var(--color-tooltip);
+      display: none;
+      font-family: monospace;
+      font-size: 80%;
+      padding: var(--text-padding-sm);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <form>
+    <div><span>Type a shortcut…</span><span><keyb>Enter</keyb> Launch</span></div>
+    <input autocomplete="off" autofocus>
+    <div><span><keyb>ESC</keyb> Clear</span><span><keyb>Space</keyb> Tooltips</span></div>
+  </form>
+
+  <main></main>
+
+  <script>
+    // Constants
+    const inlineSeparator = ' • ';  // Visual separator for inline links
+    const tooltipKeys = ['?', ' '];  // Keys to show tooltips
+    const resetKeys = ['Escape', 'Delete'];  // Keys to clear the command form
+    // Don't react to these keys
+    const ignoredModifierKeys = ['Alt', 'CapsLock', 'Control', 'Fn', 'Meta', 'Shift', 'Tab'];
+
+    // DOM elements
+    const mainContainer = document.querySelector('main');
+    const commandForm = document.querySelector('form');
+    const commandInput = document.querySelector('input');
+    let defaultPlaceholder = commandInput.placeholder;
+
+    // Commands registry (keyword › URL)
+    // Retrieved from: <a href="URL" title="KEYWORD">
+    const commands = {};
+
+    // Get the URL for the given keyword
+    function getCommandUrl(keyword) {
+      return commands[keyword];
+    }
+
+    // Clear the highlighted link (i.e. matching the current keyword)
+    function clearCommandFound() {
+      // Note: Use "all" to be sure
+      document.querySelectorAll('a.found').forEach(link => {
+        link.classList.remove('found');
+      });
+    }
+
+
+    // DOM MANIPULATION HELPERS ====================================================================
+
+    // Create a DOM element
+    function createElement(tag, text, attrs) {
+      const elem = document.createElement(tag);
+
+      if (text) elem.textContent = text;
+
+      if (attrs) {
+        for (const [key, value] of Object.entries(attrs)) {
+          // Skip empty values
+          if ([undefined, null, ''].indexOf(value) > -1) continue;
+
+          // Special handling for CSS classes
+          if (key === 'class') {
+            value.split(' ').forEach(selector => { elem.classList.add(selector); });
+          } else {
+            elem[key] = value;
+          }
+        }
+      }
+
+      return elem;
+    }
+
+    // Create a link element, with its tooltip
+    // ⚠️ Returns an array (link and optional tooltip)
+    function createLink(keyword, text, url, css) {
+      const content = [];
+
+      // Create the <a> element
+      content.push( createElement('a', text, {
+        href: url,
+        title: keyword,
+        class: css,
+      }) );
+
+      if (keyword) {
+        // Regiter the command
+        commands[keyword] = url;
+
+        // Create the tooltip
+        content.push( createElement('div', keyword, { class: 'tooltip' }) );
+      }
+
+      return content;
+    }
+
+    // Append the children to a <li>, then to the given <ul>
+    function appendListItem(ul, children) {
+      const li = createElement('li');
+      children.forEach(child => { li.appendChild(child); });
+      ul.appendChild(li);
+    }
+
+
+    // COMMAND SUBMIT HANDLER ======================================================================
+
+    commandForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const commandUrl = getCommandUrl(commandInput.value);
+      if (commandUrl) {  // Navigate to the command URL
+        window.location.href = commandUrl;
+      } else {  // Keyword/command not found
+        commandInput.placeholder = `❌ ${commandInput.value}`;  // Display error message
+        commandInput.value = '';  // Clear command form
+        setTimeout(() => {  // Clear error message after a short time
+          commandInput.placeholder = defaultPlaceholder;
+        }, 2000);
+      }
+    });
+
+
+    // TOOLTIP & RESET HANDLER =====================================================================
+    // + auto-activate the form input and auto-hide tooltips
+
+    document.addEventListener('keydown', (event) => {
+      // Force focus on command input so that the value is added into it
+      commandInput.focus();
+
+      // Handle keys to toggle tooltips
+      if (tooltipKeys.includes(event.key)) {
+        event.preventDefault();  // Don't add that value in the command form
+        document.body.classList.toggle('show-tooltip');
+        return;
+      }
+
+      // Hide tooltips when a non-modifier key is pressed
+      if (!ignoredModifierKeys.includes(event.key)) {
+        document.body.classList.remove('show-tooltip');
+      }
+
+      // Handle keys to reset/clear the form
+      if (resetKeys.includes(event.key)) {
+        commandInput.value = '';
+        clearCommandFound();
+      }
+    });
+
+
+    // DETECT WHEN A COMMAND IS FOUND ==============================================================
+
+    document.addEventListener('keyup', (event) => {
+      clearCommandFound();  // Always, to clear shorter matching keywords (ex: "foo" and "fool")
+      if (getCommandUrl(commandInput.value)) {
+        document.querySelector(`a[title="${commandInput.value}"]`).classList.add('found');
+      }
+    });
+
+
+    // GENERATE HTML LAYOUT ========================================================================
+
+    let groupId = 1;
+
+    for (const [heading, links] of Object.entries(bookmarks)) {
+      // Create the section
+      const section = createElement('section', null, {
+        id: `group${groupId++}`,
+      });
+
+      // With its heading and UL
+      section.appendChild( createElement('h1', heading) );
+      const ul = document.createElement('ul');
+
+      // Create group links
+      links.forEach(linkData => {
+        // Divider
+        if (linkData === null) {
+          appendListItem(ul, [createElement('hr')]);
+          return;
+        }
+
+        // Add inline links (if linkData is an array or arrays)
+        if (Array.isArray(linkData[0])) {
+          appendListItem(ul, linkData.reduce((content, item, index) => {
+            if (index > 0) content.push(document.createTextNode(' • '));
+            return content.concat(createLink(...item));
+          }, []));
+
+          // Add a single link
+        } else {
+          appendListItem(ul, createLink(...linkData));
+        }
+      });
+
+      // Add the UL in the card, and the card in the grid
+      section.appendChild(ul);
+      mainContainer.appendChild(section);
+    }
+  </script>
+</body>
+</html>
