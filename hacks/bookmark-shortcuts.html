@@ -68,7 +68,6 @@ HOW TO CONFIGURE BRAVE to use this as default homepage:
       --text-padding-sm: 4px 6px; /* For tooltip and keyb */
       --card-padding: 16px; /* Card content */
       --border-radius: 8px;
-      --columns: 4; /* Number of columns for cards */
 
       --color-body-bg: #f5f5f5; /* Page background */
       --color-content-bg: #fff; /* Top bar and card */
@@ -90,8 +89,10 @@ HOW TO CONFIGURE BRAVE to use this as default homepage:
       --color-tooltip: #eceff1; /* Blue Grey 50 */
       --color-tooltip-bg: #607d8b; /* Blue Grey 500 */
     }
-    @media (max-width: 1400px) { :root { --columns: 3; } }
-    @media (max-width: 1050px) { :root { --columns: 2; } }
+    /* Number of columns for cards */
+    @media (min-width: 1401px) { :root { --columns: 3; } }
+    @media (max-width: 1400px) { :root { --columns: 2; } }
+    @media (max-width: 1050px) { :root { --columns: 1; } }
     @media (max-width: 700px)  { :root { --columns: 1; } }
 
     /* Reset */
@@ -115,10 +116,11 @@ HOW TO CONFIGURE BRAVE to use this as default homepage:
     }
 
     main { /* Cards Container */
-      align-content: flex-start;
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
       flex: 1;
+      grid-auto-rows: 1fr; /* Key for equal height rows */
+      grid-gap: calc(var(--spacing) * 2);
+      grid-template-columns: repeat(var(--columns), 1fr);
       overflow-y: auto;
       padding: var(--spacing);
     }
@@ -180,8 +182,9 @@ HOW TO CONFIGURE BRAVE to use this as default homepage:
       background-color: var(--color-content-bg);
       border-radius: var(--border-radius);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      flex: 0 0 calc(100% / var(--columns) - var(--spacing) * 2);
-      margin: var(--spacing);
+      display: flex;
+      flex-direction: column;
+      margin: 0;
       position: relative;
     }
 
@@ -197,7 +200,9 @@ HOW TO CONFIGURE BRAVE to use this as default homepage:
     }
 
     ul { /* Card content */
+      flex: 1;
       list-style: none;
+      overflow-y: auto;
       padding: var(--card-padding);
     }
     li {
