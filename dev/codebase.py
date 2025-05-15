@@ -94,7 +94,6 @@ NOW = datetime.now()
 
 # INITIALIZATION ===================================================================================
 
-
 def init_arg_parser():
     """Parse command line arguments."""
     arg_parser = argparse.ArgumentParser(description="Merge or extract codebase files")
@@ -127,7 +126,6 @@ def init_arg_parser():
 
 
 # COMMANDS =========================================================================================
-
 
 class CodebaseMerge:
     """Merge all input files into a single codebase file."""
@@ -296,7 +294,7 @@ class CodebaseExtract:
             self.create_file(current_file, current_content)
 
         print()
-        print(f"Codebase extracted into: {self.output_dir}")
+        print(f"Codebase extracted into: {self.output_path}")
 
     def create_file(self, file_rel_path, content):
         file_path = self.output_path / file_rel_path
@@ -319,7 +317,6 @@ class CodebaseExtract:
 
 
 # HELPERS ==========================================================================================
-
 
 def debug(data, label=None):
     def _print(data):
@@ -371,7 +368,6 @@ def parse_ignore_patterns(patterns_str):
 
 
 # MAIN =============================================================================================
-
 
 def main():
     arg_parser = init_arg_parser()
