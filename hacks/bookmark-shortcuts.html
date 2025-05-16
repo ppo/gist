@@ -50,7 +50,7 @@ HOW TO CONFIGURE BRAVE to use this as default homepage:
       ],
     };
     // Some random links for demo…
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 7; i++) {
       const name = `Group ${i}`;
       const numLinks = Math.floor(Math.random() * 3) + 2;
       bookmarks[name] = [];
@@ -435,7 +435,7 @@ HOW TO CONFIGURE BRAVE to use this as default homepage:
         // Add inline links (if linkData is an array or arrays)
         if (Array.isArray(linkData[0])) {
           appendListItem(ul, linkData.reduce((content, item, index) => {
-            if (index > 0) content.push(document.createTextNode(' • '));
+            if (index > 0) content.push(document.createTextNode(inlineSeparator));
             return content.concat(createLink(...item));
           }, []));
 
