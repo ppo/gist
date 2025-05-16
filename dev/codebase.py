@@ -31,33 +31,35 @@ RE_FILE_HEADER = re.compile(r"^=== ([^:]+): (.*) ===$")
 
 # Patterns to ignore (gitignore-like format)
 IGNORE_PATTERNS = f"""
-__pycache__/
+{DEFAULT_CODEBASE_FILE}
+*.GI/
+*.GI.*
+
+.DS_Store
+
 .astro/
-.coverage
-.GI/
 .git/
+.vercel/
+
+build/
+cache/
+dist/
+log/
+logs/
+var/
+
+node_modules/
+pnpm-lock.yaml
+
+__pycache__/
+.coverage
 .mypy_cache/
 .pytest_cache/
 .ruff_cache/
 .venv/
-.vercel/
-build/
-cache/
-dist/
 htmlcov/
-log/
-logs/
-node_modules/
-var/
-
 *.egg-info/
-*.GI/
-*.GI.*
-
-{DEFAULT_CODEBASE_FILE}
-.DS_Store
 *.pyc
-pnpm-lock.yaml
 """
 
 SKIP_PATTERNS = """
