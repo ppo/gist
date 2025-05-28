@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tailwind 4 Template</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-primary: #3b82f6;
+      --font-body: "Inter", system-ui, sans-serif;
+    }
+
+    @layer base {
+      /* For baseline styles that affect raw HTML elements directly.
+       * Ex: Typography defaults, reset styles, global element styles.
+       */
+      body {
+        @apply bg-gray-50 text-gray-900 p-4;
+        font-family: var(--font-body);
+      }
+    }
+
+    @layer components {
+      /* For reusable UI patterns that combine multiple utilities.
+       * Ex: Buttons, cards, form inputs, navigation bars.
+       */
+      .container {
+        @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+      }
+
+      .btn {
+        @apply px-4 py-2 rounded-lg font-medium transition-colors;
+      }
+
+      .btn-primary {
+        @apply bg-primary text-white hover:bg-primary/90;
+      }
+    }
+
+    @layer utilities {
+      /* For custom utility classes that complement Tailwind's built-in utilities.
+       * Ex: Custom spacing, special text treatments, specific animations.
+       */
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1 class="mb-4">Standalone Tailwind 4 HTML Template</h1>
+    <a class="btn btn-primary">Button</a>
+  </main>
+</body>
+</html>
