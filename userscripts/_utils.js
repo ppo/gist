@@ -78,30 +78,37 @@ function slugify(value) {
 function snackbar(message, timeout=2000) {
   // Display a temporary message.
   // Or fixed until clicked if `!timeout`.
-  // _utils.js / version: 250430-01
-  const elem = document.createElement('div');
-  elem.innerHTML = message;
-  Object.assign(elem.style, {
-    all: 'initial',
-    backgroundColor: '#ffca28',
-    border: '3px solid #fff',
-    boxShadow: 'rgba(0, 0, 0, 0.5) 3px 6px 12px',
-    color: '#000',
-    fontFamily: 'sans-serif',
-    left: '50%',
-    maxHeight: '75%',
-    maxWidth: '75%',
-    minWidth: '250px',
-    overflow: 'auto',
-    padding: '1rem 1.25rem',
-    position: 'fixed',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
-    zIndex: '9999',
-  });
-  document.body.appendChild(elem);
+  // _utils.js / version: 250528-01
 
-  const destroy = () => { document.body.removeChild(elem); };
-  elem.addEventListener('click', destroy);
-  if (timeout) setTimeout(destroy, timeout);
+  try {
+    // Fix for error "Requires 'TrustedHTML' assignment"
+    // Source: https://github.com/Tampermonkey/tampermonkey/issues/1334#issuecomment-927277844
+    window.trustedTypes.createPolicy('default', {createHTML: (string, sink) => string})
+
+    const elem = document.createElement('div');
+    elem.innerHTML = message;
+    Object.assign(elem.style, {
+      all: 'initial',
+      backgroundColor: '#ffca28',
+      border: '3px solid #fff',
+      boxShadow: 'rgba(0, 0, 0, 0.5) 3px 6px 12px',
+      color: '#000',
+      fontFamily: 'sans-serif',
+      left: '50%',
+      maxHeight: '75%',
+      maxWidth: '75%',
+      minWidth: '250px',
+      overflow: 'auto',
+      padding: '1rem 1.25rem',
+      position: 'fixed',
+      top: '50%',
+      transform: 'translate(-50%, -50%)',
+      zIndex: '9999',
+    });
+    document.body.appendChild(elem);
+
+    const destroy = () => { document.body.removeChild(elem); };
+    elem.addEventListener('click', destroy);
+    if (timeout) setTimeout(destroy, timeout);
+  } catch {}
 }
