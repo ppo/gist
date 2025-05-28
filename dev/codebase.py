@@ -35,7 +35,7 @@ IGNORE_PATTERNS = f"""
 *.GI/
 *.GI.*
 
-.DS_Store
+**/.DS_Store
 
 .astro/
 .git/
@@ -51,7 +51,7 @@ var/
 node_modules/
 pnpm-lock.yaml
 
-__pycache__/
+**/__pycache__/
 .coverage
 .mypy_cache/
 .pytest_cache/
@@ -59,7 +59,7 @@ __pycache__/
 .venv/
 htmlcov/
 *.egg-info/
-*.pyc
+**/*.pyc
 """
 
 SKIP_PATTERNS = """
