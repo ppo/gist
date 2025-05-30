@@ -2,7 +2,7 @@
 // @name         YouTube Video Link
 // @description  Create a Markdown string with information about the video, and copy it to the clipboard.
 // @icon         data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📺</text></svg>
-// @version      250528-01
+// @version      250528-02
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/watch?*
@@ -25,7 +25,7 @@
 // CONSTANTS =======================================================================================
 
 const KEEP_UPPERCASE = [
-  'AI', 'DIY', 'VW',
+  '3D', 'AI', 'BMW', 'CNC', 'DIY', 'HQ', 'HVAC', 'RV', 'VW',
 ];
 
 
@@ -118,7 +118,7 @@ function getVideoUrl() {
 }
 
 function getChannelInfo() {
-  const e = document.querySelector('#channel-name .ytd-channel-name a');
+  const e = document.querySelector('#owner .ytd-channel-name a');
   return { name: e.textContent.trim(), url: e.href };
 }
 
@@ -170,9 +170,7 @@ function mustConvertUpperCase(value) {
 }
 
 function convertUpperCaseWords(value) {
-  let words = value.split(' ');
-  words = words.map(word => mustConvertUpperCase(word) ? toTitleCase(word) : word);
-  return words.join(' ');
+  return value.replace(/\b[A-Z]+\b/g, match =>  mustConvertUpperCase(match) ? toTitleCase(match) : match);
 }
 
 
