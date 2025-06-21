@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    const domains = [ 'com' ];
+    const socials = {
+      Facebook:    'https://www.facebook.com/%s',
+      GitHub:      'https://github.com/%s',
+      Instagram:   'https://www.instagram.com/%s/',
+      LinkedIn:    'https://www.linkedin.com/company/%s',
+      Pinterest:   'https://www.pinterest.com/%s/',
+      ProductHunt: 'https://www.producthunt.com/@%s',
+      TikTok:      'https://www.tiktok.com/@%s',
+      X:           'https://x.com/%s',
+      YouTube:     'https://www.youtube.com/@%s',
+
+      // GitLab: 'https://gitlab.com/%s',
+
+      // Medium: 'https://medium.com/@%s',
+      // Vimeo: 'https://vimeo.com/%s',
+    }
+  </script>
+
+  <style>
+    /* Theme */
+    :root {
+      --spacing: 10px;
+      --text-padding: 8px; /* Around texts */
+      --text-padding-sm: 4px 6px; /* For tooltip and keyb */
+      --card-padding: 16px; /* Card content */
+      --border-radius: 8px;
+
+      --color-body-bg: #f5f5f5; /* Page background */
+      --color-content-bg: #fff; /* Top bar and card */
+      --color-dim: #999; /* Dimmed text */
+      --color-separator: #eee; /* Separator lines */
+
+      --color-heading: #607d8b; /* Card heading */
+
+      --color-link: #1e88e5; /* Blue 600 */
+      --color-link-hover: #43a047; /* Green 600 */
+      --color-link-highlight: #9c27b0; /* Purple 500 */
+      --color-link-found: var(--color-link-hover);
+      --color-link-found-bg: #ffecb3; /* Amber 100 */
+
+      --color-command: #8bc34a; /* Light Green 500 */
+      --color-command-bg: #000;
+      --color-help-key: #f0f0f0;
+
+      --color-tooltip: #eceff1; /* Blue Grey 50 */
+      --color-tooltip-bg: #607d8b; /* Blue Grey 500 */
+    }
+    /* Number of columns for cards */
+    @media (min-width: 1401px) { :root { --columns: 3; } }
+    @media (max-width: 1400px) { :root { --columns: 2; } }
+    @media (max-width: 1050px) { :root { --columns: 1; } }
+    @media (max-width: 700px)  { :root { --columns: 1; } }
+
+    /* Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    /* Link */
+    a {
+      border-radius: var(--border-radius);
+      color: var(--color-link);
+      display: inline-block;
+      padding: var(--text-padding);
+      text-decoration: none;
+    }
+    a:hover {
+      color: var(--color-link-hover);
+    }
+
+    /* Main Layout */
+    body {
+      background-color: var(--color-body-bg);
+      display: flex;
+      flex-direction: column;
+      font-family: sans-serif;
+    }
+
+    main { /* Cards Container */
+      display: grid;
+      flex: 1;
+      grid-auto-rows: 1fr; /* Key for equal height rows */
+      grid-gap: calc(var(--spacing) * 2);
+      grid-template-columns: repeat(var(--columns), 1fr);
+      overflow-y: auto;
+      padding: var(--spacing);
+    }
+
+    /* Command Bar */
+    form {
+      align-items: center;
+      background-color: var(--color-content-bg);
+      border-bottom: 1px solid var(--color-separator);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      padding: var(--spacing);
+    }
+
+    form input {
+      background-color: transparent;
+      border-radius: 20px;
+      border: 1px solid var(--color-separator);
+      font-size: 1rem;
+      outline: none;
+      padding: var(--text-padding);
+      text-align: center;
+      width: 250px;
+    }
+
+    form input:focus,
+    form input:hover {
+      background-color: var(--color-command-bg);
+      border-color: transparent;
+      color: var(--color-command);
+    }
+
+    form div { /* Help */
+      color: var(--color-dim);
+      font-size: 0.75rem;
+      font-weight: 300;
+      padding: 0 var(--spacing);
+      text-transform: uppercase;
+    }
+
+    form div:first-of-type  { margin-right: var(--spacing); text-align: right; }
+    form div:last-of-type   { margin-left:  var(--spacing); text-align: left; }
+
+    form keyb {
+      background-color: var(--color-help-key);
+      border-radius: calc(0.5 * var(--border-radius));
+      font-family: monospace;
+      font-weight: 400;
+      margin-right: 2px;
+      padding: var(--text-padding-sm);
+    }
+    form span:not(:first-of-type) {
+      margin-left: var(--spacing);
+    }
+
+    /* Card */
+    section {
+      background-color: var(--color-content-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      position: relative;
+    }
+
+    h1 { /* Card header */
+      border-bottom: 1px solid var(--color-separator);
+      color: var(--color-heading);
+      font-size: 1rem;
+      font-weight: 300;
+      margin: 0;
+      padding: var(--text-padding);
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    /* Statuses */
+    ul {
+      list-style: none;
+      padding: var(--card-padding);
+    }
+
+    li::before {
+      content: '⚪️';
+      display: inline-block;
+      margin-right: var(--spacing);
+      width: 1.25rem;
+    }
+
+    li.working::before     { content: '⏳'; }
+    li.failed::before      { content: '💥'; }
+    li.available::before   { content: '🟢'; }
+    li.unavailable::before { content: '🔴'; }
+    li.unknown::before     { content: '❓'; }
+  </style>
+</head>
+<body>
+  <form>
+    <div>
+      <span>Type a name…</span>
+    </div>
+    <input autocomplete="off" autofocus>
+    <div>
+      <span><keyb>Enter</keyb> Launch</span>
+      <span><keyb>ESC</keyb> Clear</span>
+    </div>
+  </form>
+
+  <main></main>
+
+  <script>
+    // Constants
+    const STATUS_DEFAULT     = 'default';
+    const STATUS_WORKING     = 'working';
+    const STATUS_FAILED      = 'failed';
+    const STATUS_AVAILABLE   = 'available';
+    const STATUS_UNAVAILABLE = 'unavailable';
+    const STATUS_UNKNOWN     = 'unknown';
+
+  // DOM elements
+    const mainContainer = document.querySelector('main');
+    const nameForm = document.querySelector('form');
+    const nameInput = document.querySelector('input');
+
+
+    // HELPERS =====================================================================================
+
+    function openInTab(url) {
+      try {
+        const newTab = window.open(url, '_blank');
+        newTab.blur();
+        window.focus();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Use a better check for domains specifically
+    async function checkDomainStatus(domain) {
+      try {
+        const whoisApiUrl = `https://api.whois.vu/?q=${domain}`;
+        const response = await fetch(whoisApiUrl);
+        const data = await response.json();
+
+        if (data && data.available === true)       return STATUS_AVAILABLE;
+        else if (data && data.available === false) return STATUS_UNAVAILABLE;
+        else                                       return STATUS_UNKNOWN;
+      } catch (error) {
+        return STATUS_FAILED;
+      }
+    }
+
+    function analyzeResponse(name, html) {
+      name = name.toLowerCase();
+      console.log(`analyzeResponse(${name})`);
+      const terms = [];
+      switch (name) {
+        case 'facebook':  terms.push("This content isn't available right now"); break;
+        case 'gandi':     terms.push("This domain is available"); break;
+        case 'gandi':     terms.push("We seem to have lost this page"); break;  // 404
+        case 'github':    terms.push("This is not the web page you are looking for"); break;  // 404
+        case 'gitlab':    terms.push("???"); break;
+        case 'instagram': terms.push("Sorry, this page isn't available"); break;
+        case 'linkedin':  terms.push("This LinkedIn Page isn’t available"); break;
+        case 'medium':    terms.push("Out of nothing, something"); break;  // 404
+        case 'pinterest': terms.push("User not found"); break;
+        case 'tiktok':    terms.push(">Couldn't find this account<"); break;  // Trick `>…<` as it's always present in a `<script>`.
+        case 'vimeo':     terms.push("Sorry, we couldn’t find that page"); break;
+        case 'x':         terms.push("This account doesn’t exist"); break;
+        case 'youtube':   terms.push("This page isn't available"); break;
+      }
+
+      // Need to check the content to see if it's a "user not found" page
+      let isNotFound = false;
+      for (const term of terms) {
+        isNotFound = html.includes(term);
+        console.log('isNotFound:', name, isNotFound, term);
+        if (isNotFound) break;
+      }
+      return isNotFound ? STATUS_AVAILABLE : STATUS_UNAVAILABLE;
+    }
+
+    async function checkSocialsStatus(name, url) {
+      // To properly check social media usernames, we'd need a backend
+      // So for now, create a more informative result display
+      try {
+        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+        const response = await fetch(proxyUrl, { method: 'GET' });
+
+        if (response.status === 404) {
+          return STATUS_AVAILABLE;
+        } else {
+          if (response.status !== 200) console.log('status:', name, response.status);
+          const html = await response.text();
+          return analyzeResponse(name, html);
+        }
+      } catch (error) {
+        // Show error but don't treat it as failure
+        console.log('error:', name, error);
+        return STATUS_UNKNOWN;
+      }
+    }
+
+    // // Get HTTP status of a URL without embedding it
+    // async function checkUrlStatus(url) {
+    //   try {
+    //     // Use GET instead of HEAD for more accurate results
+    //     const response = await fetch(url, {
+    //       method: 'GET',
+    //       cache: 'no-cache',  // Can't use 'no-cors' since it doesn't give us status information
+    //     });
+    //
+    //     // Social media sites typically return these status codes for usernames
+    //     switch (response.status) {
+    //       case 404: return STATUS_AVAILABLE;   break;  // 404 usually means username is available (not found)
+    //       case 200: return STATUS_UNAVAILABLE; break;  // 200 usually means page exists, username is taken
+    //       default:  return STATUS_UNKNOWN;
+    //     }
+    //   } catch (error) {
+    //     // For domains, ERR_NAME_NOT_RESOLVED is good - domain may be available
+    //     if (error.message.includes('ERR_NAME_NOT_RESOLVED')) return STATUS_AVAILABLE;
+    //
+    //     // For social sites, errors are generally bad news (CORS, etc.)
+    //     return STATUS_UNKNOWN;
+    //   }
+    // }
+
+    function changeStatus(li, status) {
+      const currentStatus = li['data-status'];
+      if (currentStatus) li.classList.remove(currentStatus);
+      li.classList.add(status);
+      li.title = status;
+    }
+
+    // Create a DOM element
+    function createElement(tag, text, attrs) {
+      const elem = document.createElement(tag);
+
+      if (text) elem.textContent = text;
+
+      if (attrs) {
+        for (const [key, value] of Object.entries(attrs)) {
+          // Skip empty values
+          if ([undefined, null, ''].indexOf(value) > -1) continue;
+
+          // Special handling for CSS classes
+          if (key === 'class') {
+            value.split(' ').forEach(selector => { elem.classList.add(selector); });
+          } else {
+            elem[key] = value;
+          }
+        }
+      }
+
+      return elem;
+    }
+
+    function createLinkToTab(name, url) {
+      const a = createElement('a', name, {
+        href: url,
+        target: '_blank',
+        rel: 'noopener noreferrer',
+        'data-new-tab': 'true', // The key attribute for background tabs
+      });
+
+      // Prevent the default behavior to maintain control
+      a.addEventListener('click', (event) => {
+        event.preventDefault();
+        openInTab(url);
+      });
+
+      return a;
+    }
+
+    // Create status item
+    function createStatusCheck(ul, name, url) {
+      const li = createElement('li');
+      // li.appendChild( createLinkToTab(name, url) );
+      li.appendChild( createElement('a', name, { href: url }) );
+      ul.appendChild(li);
+      changeStatus(li, STATUS_WORKING);
+      return li;
+    }
+
+    async function checkDomain(ul, domain) {
+      const url = `https://${domain}/`;
+      const li = createStatusCheck(ul, domain, url);
+      li.appendChild( createElement('a', 'Gandi ', { href: `https://shop.gandi.net/en/domain/suggest?search=${domain}` }) );
+      li.appendChild( createElement('a', 'Whois', { href: `https://whois.domaintools.com/${domain}` }) );
+      const status = await checkDomainStatus(domain);
+      changeStatus(li, status);
+    }
+
+    async function checkSocials(ul, name, url) {
+      const li = createStatusCheck(ul, name, url);
+      const status = await checkSocialsStatus(name, url);
+      changeStatus(li, status);
+    }
+
+    // Generate content with status checks
+    async function generateContent() {
+      const username = nameInput.value.toLowerCase();
+      nameInput.value = username;
+
+      mainContainer.innerHTML = '';
+      const section = document.createElement('section');
+      const ul = document.createElement('ul');
+
+      // Handle domains
+      for (const tld of domains) {
+        const domain = `${username}.${tld}`;
+        const url = `https://${username}.${tld}/`;
+        checkDomain(ul, domain);
+        // openInTab(url);
+      }
+
+      // Handle socials
+      for (const [name, urlTemplate] of Object.entries(socials)) {
+        const url = urlTemplate.replace('%s', username);
+        checkSocials(ul, name, url);
+        // openInTab(url);
+      }
+
+      section.appendChild(ul);
+      mainContainer.appendChild(section);
+    }
+
+
+    // EVENT HANDLERS ==============================================================================
+
+    nameForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      generateContent();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      nameInput.focus();
+      if (event.key === 'Escape') nameInput.value = '';
+    });
+  </script>
+</body>
+</html>
