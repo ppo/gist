@@ -391,7 +391,7 @@ function waitForElement(selector, callback, timeout=2000) {
   const elem = document.querySelector(selector);
   if (elem) {
     callback(elem);
-  } else if (timeout > 0) {
-    setTimeout(() => waitForElement(selector, callback, timeout - 100), 100);
+  } else {
+    setTimeout(() => { waitForElement(selector, callback, timeout); }, timeout);
   }
 }
