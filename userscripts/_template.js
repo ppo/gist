@@ -6,6 +6,7 @@
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
+// @require      https://raw.githubusercontent.com/ppo/gist/refs/heads/master/userscripts/_utils.js
 // @run-at       context-menu | document-start | document-end
 // ==/UserScript==
 
@@ -22,14 +23,6 @@
 // SETTINGS ========================================================================================
 
 // const waldo = 'constant value';
-
-
-// SHARED HELPERS ==================================================================================
-
-// function foo() {
-//   // Description.
-//   // _utils.js / version: YYMMDD-nn
-// }
 
 
 // HELPERS =========================================================================================
