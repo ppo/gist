@@ -25,7 +25,7 @@
 // CONSTANTS =======================================================================================
 
 const KEEP_UPPERCASE = [
-  '3D', 'AI', 'BMW', 'CNC', 'DIY', 'HQ', 'HVAC', 'RV', 'VW',
+  '3D', 'AI', 'BMW', 'CNC', 'DIY', 'HQ', 'HVAC', 'PC', 'RV', 'VW',
 ];
 
 
