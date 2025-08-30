@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Copy Clean URL
 // @description  Copy the clean URL to clipboard.
-// @version      250505-01
+// @version      250829-01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -13,11 +13,6 @@
 
 const RE_AMAZON_PRODUCT_ID = [ /\/dp\/([A-Z0-9]+)/, /\/gp\/product\/([A-Z0-9]+)/ ];
 const RE_YOUTUBE_VIDEO_ID = /\/watch\?v=([^&]+)/;
-
-
-// GLOBALS =========================================================================================
-
-let specialSite = null;
 
 
 // SHARED HELPERS ==================================================================================
@@ -86,22 +81,29 @@ function snackbar(message, timeout=2000) {
 
 // HELPERS =========================================================================================
 
-function checkSpecialSite() {
-  if (window.location.host.includes('amazon.'))     specialSite = 'AMAZON';
-  if (window.location.host.includes('youtube.com')) specialSite = 'YOUTUBE';
+function getSpecialSite() {
+  if (window.location.host.includes('aliexpress.com')) return 'ALIEXPRESS';
+  if (window.location.host.includes('amazon.'))        return 'AMAZON';
+  if (window.location.host.includes('youtube.com'))    return 'YOUTUBE';
 }
 
 function getCleanUrl() {
   let match;
 
-  switch (specialSite) {
-    case 'AMAZON':
+  const url = new URL(window.location.href);
+  url.hash = '';
+
+  switch (getSpecialSite()) {
+    case 'ALIEXPRESS':
+      url.search = '';
+      return url.toString();
+
+      case 'AMAZON':
       RE_AMAZON_PRODUCT_ID.forEach(regex => {
         if (match) return;
         match = window.location.pathname.match(regex);
       });
       if (match) {
-        const url = new URL(window.location.href);
         url.pathname = `/dp/${match[1]}`;
         url.search = '';
         return url.toString();
@@ -111,7 +113,6 @@ function getCleanUrl() {
     case 'YOUTUBE':
       match = window.location.href.match(RE_YOUTUBE_VIDEO_ID);
       if (match) {
-        const url = new URL(window.location.href);
         url.host = 'youtu.be'
         url.pathname = match[1];
         url.search = '';
@@ -120,7 +121,7 @@ function getCleanUrl() {
       break;
   }
 
-  return window.location.href;
+  return url.toString();
 }
 
 
@@ -129,7 +130,6 @@ function getCleanUrl() {
 (function() {
   'use strict';
 
-  checkSpecialSite();
   copyToClipboard(getCleanUrl());
 
 })();
