@@ -2,7 +2,7 @@
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
 // @icon         data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>
-// @version      250528-01
+// @version      251020-01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -132,17 +132,30 @@ function snackbar(message, timeout=2000) {
 // LOCAL HELPERS ===================================================================================
 
 function checkSpecialSite() {
+  if (window.location.host.includes('amazon.'))       specialSite = 'AMAZON';
   if (window.location.host.includes('github.com'))    specialSite = 'GITHUB';
+  if (window.location.host.includes('ikea.com'))      specialSite = 'IKEA';
   if (window.location.host.includes('wikipedia.org')) specialSite = 'WIKIPEDIA';
 }
 
 function formatResult(url, title, date) {
   let result = `[${title}](${url})` + (date ? ` (${date})` : '');
+  const today = new Date().toISOString().replaceAll('-', '').substr(2, 6);
+  let price;
 
   switch (specialSite) {
+    case 'AMAZON':
+      price = document.querySelector('#tp-tool-tip-subtotal-price-value .a-offscreen').textContent.replace(',', '.').trim();
+      const cleanUrl = getAmazonCleanUrl();
+      result = `[Amazon] [${title}](${cleanUrl}) ${price} (${today})`;
+      break;
     case 'GITHUB':
       const about = document.querySelector('.Layout-sidebar .about-margin h2 + p').innerText.trim();
       result = `GitHub: [${title}](${url}) • ${about}`;
+      break;
+    case 'IKEA':
+      price = document.querySelector('#pip-buy-module-content .pip-price__sr-text').textContent.replace('Price ', '').replace(',', '.').trim();
+      result = `[IKEA] [${title}](${url}) ${price} (${today})`;
       break;
     case 'WIKIPEDIA': result = `⍵:[${title}](${url})`; break;
   }
@@ -150,19 +163,39 @@ function formatResult(url, title, date) {
   return result;
 }
 
+// Copy from `copy-clean-url.js`
+function getAmazonCleanUrl() {
+  const RE_AMAZON_PRODUCT_ID = [ /\/dp\/([A-Z0-9]+)/, /\/gp\/product\/([A-Z0-9]+)/ ];
+  const url = new URL(window.location.href);
+  url.hash = '';
+  url.search = '';
+  let match;
+  RE_AMAZON_PRODUCT_ID.forEach(regex => {
+    if (match) return;
+    match = window.location.pathname.match(regex);
+  });
+  if (match) {
+    url.pathname = `/dp/${match[1]}`;
+  }
+  return url.toString();
+}
+
 function getHeading() {
   let e;
 
   switch (specialSite) {
+    case 'AMAZON': e = document.getElementById('productTitle'); break;
     case 'GITHUB':
       e = document.querySelector('article .markdown-heading h1.heading-element');
       if (!e) e = document.querySelector('#repo-title-component a');
       break;
+    case 'IKEA': e = document.querySelector('#pip-buy-module-content h1'); break;
     case 'WIKIPEDIA': e = document.querySelector('#firstHeading > span'); break;
     default: e = findFirstElement(HEADING_SELECTORS, NAMESPACES);
   }
 
-  if (e) return e.innerText.trim();
+  // if (e) return e.innerText.trim();
+  if (e) return e.textContent.trim();
 }
 
 function getTime() {
