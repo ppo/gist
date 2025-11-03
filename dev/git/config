@@ -1,0 +1,40 @@
+[alias]
+  # See https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases
+  # See https://opensource.com/article/20/11/git-aliases
+  a = add                              # Shorthand for "add"
+  aa = add -A                          # Stage all changes (tracked and untracked files)
+  ac = !git add -A && git commit -m    # Stage all changes and commit with message
+  acs = !git add -A && git commit -F-  # Stage all changes and commit with message from stdin
+  b = branch                           # Shorthand for "branch"
+  c = commit -m                        # Commit with message
+  co = checkout                        # Shorthand for "checkout"
+  d = diff                             # Shorthand for "diff"
+  dv = difftool -t vimdiff -y          # Visual diff using Vim in side-by-side mode
+  l = log --oneline                    # List commits as single lines
+  lf = ls-files                        # Shorthand for "ls-files"
+  p = push                             # Shorthand for "push"
+  pl = pull                            # Shorthand for "pull"
+  r = remote -v                        # Show remote repositories with URLs
+  s = status -bsu                      # Show branch, short status in a compact format
+  se = log --all -i --grep             # Search commit messages (case-insensitive)
+
+  last = log -1 HEAD --stat                         # Show details of the last commit
+  search = !git rev-list --all | xargs git grep -F  # Search entire repo history for content
+  unstage = restore --staged                        # Remove files from staging area but keep changes (modern replacement for `reset HEAD --`)
+  unstage-new = rm --cached                         # Unstage new files (remove from tracking without deletion)
+
+[core]
+  # excludesfile = ~/.config/git/ignore
+
+[credential]
+  helper = osxkeychain
+
+[init]
+  defaultBranch = main
+
+[pull]
+  rebase = false
+
+[user]
+  name = Pascal Polleunus
+  email = me@example.com
