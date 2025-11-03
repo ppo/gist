@@ -1,11 +1,14 @@
 # Define coding styles for editors.
-# See: https://editorconfig.org/#file-format-details
-# See: https://github.com/editorconfig/editorconfig/wiki/EditorConfig-Properties
+#
+# Doc: https://editorconfig.org/#file-format-details
+# Ref: https://github.com/editorconfig/editorconfig/wiki/EditorConfig-Properties
 
-# Stop here in the file hierarchy (don't look in parent folders for other `.editorconfig` files).
+
+# Stop looking for other `.editorconfig` files in parent folders.
 root = true
 
-# Default values
+
+# DEFAULT VALUES
 [*]
 charset = utf-8
 end_of_line = lf
@@ -15,39 +18,43 @@ insert_final_newline = true
 max_line_length = 100
 trim_trailing_whitespace = true
 
-# CSV (for tab-separated files)
-[*.csv]
-indent_size = 50
-indent_style = tab
 
-# Diff files
+# CSV FILES (for tab-separated files)
+[*.{csv,tsv}]
+indent_size = 50    # Large columns for readability
+indent_style = tab  # Used as column separator
+
+# DIFF FILES
 [*.{diff,patch}]
 indent_size = 4
 trim_trailing_whitespace = false
 
-# INI
-[*.ini]
+# INI FILES (and Python setuptools config)
+[{*.ini,setup.cfg}]
 indent_size = 4
 
-# Makefiles
+# MAKEFILES
 [Makefile]
 indent_size = 4
 indent_style = tab
 
-# Markdown
-[*.md]
-indent_size = 4
+# MARKDOWN
+[*.{md,mdx}]
 trim_trailing_whitespace = false
 
-# Minified files (shouldn't be changed!)
-[**.min.{css,js}]
+# MINIFIED FILES (should NOT/NEVER be changed!)
+[**.min.{css,html,js}]
 indent_style = ignore
 insert_final_newline = ignore
 
-# Python
+# PYTHON
 [*.py]
 indent_size = 4
 
-# reStructuredText
+# RESTRUCTUREDTEXT
 [*.rst]
 indent_size = 4
+
+# TOML
+[*.toml]
+indent_size = 4  # As usually in Python projects
