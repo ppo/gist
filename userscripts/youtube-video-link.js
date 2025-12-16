@@ -2,7 +2,7 @@
 // @name         YouTube Video Link
 // @description  Create a Markdown string with information about the video, and copy it to the clipboard.
 // @icon         data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📺</text></svg>
-// @version      250721-01
+// @version      251216-01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/watch?*
@@ -26,7 +26,7 @@
 // CONSTANTS =======================================================================================
 
 const KEEP_UPPERCASE = [
-  '3D', 'AI', 'BMW', 'CNC', 'DIY', 'HQ', 'HVAC', 'PC', 'RV', 'USB', 'VW',
+  '3D', 'AI', 'BMW', 'CNC', 'DIY', 'HQ', 'HVAC', 'IA', 'PC', 'RV', 'USB', 'VW',
 ];
 
 
