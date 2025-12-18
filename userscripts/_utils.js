@@ -1,36 +1,5 @@
 // Shared helpers for userscripts.
 
-function copyToClipboard(value, message=true, timeout=undefined) {
-  // Copy the given value to the clipboard.
-  // _utils.js / version: 250430-01
-  const e = document.createElement('textarea');
-  e.value = value;
-  document.body.appendChild(e);
-  e.select();
-
-  document.execCommand('copy');
-  document.body.removeChild(e);
-
-  if (message) {
-    if (message === true) {
-      message = document.createElement('div');
-
-      const heading = document.createElement('p');
-      heading.style = 'font-weight: bold; margin-bottom: 1rem';
-      heading.textContent = 'Value copied to clipboard:';
-      message.appendChild(heading);
-
-      const pre = document.createElement('pre');
-      pre.textContent = value;
-      message.appendChild(pre);
-
-      message = message.innerHTML;
-    }
-    snackbar(message, timeout);
-  }
-}
-
-
 /**
  * Converts a date to a different timezone, returning a new Date object
  * where the local time represents the time in the target timezone
@@ -92,6 +61,41 @@ function changeTimezone(value, timezone) {
  } catch (error) {
    throw new Error(`Unsupported timezone: ${timezone}`);
  }
+}
+
+
+/**
+ * Copy the given value to the clipboard.
+ * @param {string} value - The value to copy.
+ * @param {bool|string} message - Display a snackbar message. `true` = use `value`.
+ * @param {integer} timeout - Display duration of the snackbar.
+*/
+function copyToClipboard(value, message=true, timeout=undefined) {
+  const e = document.createElement('textarea');
+  e.value = value;
+  document.body.appendChild(e);
+  e.select();
+
+  document.execCommand('copy');
+  document.body.removeChild(e);
+
+  if (message) {
+    if (message === true) {
+      message = document.createElement('div');
+
+      const heading = document.createElement('p');
+      heading.style = 'font-weight: bold; margin-bottom: 1rem';
+      heading.textContent = 'Value copied to clipboard:';
+      message.appendChild(heading);
+
+      const pre = document.createElement('pre');
+      pre.textContent = value;
+      message.appendChild(pre);
+
+      message = message.innerHTML;
+    }
+    snackbar(message, timeout);
+  }
 }
 
 
