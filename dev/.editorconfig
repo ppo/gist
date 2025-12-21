@@ -40,6 +40,7 @@ indent_style = tab
 
 # MARKDOWN
 [*.{md,mdx}]
+indent_size = 4
 trim_trailing_whitespace = false
 
 # MINIFIED FILES (should NOT/NEVER be changed!)
