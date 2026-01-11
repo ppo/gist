@@ -6,9 +6,10 @@
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/watch?*
-// @include      /^https://www\.youtube.\.com/(shorts|watch)/
 // @run-at       context-menu
 // ==/UserScript==
+
+// ❓ @include      /^https://www\.youtube.\.com/(shorts|watch)/
 
 
 // DOCUMENTATION ===================================================================================
