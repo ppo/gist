@@ -516,15 +516,6 @@ const RE_AMAZON_PRODUCT_ID = /\/(dp|gp\/product)\/([A-Z0-9]+)/;
 const RE_AMAZON_SEO_URL = /\/[^\/]+\/(dp|gp\/product)\/[A-Z0-9]+\//;
 
 
-function amazon_getProductId(location) {
-  console.debug('[amazon_getProductId] called');
-
-  if (!location) location = window.location;
-  match = location.pathname.match(RE_AMAZON_PRODUCT_ID);
-  return match ? match[2] : null;
-}
-
-
 function amazon_getCleanUrl(location) {
   console.debug('[amazon_getCleanUrl] called');
 
@@ -538,6 +529,15 @@ function amazon_getCleanUrl(location) {
   if (productId) url.pathname = `/dp/${productId}`;
 
   return url.toString();
+}
+
+
+function amazon_getProductId(location) {
+  console.debug('[amazon_getProductId] called');
+
+  if (!location) location = window.location;
+  match = location.pathname.match(RE_AMAZON_PRODUCT_ID);
+  return match ? match[2] : null;
 }
 
 
@@ -574,15 +574,6 @@ function youtube_getChannelInfo() {
 }
 
 
-function youtube_getTitle() {
-  console.debug('[youtube_getTitle] called');
-
-  const e = document.querySelector('ytd-watch-metadata #title h1 yt-formatted-string');
-  const title = e.textContent.replace(/ +/g, s => ' '); // Remove multiple spaces.
-  return title.trim();
-}
-
-
 function youtube_getDate() {
   console.debug('[youtube_getDate] called');
 
@@ -608,4 +599,13 @@ function youtube_getDuration() {
 
   const e = document.querySelector('ytd-player .ytp-time-duration');
   return e.textContent.trim();
+}
+
+
+function youtube_getTitle() {
+  console.debug('[youtube_getTitle] called');
+
+  const e = document.querySelector('ytd-watch-metadata #title h1 yt-formatted-string');
+  const title = e.textContent.replace(/ +/g, s => ' '); // Remove multiple spaces.
+  return title.trim();
 }
