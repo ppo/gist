@@ -1,4 +1,4 @@
-// @version 260125.01
+// @version 260126.01
 
 
 // BROWSER FEATURES ================================================================================
@@ -543,7 +543,7 @@ function amazon_getCleanUrl(location) {
 
 // YOUTUBE =========================================================================================
 
-const RE_YOUTUBE_VIDEO_ID = /\/watch\?v=([^&]+)/;
+const RE_YOUTUBE_VIDEO_ID = /\/(watch\?v=|shorts\/)([^&]+)/;
 
 
 function youtube_getVideoUrl(location) {
@@ -555,7 +555,7 @@ function youtube_getVideoUrl(location) {
 
   match = location.pathname.match(RE_YOUTUBE_VIDEO_ID);
   if (match) {
-    url.pathname = match[1];
+    url.pathname = match[2];
   } else {
     const e = document.querySelector('ytd-watch-metadata');
     url.pathname = e.getAttribute('video-id').trim();
