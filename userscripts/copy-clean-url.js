@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Copy Clean URL
 // @description  Copy the clean URL to clipboard.
-// @version      260125.01
+// @version      260127.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
