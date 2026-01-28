@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Copy Clean URL
 // @description  Copy the clean URL to clipboard.
-// @version      260127.01
+// @version      260128.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -9,6 +9,7 @@
 // @grant        GM_registerMenuCommand
 // @require      https://raw.githubusercontent.com/ppo/gist/main/userscripts/_utils.js
 // @downloadURL  https://raw.githubusercontent.com/ppo/gist/main/userscripts/copy-clean-url.js
+// @homepageURL  https://github.com/ppo/gist/blob/main/userscripts/copy-clean-url.js
 // ==/UserScript==
 // Userscript Manager: Violentmonkey
 

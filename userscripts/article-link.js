@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      260125.01
+// @version      260128.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -9,6 +9,7 @@
 // @grant        GM_registerMenuCommand
 // @require      https://raw.githubusercontent.com/ppo/gist/main/userscripts/_utils.js
 // @downloadURL  https://raw.githubusercontent.com/ppo/gist/main/userscripts/article-link.js
+// @homepageURL  https://github.com/ppo/gist/blob/main/userscripts/article-link.js
 // ==/UserScript==
 // Userscript Manager: Violentmonkey
 
