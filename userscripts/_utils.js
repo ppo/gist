@@ -1,4 +1,4 @@
-// @version 260126.01
+// @version 260128.01
 
 
 // BROWSER FEATURES ================================================================================
@@ -452,7 +452,7 @@ function snackbar(message, timeout=2000) {
 // ALL UPPERCASE WORDS TO TITLE CASE ===============================================================
 
 const KEEP_UPPERCASE = [
-  '3D', 'AI', 'BMW', 'CNC', 'DIY', 'HQ', 'HVAC', 'IA', 'MCP', 'PC', 'RAG', 'RV', 'USB', 'VW',
+  '3D', 'AI', 'BMW', 'CNC', 'DIY', 'HQ', 'HVAC', 'IA', 'MCP', 'OS', 'PC', 'RAG', 'RV', 'USB', 'VW',
 ];
 
 
