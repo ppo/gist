@@ -20,6 +20,8 @@
 //   Frontmatter: url, title, date, duration, channel: {name, url}
 //   Transcript lines
 
+// 🔴 Use `GM_download` to download the TXT file and copy the YT download command to clipboard.
+// 🔴 Prompt filename?
 // 🔴 Keep timestamps in short format `[00:00] Text`?
 
 

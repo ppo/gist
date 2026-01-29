@@ -51,7 +51,7 @@ function copyToClipboard(value, message=true, timeout=undefined) {
 
 /**
  * Triggers download of a file in the browser.
- * version: 250604
+ *
  * @param {string} content - File content
  * @param {string} filename - Filename with extension
  * @param {string} [type] - MIME type (defaults to 'text/plain')
@@ -80,6 +80,7 @@ function downloadFile(content, filename, type='text/plain') {
 
 /**
  * Creates an ICS file content from event data.
+ *
  * @param {Object} data - Event data.
  * @param {string} data.title - Event title.
  * @param {Date|string} data.start - Start date/time, with/without timezone.
@@ -153,17 +154,17 @@ function createIcs(data, prodId='-//Generic Script//Calendar Event//EN') {
 // DATE, TIME, TIMEZONE ============================================================================
 
 /**
- * Converts a date to a different timezone, returning a new Date object
- * where the local time represents the time in the target timezone
+ * Converts a date to a different timezone, returning a new Date object where the local time
+ * represents the time in the target timezone.
+ *
  * @param {Date|string} value - Source date value
  * @param {string} timezone - Target timezone ('UTC', 'local', or IANA timezone like 'Europe/Brussels')
  * @returns {Date} New Date object with converted timezone
  * @throws {Error} When invalid date or unsupported timezone is provided
- * @updated 250604
  * @example
- * switchTimezone(new Date(), 'UTC') // Convert to UTC
- * switchTimezone('2025-06-04T14:30:00', 'Europe/Brussels') // Convert to Brussels time
- * switchTimezone(new Date(), 'local') // Keep as local time (no-op)
+ *   switchTimezone(new Date(), 'UTC') // Convert to UTC
+ *   switchTimezone('2025-06-04T14:30:00', 'Europe/Brussels') // Convert to Brussels time
+ *   switchTimezone(new Date(), 'local') // Keep as local time (no-op)
  */
 function changeTimezone(value, timezone) {
   console.debug('[changeTimezone] called');
@@ -221,13 +222,13 @@ function changeTimezone(value, timezone) {
 
 /**
  * Formats a date/time value, according to PHP `DateTime::format` conventions.
+ *
  * @param {string} format - Format string or predefined format name.
  * @param {Date|string} [value] - Date, time, or date/time value. Default: `now`.
  * @param {string} [timezone] - Target timezone ('UTC', 'local', or IANA timezone).
  * @returns {string} Formatted date/time string.
  * @throws {Error} When invalid date is provided.
  * @see https://www.php.net/manual/en/datetime.format.php
- * @updated 260125
  */
 function formatDateTime(format, value, timezone) {
   console.debug('[formatDateTime] called');
@@ -287,10 +288,10 @@ function formatDateTime(format, value, timezone) {
 
 /**
  * Returns the difference to UTC without colon between hours and minutes.
+ *
  * @param {Date|string} [value] - Time or date/time value. Default: `now`.
  * @returns {string} Timezone offset string as `sHHMM` (s = sign = +/-).
  * @throws {Error} When invalid time is provided.
- * @updated 250604
  */
 function getTimezoneOffset(value) {
   console.debug('[getTimezoneOffset] called');
@@ -332,11 +333,10 @@ function createCssStyle(css) {
 }
 
 
+// Find the first element matching a series of selectors, located under a series of namespaces.
 function findFirstElement(selectors, namespaces) {
   console.debug('[findFirstElement] called');
 
-  // Find the first element matching a series of selectors, located under a series of namespaces.
-  // _utils.js / version: 240126-01
   for (let selector of selectors) {
     for (let namespace of namespaces) {
       let e = document.querySelector(`${namespace} ${selector}`);
@@ -353,10 +353,9 @@ function hide(elem) {
 }
 
 
+// Usage: waitForElement('.selector', e => { … });
 function waitForElement(selector, callback, timeout=2000) {
   console.debug('[waitForElement] called');
-
-  // Usage: waitForElement('.selector', e => { … });
 
   const elem = document.querySelector(selector);
   if (elem) {
@@ -371,6 +370,7 @@ function waitForElement(selector, callback, timeout=2000) {
 
 /**
  * Applies multiple string replacements using a map of pattern-replacement pairs.
+ *
  * @param {string} text - Text to process.
  * @param {Array} replacements - Flat array of [pattern, replacement, …].
  * @returns {string} Text with all replacements applied.
@@ -391,11 +391,10 @@ function replaceMap(text, replacements) {
 }
 
 
+// Generate a slug based on the given value.
 function slugify(value) {
   console.debug('[slugify] called');
 
-  // Generate a slug based on the given value.
-  // _utils.js / version: 250514-01
   return value
     .toString()
     .toLowerCase()
@@ -480,7 +479,6 @@ function mustConvertUpperCase(value) {
 }
 
 
-// Requires: mustConvertUpperCase, toTitleCase
 function convertUpperCaseWords(value) {
   console.debug('[convertUpperCaseWords] called');
 
