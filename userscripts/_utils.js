@@ -1,4 +1,4 @@
-console.debug('[_utils.js] Versoin 260129.02');
+console.debug('[_utils.js] Version 260129.02');
 
 
 // BROWSER FEATURES ================================================================================
