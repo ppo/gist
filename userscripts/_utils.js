@@ -416,7 +416,11 @@ function snackbar(message, timeout=2000) {
     // Fix for error "Requires 'TrustedHTML' assignment"
     // Source: https://github.com/Tampermonkey/tampermonkey/issues/1334#issuecomment-927277844
     window.trustedTypes.createPolicy('default', { createHTML: (string, sink) => string });
+  } catch (error) {
+    console.debug('[snackbar] createPolicy() ERROR:', error);
+  }
 
+  try {
     const elem = document.createElement('div');
     elem.innerHTML = message;
     Object.assign(elem.style, {
