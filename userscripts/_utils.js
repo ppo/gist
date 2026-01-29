@@ -409,6 +409,26 @@ function slugify(value) {
 
 // UI ==============================================================================================
 
+const SNACKBAR_CSS = {
+  all: 'initial',
+  backgroundColor: '#ffca28',
+  border: '3px solid #fff',
+  boxShadow: 'rgba(0, 0, 0, 0.5) 3px 6px 12px',
+  color: '#000',
+  fontFamily: 'sans-serif',
+  left: '50%',
+  maxHeight: '75%',
+  maxWidth: '75%',
+  minWidth: '250px',
+  overflow: 'auto',
+  padding: '1rem 1.25rem',
+  position: 'fixed',
+  top: '50%',
+  transform: 'translate(-50%, -50%)',
+  zIndex: '9999',
+};
+
+
 // Display a temporary message – or fixed until clicked if `!timeout`.
 function snackbar(message, timeout=2000) {
   console.debug('[snackbar] called');
@@ -424,24 +444,7 @@ function snackbar(message, timeout=2000) {
   try {
     const elem = document.createElement('div');
     elem.innerHTML = message;
-    Object.assign(elem.style, {
-      all: 'initial',
-      backgroundColor: '#ffca28',
-      border: '3px solid #fff',
-      boxShadow: 'rgba(0, 0, 0, 0.5) 3px 6px 12px',
-      color: '#000',
-      fontFamily: 'sans-serif',
-      left: '50%',
-      maxHeight: '75%',
-      maxWidth: '75%',
-      minWidth: '250px',
-      overflow: 'auto',
-      padding: '1rem 1.25rem',
-      position: 'fixed',
-      top: '50%',
-      transform: 'translate(-50%, -50%)',
-      zIndex: '9999',
-    });
+    Object.assign(elem.style, SNACKBAR_CSS);
     document.body.appendChild(elem);
     console.debug('[snackbar] DOM updated', elem);
 
