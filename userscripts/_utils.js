@@ -1,11 +1,11 @@
-console.debug('[_utils.js] Versoin 260129.01');
+console.debug('[_utils.js] Versoin 260129.02');
 
 
 // BROWSER FEATURES ================================================================================
 
 /**
  * Copy the given value to the clipboard.
- * Requires: snackbar
+ * Requires: `@grant GM_setClipboard`
  *
  * @param {string} value - The value to copy.
  * @param {bool|string} message - Display a snackbar message. `true` = use `value`.
@@ -14,13 +14,14 @@ console.debug('[_utils.js] Versoin 260129.01');
 function copyToClipboard(value, message=true, timeout=undefined) {
   console.debug('[copyToClipboard] called');
 
-  const e = document.createElement('textarea');
-  e.value = value;
-  document.body.appendChild(e);
-  e.select();
+  GM_setClipboard(value);
+  // const e = document.createElement('textarea');
+  // e.value = value;
+  // document.body.appendChild(e);
+  // e.select();
 
-  document.execCommand('copy');
-  document.body.removeChild(e);
+  // document.execCommand('copy');
+  // document.body.removeChild(e);
 
   if (message) {
     if (message === true) {
