@@ -1,4 +1,4 @@
-console.debug('[_utils.js] Version 260129.02');
+console.debug('[_utils.js] Version 260130.01');
 
 
 // BROWSER FEATURES ================================================================================
@@ -459,7 +459,8 @@ function snackbar(message, timeout=2000) {
 // ALL UPPERCASE WORDS TO TITLE CASE ===============================================================
 
 const KEEP_UPPERCASE = [
-  '3D', 'AI', 'BMW', 'CNC', 'DIY', 'HQ', 'HVAC', 'IA', 'MCP', 'OS', 'PC', 'RAG', 'RV', 'USB', 'VW',
+  '3D', 'AI', 'BMW', 'CEO', 'CNC', 'CTO', 'DIY', 'HQ', 'HVAC', 'IA', 'MCP', 'OS', 'PC', 'RAG',
+  'RV', 'USB', 'VW',
 ];
 
 
