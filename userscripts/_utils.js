@@ -558,9 +558,9 @@ function youtube_getVideoUrl(location) {
 
   if (!location) location = window.location;
 
-  const url = new URL('https://youtu.be/');
+  const url = new URL('https://youtu.be');
 
-  match = location.pathname.match(RE_YOUTUBE_VIDEO_ID);
+  const match = location.pathname.match(RE_YOUTUBE_VIDEO_ID);
   if (match) {
     url.pathname = match[2];
   } else {
@@ -568,7 +568,7 @@ function youtube_getVideoUrl(location) {
     url.pathname = e.getAttribute('video-id').trim();
   }
 
-  return url.toString();
+  return url.pathname === '/' ? null : url.toString();
 }
 
 
@@ -615,4 +615,10 @@ function youtube_getTitle() {
   const e = document.querySelector('ytd-watch-metadata #title h1 yt-formatted-string');
   const title = e.textContent.replace(/ +/g, s => ' '); // Remove multiple spaces.
   return title.trim();
+}
+
+
+function youtube_isVideoPage(location) {
+  if (!location) location = window.location;
+  return RE_YOUTUBE_VIDEO_ID.test(location.pathname);
 }

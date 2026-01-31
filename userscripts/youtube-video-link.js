@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         YouTube Video Link
 // @description  Create a Markdown string with information about the video, and copy it to the clipboard.
-// @version      260129.01
+// @version      260131.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
-// @match        *://www.youtube.com/watch?*
+// @match        *://www.youtube.com/
 // @run-at       document-idle
 // @grant        GM_registerMenuCommand
 // @grant        GM_setClipboard
@@ -23,6 +23,11 @@
 function main() {
   console.debug(`[${GM_info.script.name}][main] called`);
 
+  if (!youtube_isVideoPage()) {
+    alert('This is not a YouTube video page.');
+    return;
+  }
+
   const videoUrl = youtube_getVideoUrl();
   const channel = youtube_getChannelInfo();
   const title = convertUpperCaseWords(youtube_getTitle());
@@ -36,4 +41,5 @@ function main() {
 }
 
 
+// 🔴 SPA => use MutationObserver or window.navigation API to detect `/watch?*`
 GM_registerMenuCommand(GM_info.script.name, main);

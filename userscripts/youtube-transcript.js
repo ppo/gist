@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      260129.01
+// @version      260131.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
-// @match        *://www.youtube.com/watch?*
+// @match        *://www.youtube.com/
 // @run-at       document-idle
 // @grant        GM_registerMenuCommand
 // @grant        GM_setClipboard
@@ -20,7 +20,7 @@
 //   Frontmatter: url, title, date, duration, channel: {name, url}
 //   Transcript lines
 
-// 🔴 Use `GM_download` to download the TXT file and copy the YT download command to clipboard.
+// 🔴 Generate a download TXT file and copy the YT download command to clipboard.
 // 🔴 Prompt filename?
 // 🔴 Keep timestamps in short format `[00:00] Text`?
 
@@ -68,6 +68,11 @@ ${lines.join('\n')}
 
 function main() {
   console.debug(`[${GM_info.script.name}][main] called`);
+
+  if (!window.location.pathname.startsWith('/watch')) {
+    alert('This is not a YouTube "watch" video page.');
+    return;
+  }
 
   document.querySelector('button[aria-label="Show transcript"]').click();
   waitForElement('ytd-transcript-renderer', processData);
