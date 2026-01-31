@@ -1,9 +1,9 @@
 function logDebug(ns, message, ...args) {
   ns = ns ? `[${ns}]` : '';
-  console.debug(`[Utils]${ns ? `[${ns}]` : ''} ${message}`, ...args);
+  console.debug(`[Utils]${ns} ${message}`, ...args);
 }
 
-logDebug('loaded', 'Version 260131.01');
+logDebug('loaded', 'Version 260131.02');
 
 
 // BROWSER FEATURES ================================================================================
