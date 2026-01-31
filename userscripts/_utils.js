@@ -1,4 +1,9 @@
-console.debug('[_utils.js] Version 260131.01');
+function logDebug(ns, message, ...args) {
+  ns = ns ? `[${ns}]` : '';
+  console.debug(`[Utils]${ns ? `[${ns}]` : ''} ${message}`, ...args);
+}
+
+logDebug('loaded', 'Version 260131.01');
 
 
 // BROWSER FEATURES ================================================================================
@@ -12,7 +17,7 @@ console.debug('[_utils.js] Version 260131.01');
  * @param {integer} timeout - Display duration of the snackbar.
 */
 function copyToClipboard(value, message=true, timeout=undefined) {
-  console.debug('[copyToClipboard] called');
+  logDebug('copyToClipboard', 'called');
 
   GM_setClipboard(value);
   // const e = document.createElement('textarea');
@@ -38,13 +43,13 @@ function copyToClipboard(value, message=true, timeout=undefined) {
 
       message = message.innerHTML;
     } else {
-      console.debug('[copyToClipboard] message !== true', message);
+      logDebug('copyToClipboard', 'message !== true', message);
     }
 
-    console.debug('[copyToClipboard] calling snackbar()', message, timeout);
+    logDebug('copyToClipboard', 'calling snackbar()', message, timeout);
     snackbar(message, timeout);
   } else {
-    console.debug('[copyToClipboard] no message', message);
+    logDebug('copyToClipboard', 'no message', message);
   }
 }
 
@@ -57,7 +62,7 @@ function copyToClipboard(value, message=true, timeout=undefined) {
  * @param {string} [type] - MIME type (defaults to 'text/plain')
  */
 function downloadFile(content, filename, type='text/plain') {
-  console.debug('[downloadFile] called');
+  logDebug('downloadFile', 'called');
 
   const blob = new Blob([content], { type: `${type};charset=utf-8` });
   const url = URL.createObjectURL(blob);
@@ -91,7 +96,7 @@ function downloadFile(content, filename, type='text/plain') {
  * @returns {string} ICS file content.
  */
 function createIcs(data, prodId='-//Generic Script//Calendar Event//EN') {
-  console.debug('[createIcs] called');
+  logDebug('createIcs', 'called');
 
   const ESCAPE_MAP = [
     /\\/g, '\\\\',
@@ -167,7 +172,7 @@ function createIcs(data, prodId='-//Generic Script//Calendar Event//EN') {
  *   switchTimezone(new Date(), 'local') // Keep as local time (no-op)
  */
 function changeTimezone(value, timezone) {
-  console.debug('[changeTimezone] called');
+  logDebug('changeTimezone', 'called');
 
  const date = strToDate(value, true);
 
@@ -214,7 +219,7 @@ function changeTimezone(value, timezone) {
      parseInt(partsMap.second),
    );
  } catch (error) {
-    console.debug('[changeTimezone] ERROR:', error);
+    logDebug('changeTimezone', 'ERROR:', error);
     throw new Error(`Unsupported timezone: ${timezone}`);
  }
 }
@@ -231,7 +236,7 @@ function changeTimezone(value, timezone) {
  * @see https://www.php.net/manual/en/datetime.format.php
  */
 function formatDateTime(format, value, timezone) {
-  console.debug('[formatDateTime] called');
+  logDebug('formatDateTime', 'called');
 
   if (!value) return value;
 
@@ -294,7 +299,7 @@ function formatDateTime(format, value, timezone) {
  * @throws {Error} When invalid time is provided.
  */
 function getTimezoneOffset(value) {
-  console.debug('[getTimezoneOffset] called');
+  logDebug('getTimezoneOffset', 'called');
 
   // Initialize date
   const date = strToDate(value, true);
@@ -311,7 +316,7 @@ function getTimezoneOffset(value) {
 
 
 function strToDate(value, withTime=false) {
-  console.debug('[strToDate] called');
+  logDebug('strToDate', 'called');
 
   const date = value ? new Date(value) : new Date();
   if (withTime && isNaN(date.getTime())) {
@@ -324,7 +329,7 @@ function strToDate(value, withTime=false) {
 // DOM =============================================================================================
 
 function createCssStyle(css) {
-  console.debug('[createCssStyle] called');
+  logDebug('createCssStyle', 'called');
 
   var style = document.createElement('style');
   style.type = 'text/css';
@@ -335,7 +340,7 @@ function createCssStyle(css) {
 
 // Find the first element matching a series of selectors, located under a series of namespaces.
 function findFirstElement(selectors, namespaces) {
-  console.debug('[findFirstElement] called');
+  logDebug('findFirstElement', 'called');
 
   for (let selector of selectors) {
     for (let namespace of namespaces) {
@@ -347,7 +352,7 @@ function findFirstElement(selectors, namespaces) {
 
 
 function hide(elem) {
-  console.debug('[hide] called');
+  logDebug('hide', 'called');
 
   elem.style.display = 'none';
 }
@@ -355,7 +360,7 @@ function hide(elem) {
 
 // Usage: waitForElement('.selector', e => { … });
 function waitForElement(selector, callback, timeout=2000) {
-  console.debug('[waitForElement] called');
+  logDebug('waitForElement', 'called');
 
   const elem = document.querySelector(selector);
   if (elem) {
@@ -376,7 +381,7 @@ function waitForElement(selector, callback, timeout=2000) {
  * @returns {string} Text with all replacements applied.
  */
 function replaceMap(text, replacements) {
-  console.debug('[replaceMap] called');
+  logDebug('replaceMap', 'called');
 
   if (!text) return '';
 
@@ -393,7 +398,7 @@ function replaceMap(text, replacements) {
 
 // Generate a slug based on the given value.
 function slugify(value) {
-  console.debug('[slugify] called');
+  logDebug('slugify', 'called');
 
   return value
     .toString()
@@ -430,14 +435,14 @@ const SNACKBAR_CSS = {
 
 // Display a temporary message – or fixed until clicked if `!timeout`.
 function snackbar(message, timeout=2000) {
-  console.debug('[snackbar] called');
+  logDebug('snackbar', 'called');
 
   try {
     // Fix for error "Requires 'TrustedHTML' assignment"
     // Source: https://github.com/Tampermonkey/tampermonkey/issues/1334#issuecomment-927277844
     window.trustedTypes.createPolicy('default', { createHTML: (string, sink) => string });
   } catch (error) {
-    console.debug('[snackbar] createPolicy() ERROR:', error);
+    logDebug('snackbar', 'createPolicy() ERROR:', error);
   }
 
   try {
@@ -445,13 +450,13 @@ function snackbar(message, timeout=2000) {
     elem.innerHTML = message;
     Object.assign(elem.style, SNACKBAR_CSS);
     document.body.appendChild(elem);
-    console.debug('[snackbar] DOM updated', elem);
+    logDebug('snackbar', 'DOM updated', elem);
 
     const destroy = () => { document.body.removeChild(elem); };
     elem.addEventListener('click', destroy);
     if (timeout) setTimeout(destroy, timeout);
   } catch (error) {
-    console.debug('[snackbar] ERROR:', error);
+    logDebug('snackbar', 'ERROR:', error);
   }
 }
 
@@ -465,14 +470,14 @@ const KEEP_UPPERCASE = [
 
 
 function toTitleCase(value) {
-  console.debug('[toTitleCase] called');
+  logDebug('toTitleCase', 'called');
 
   return value.charAt(0).toUpperCase() + value.substring(1).toLowerCase();
 }
 
 
 function mustConvertUpperCase(value) {
-  console.debug('[mustConvertUpperCase] called');
+  logDebug('mustConvertUpperCase', 'called');
 
   return value.length > 1
     && value === value.toUpperCase()
@@ -481,7 +486,7 @@ function mustConvertUpperCase(value) {
 
 
 function convertUpperCaseWords(value) {
-  console.debug('[convertUpperCaseWords] called');
+  logDebug('convertUpperCaseWords', 'called');
 
   return value.replace(/\b[A-Z]+\b/g, match => {
     return mustConvertUpperCase(match) ? toTitleCase(match) : match;
@@ -492,7 +497,7 @@ function convertUpperCaseWords(value) {
 // MISC ============================================================================================
 
 function getSpecialSite() {
-  console.debug('[getSpecialSite] called');
+  logDebug('getSpecialSite', 'called');
 
   if (window.location.host.includes('aliexpress.com')) return 'ALIEXPRESS';
   if (window.location.host.includes('amazon.'))        return 'AMAZON';
@@ -506,7 +511,7 @@ function getSpecialSite() {
 // Wait for the given time (`ms`) then executes the callback.
 // Or return immediately a Promise if no callback provided.
 function sleep(ms, callback) {
-  console.debug('[sleep] called');
+  logDebug('sleep', 'called');
 
   const p = new Promise(resolve => setTimeout(resolve, ms));
   return callback ? p.then(callback) : p;
@@ -524,7 +529,7 @@ const RE_AMAZON_SEO_URL = /\/[^\/]+\/(dp|gp\/product)\/[A-Z0-9]+\//;
 
 
 function amazon_getCleanUrl(location) {
-  console.debug('[amazon_getCleanUrl] called');
+  logDebug('amazon_getCleanUrl', 'called');
 
   if (!location) location = window.location;
 
@@ -540,7 +545,7 @@ function amazon_getCleanUrl(location) {
 
 
 function amazon_getProductId(location) {
-  console.debug('[amazon_getProductId] called');
+  logDebug('amazon_getProductId', 'called');
 
   if (!location) location = window.location;
   match = location.pathname.match(RE_AMAZON_PRODUCT_ID);
@@ -554,7 +559,7 @@ const RE_YOUTUBE_VIDEO_ID = /\/(watch\?v=|shorts\/)([^&]+)/;
 
 
 function youtube_getVideoUrl(location) {
-  console.debug('[youtube_getVideoUrl] called');
+  logDebug('youtube_getVideoUrl', 'called');
 
   if (!location) location = window.location;
 
@@ -573,7 +578,7 @@ function youtube_getVideoUrl(location) {
 
 
 function youtube_getChannelInfo() {
-  console.debug('[youtube_getChannelInfo] called');
+  logDebug('youtube_getChannelInfo', 'called');
 
   const e = document.querySelector('#owner .ytd-channel-name a')
     || document.querySelector('#owner #attributed-channel-name a');
@@ -582,7 +587,7 @@ function youtube_getChannelInfo() {
 
 
 function youtube_getDate() {
-  console.debug('[youtube_getDate] called');
+  logDebug('youtube_getDate', 'called');
 
   let e, value;
   try {
@@ -602,7 +607,7 @@ function youtube_getDate() {
 
 
 function youtube_getDuration() {
-  console.debug('[youtube_getDuration] called');
+  logDebug('youtube_getDuration', 'called');
 
   const e = document.querySelector('ytd-player .ytp-time-duration');
   return e.textContent.trim();
@@ -610,7 +615,7 @@ function youtube_getDuration() {
 
 
 function youtube_getTitle() {
-  console.debug('[youtube_getTitle] called');
+  logDebug('youtube_getTitle', 'called');
 
   const e = document.querySelector('ytd-watch-metadata #title h1 yt-formatted-string');
   const title = e.textContent.replace(/ +/g, s => ' '); // Remove multiple spaces.
