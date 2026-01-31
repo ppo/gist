@@ -3,7 +3,7 @@ function logDebug(ns, message, ...args) {
   console.debug(`[Utils]${ns} ${message}`, ...args);
 }
 
-logDebug('loaded', 'Version 260131.02');
+logDebug('loaded', 'Version 260131.03');
 
 
 // BROWSER FEATURES ================================================================================
@@ -565,15 +565,20 @@ function youtube_getVideoUrl(location) {
 
   const url = new URL('https://youtu.be');
 
-  const match = location.pathname.match(RE_YOUTUBE_VIDEO_ID);
+  const match = location.href.match(RE_YOUTUBE_VIDEO_ID);
   if (match) {
     url.pathname = match[2];
+    logDebug('youtube_getVideoUrl', 'matching', match);
   } else {
     const e = document.querySelector('ytd-watch-metadata');
     url.pathname = e.getAttribute('video-id').trim();
+    logDebug('youtube_getVideoUrl', 'use video-id', e);
   }
 
-  return url.pathname === '/' ? null : url.toString();
+  const videoUrl = url.pathname === '/' ? null : url.toString();
+  logDebug('youtube_getVideoUrl', 'return', videoUrl);
+
+  return videoUrl;
 }
 
 
@@ -625,5 +630,5 @@ function youtube_getTitle() {
 
 function youtube_isVideoPage(location) {
   if (!location) location = window.location;
-  return RE_YOUTUBE_VIDEO_ID.test(location.pathname);
+  return RE_YOUTUBE_VIDEO_ID.test(location.href);
 }
