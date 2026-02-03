@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      260129.02
+// @version      260203.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
 // @run-at       document-idle
 // @grant        GM_registerMenuCommand
 // @grant        GM_setClipboard
-// @require      https://raw.githubusercontent.com/ppo/gist/main/userscripts/_utils.js?260131.03
+// @require      https://raw.githubusercontent.com/ppo/gist/main/userscripts/_utils.js
 // @downloadURL  https://raw.githubusercontent.com/ppo/gist/main/userscripts/article-link.js
 // @homepageURL  https://github.com/ppo/gist/blob/main/userscripts/article-link.js
 // ==/UserScript==
