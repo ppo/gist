@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      260203.01
+// @version      260206.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -56,7 +56,7 @@ channel:
   url: ${channel.url}
 ---
 
-${lines.join('\n')}
+${lines.join(' ')}
 `;
 
   console.debug(`[${GM_info.script.name}][main] result:`, result);
