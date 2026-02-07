@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      260207.01
+// @version      260207.02
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -45,6 +45,7 @@ function processData(elem) {
 
   const filenameText = `${channel.name} - ${title}.${compactDate}.txt`;
   const downloadCommand = `youtube-download "${videoUrl}" ".${compactDate}.mp3"`;
+  const transcript = lines.join(' ').replaceAll(/[  \t\n]+/g, ' ');
 
   const result = `${filenameText}
 ${downloadCommand}
@@ -58,7 +59,7 @@ channel:
   url: ${channel.url}
 ---
 
-${lines.join(' ')}
+${transcript}
 `;
 
   console.debug(`[${GM_info.script.name}][main] result:`, result);
