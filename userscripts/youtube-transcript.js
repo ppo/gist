@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      260209.01
+// @version      260210.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -44,7 +44,7 @@ function processData(elem) {
   });
 
   const filenameText = `${channel.name} - ${title}.${compactDate}.txt`.replaceAll(/[‘’]/g, "'").replaceAll(/[“”]/g, '"');
-  const downloadCommand = `youtube-download "${videoUrl}" ".${compactDate}.mp3"`;
+  const downloadCommand = `youtube-download "${videoUrl}" ".mp3"`;
   const transcript = lines.join(' ').replaceAll(/[  \t\n]+/g, ' ');
 
   const result = `${filenameText}
