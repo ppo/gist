@@ -233,7 +233,7 @@ function changeTimezone(value, timezone) {
 function formatDateTime(format, value, timezone) {
   console.debug('[Utils][formatDateTime] called');
 
-  if (!value) return value;
+  if (!value) value = new Date();
 
   const predefined = {
     'date':             'Y-m-d',
@@ -369,7 +369,7 @@ function waitForElement(selector, callback, timeout=2000) {
 // STRING ==========================================================================================
 
 /**
- * Applies multiple string replacements using a map of pattern-replacement pairs.
+ * Apply multiple string replacements using a map of search-replace pairs.
  *
  * @param {string} text - Text to process.
  * @param {Array} replacements - Flat array of [pattern, replacement, …].
