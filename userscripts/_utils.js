@@ -368,6 +368,89 @@ function waitForElement(selector, callback, timeout=2000) {
 
 // STRING ==========================================================================================
 
+// Clean filename string.
+function cleanFilename(value) {
+  console.debug('[Utils][cleanFilename] called');
+
+  const REPLACEMENTS = [
+    [ /[‘’]/g,     "'"   ],  // Smart single quotes
+    [ /[“”«»<>]/g, '"'   ],  // Smart double quotes, guillemets, <>
+    [ /[\/\\]/g,   '-'   ],  // Slashes (/ & \)
+    [ / ?: ?/g,    ' - ' ],  // Colon (:)
+    [ /[\x00]/g,   ''    ],  // NUL – just strip
+  ];
+  return replaceMap(value, REPLACEMENTS);
+}
+
+
+// Convert HTML to Markdown.
+// ⚠️ Userscript must require Turndown before this library:
+//   @require https://cdn.jsdelivr.net/npm/turndown/dist/turndown.min.js
+function html2markdown(html) {
+  console.debug('[Utils][html2markdown] called');
+
+  const td = new TurndownService({
+    headingStyle: 'atx',       // `#` for headings (default: setext)
+    emDelimiter: '_',          // `_` for italic (default)
+    bulletListMarker: '-',     // `-` for bullet lists (default)
+    codeBlockStyle: 'fenced',  // ``` (default: indented)
+  });
+
+  // Fix headings
+  td.addRule('headings', {
+    filter: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+    replacement(content, node) {
+      content = content.trim();
+      if (!content) return '';
+      const level = parseInt(node.nodeName[1]);
+      return `\n\n${'#'.repeat(level)} ${content}\n`;
+    },
+  });
+
+  // Fix links
+  td.addRule('link', {
+    filter: 'a',
+    replacement(content, node) {
+      const href = node.getAttribute('href');
+      if (!href) return content;
+      const title = node.getAttribute('title');
+      return title
+        ? `[${content}](${href} "${title}")`
+        : `[${content}](${href})`;
+    },
+  });
+
+  // Fix lists
+  td.addRule('listItem', {
+    filter: 'li',
+    replacement(content, node) {
+      const clean = content.trim().replace(/\n+/g, '\n  ');
+      const isOrdered = node.parentNode.nodeName === 'OL';
+      if (isOrdered) {
+        const index = Array.from(node.parentNode.children).indexOf(node) + 1;
+        return `${index}. ${clean}\n`;
+      }
+      return `- ${clean}\n`;
+    },
+  });
+
+  // Fix
+  td.addRule('paragraphInListItem', {
+    filter(node) { return node.nodeName === 'P' && node.parentNode.nodeName === 'LI'; },
+    replacement(content) { return content; },
+  });
+
+  const REPLACEMENTS = [
+    [ /^([-*+]|\d+\.)\s{2,}/gm, '$1 '   ],  // Remove alignment spaces after list symbol
+    [ /\n#/g,                   '\n\n#' ],  // Headings: Add extra line before
+    [ /\n(\s*)\[/g,             ' ['    ],  // Links: Remove new line before
+    [ /\]\(([^)]+)\)\n(\s*)/g,  ']($1)' ],  // Links: Remove new line after
+  ];
+
+  return replaceMap(td.turndown(html), REPLACEMENTS);
+}
+
+
 /**
  * Apply multiple string replacements using a map of search-replace pairs.
  *
