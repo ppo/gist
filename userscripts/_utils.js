@@ -94,11 +94,11 @@ function createIcs(data, prodId='-//Generic Script//Calendar Event//EN') {
   console.debug('[Utils][createIcs] called');
 
   const ESCAPE_MAP = [
-    /\\/g, '\\\\',
-    /;/g,  '\\;',
-    /,/g,  '\\,',
-    /\n/g, '\n',
-    /\r/g, '',
+    [ /\\/g, '\\\\' ],
+    [ /;/g,  '\\;'  ],
+    [ /,/g,  '\\,'  ],
+    [ /\n/g, '\n'   ],
+    [ /\r/g, ''     ],
   ];
 
   const generateUID = () => {
@@ -372,22 +372,14 @@ function waitForElement(selector, callback, timeout=2000) {
  * Apply multiple string replacements using a map of search-replace pairs.
  *
  * @param {string} text - Text to process.
- * @param {Array} replacements - Flat array of [pattern, replacement, …].
+ * @param {Array} replacements - Array of [ [search, replace]… ].
  * @returns {string} Text with all replacements applied.
  */
 function replaceMap(text, replacements) {
   console.debug('[Utils][replaceMap] called');
 
   if (!text) return '';
-
-  let result = text;
-  for (let i = 0; i < replacements.length; i += 2) {
-    const pattern = replacements[i];
-    const replacement = replacements[i + 1];
-    result = result.replace(pattern, replacement);
-  }
-
-  return result;
+  return replacements.reduce((t, [search, replace]) => t.replaceAll(search, replace), text);
 }
 
 
