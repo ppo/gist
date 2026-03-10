@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      260224.01
+// @version      260310.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -50,7 +50,7 @@ function processData(elem) {
   const duration = youtube_getDuration();
 
   const lines = [];
-  elem.querySelectorAll('#content #body #segments-container .segment-text').forEach(elem => {
+  document.querySelectorAll('#content transcript-segment-view-model .yt-core-attributed-string').forEach(elem => {
     lines.push(elem.textContent.trim());
   });
 
@@ -89,7 +89,7 @@ function main() {
   }
 
   document.querySelector('button[aria-label="Show transcript"]').click();
-  waitForElement('ytd-transcript-renderer', processData);
+  waitForElement('transcript-segment-view-model', processData);
 }
 
 
