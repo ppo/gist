@@ -1,4 +1,4 @@
-console.debug('[Utils][loaded] Version 260315.01');
+console.debug('[Utils][loaded] Version 260315.02');
 
 
 // BROWSER FEATURES ================================================================================
@@ -374,10 +374,11 @@ function cleanFilename(value) {
 
   const REPLACEMENTS = [
     [ /[‘’]/g,     "'"   ],  // Smart single quotes
-    [ /[“”«»<>]/g, "'"   ],  // Smart double quotes, guillemets, <> (as single quote)
+    [ /[“”«»<>]/g, '"'   ],  // Smart double quotes, guillemets, <>
     [ /[\/\\–—]/g, '-'   ],  // Slashes (/ & \) and long dashes (–, —)
     [ / ?: ?/g,    ' - ' ],  // Colon (:)
     [ /[\x00]/g,   ''    ],  // NUL – just strip
+    [ /[""]/g,     "'"   ],  // Double quotes as single quotes
   ];
   return replaceMap(value, REPLACEMENTS);
 }
