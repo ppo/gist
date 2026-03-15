@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      260310.02
+// @version      260315.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -65,11 +65,11 @@ function processData(elem) {
 ${downloadCommand}
 ---
 url: ${videoUrl}
-title: "${title}"
+title: ${JSON.stringify(title)}
 date: ${date}
 duration: ${duration}
 channel:
-  name: "${channel.name}"
+  name: ${JSON.stringify(channel.name)}
   url: ${channel.url}
 ---
 
