@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      260219.02
+// @version      260326.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -54,23 +54,30 @@ function formatResult(url, title, date) {
 
   let result = `[${title}](${url})` + (date ? ` (${date})` : '');
   const today = new Date().toISOString().replaceAll('-', '').substr(2, 6);
+  let e;
   let price;
 
   switch (specialSite) {
     case 'AMAZON':
-      price = document.querySelector('#tp-tool-tip-subtotal-price-value .a-offscreen').textContent.replace(',', '.').trim();
+      e = document.querySelector('#tp-tool-tip-subtotal-price-value .a-offscreen')
+        || document.querySelector('.slot-price');
+      price = e ? ' ' + e.textContent.replace(',', '.').trim() : '';
       const cleanUrl = amazon_getCleanUrl();
-      result = `[Amazon] [${title}](${cleanUrl}) ${price} (${today})`;
+      result = `[Amazon] [${title}](${cleanUrl})${price} (${today})`;
       break;
     case 'GITHUB':
-      const about = document.querySelector('.Layout-sidebar .about-margin h2 + p').innerText.trim();
-      result = `**[${title}](${url}):** ${about}`;
+      const link = `[${title}](${url})`;
+      e = document.querySelector('.Layout-sidebar .about-margin h2 + p');
+      result = e ? `**${link}:** ${e.innerText.trim()}` : `**${link}**`;
       break;
     case 'IKEA':
-      price = document.querySelector('#pip-buy-module-content .pip-price__sr-text').textContent.replace('Price ', '').replace(',', '.').trim();
-      result = `[IKEA] [${title}](${url}) ${price} (${today})`;
+      e = document.querySelector('#pip-buy-module-content .pip-price__sr-text');
+      price = e ? ' ' + e.textContent.replace('Price ', '').replace(',', '.').trim() : '';
+      result = `[IKEA] [${title}](${url})${price} (${today})`;
       break;
-    case 'WIKIPEDIA': result = `[${title}](${url})`; break;
+    case 'WIKIPEDIA':
+      result = `[${title}](${url})`;
+      break;
   }
 
   console.debug(`[${GM_info.script.name}][formatResult] return:`, result);
