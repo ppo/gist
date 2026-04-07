@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      260315.01
+// @version      260407.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -41,6 +41,8 @@ function cleanTranscript(transcript) {
 function processData(elem) {
   console.debug(`[${GM_info.script.name}][processData] called`);
 
+  const isOldStructure = document.querySelector('ytd-transcript-renderer') !== null;  // 260310: New = 'transcript-segment-view-model'
+
   const videoUrl = youtube_getVideoUrl();
   const channel = youtube_getChannelInfo();
   const title = convertUpperCaseWords(youtube_getTitle());
@@ -50,7 +52,7 @@ function processData(elem) {
   const duration = youtube_getDuration();
 
   const lines = [];
-  const sel = document.querySelector('ytd-transcript-renderer')  // 260310: New = 'transcript-segment-view-model'
+  const sel = isOldStructure
     ? '#content #body #segments-container .segment-text'
     : '#content transcript-segment-view-model .yt-core-attributed-string';  // 260310: New coming?
   document.querySelectorAll(sel).forEach(elem => {
@@ -78,6 +80,11 @@ ${transcript}
 
   console.debug(`[${GM_info.script.name}][processData] result:`, result);
   copyToClipboard(result);
+
+  const closeBtn = isOldStructure
+  ? document.querySelector('button[aria-label="Close transcript"]')
+  : document.querySelector('#panels button[aria-label="Close"]');  // 260310: New coming?
+  if (closeBtn) closeBtn.click();
 }
 
 
