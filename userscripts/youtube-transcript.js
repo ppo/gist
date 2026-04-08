@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      260407.01
+// @version      260408.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -41,7 +41,7 @@ function cleanTranscript(transcript) {
 function processData(elem) {
   console.debug(`[${GM_info.script.name}][processData] called`);
 
-  const isOldStructure = document.querySelector('ytd-transcript-renderer') !== null;  // 260310: New = 'transcript-segment-view-model'
+  const isNewStructure = document.querySelector('transcript-segment-view-model') !== null;  // 260310: Old = 'ytd-transcript-renderer'
 
   const videoUrl = youtube_getVideoUrl();
   const channel = youtube_getChannelInfo();
@@ -52,9 +52,9 @@ function processData(elem) {
   const duration = youtube_getDuration();
 
   const lines = [];
-  const sel = isOldStructure
-    ? '#content #body #segments-container .segment-text'
-    : '#content transcript-segment-view-model .yt-core-attributed-string';  // 260310: New coming?
+  const sel = isNewStructure
+    ? '#content transcript-segment-view-model .yt-core-attributed-string'  // 260310: New coming?
+    : '#content #body #segments-container .segment-text';
   document.querySelectorAll(sel).forEach(elem => {
     lines.push(elem.textContent.trim());
   });
@@ -81,9 +81,8 @@ ${transcript}
   console.debug(`[${GM_info.script.name}][processData] result:`, result);
   copyToClipboard(result);
 
-  const closeBtn = isOldStructure
-  ? document.querySelector('button[aria-label="Close transcript"]')
-  : document.querySelector('#panels button[aria-label="Close"]');  // 260310: New coming?
+  const closeBtn = document.querySelector('#panels [visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"] button[aria-label="Close"]')  // 260310: New coming?
+    || document.querySelector('button[aria-label="Close transcript"]');
   if (closeBtn) closeBtn.click();
 }
 
