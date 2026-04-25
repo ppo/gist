@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      260409.01
+// @version      260425.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -24,6 +24,14 @@
 // 🔴 Prompt filename?
 // 🔴 Keep timestamps in short format `[00:00] Text`?
 
+
+// SETTINGS ========================================================================================
+
+const TRANSCRIPT_SELECTORS = [
+  '#panels [visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"] transcript-segment-view-model .yt-core-attributed-string',  // 260310
+  '#panels [visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"] transcript-segment-view-model .ytAttributedStringHost',  // 260425
+  '#panels [visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"] #body #segments-container .segment-text',
+];
 
 // HELPERS =========================================================================================
 
@@ -52,16 +60,28 @@ function processData(elem) {
   const duration = youtube_getDuration();
 
   const lines = [];
-  const sel = isNewStructure
-    ? '#panels [visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"] transcript-segment-view-model .yt-core-attributed-string'  // 260310: New coming?
-    : '#panels [visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"] #body #segments-container .segment-text';
-  document.querySelectorAll(sel).forEach(elem => {
+  let rawLines;
+  for (let sel of TRANSCRIPT_SELECTORS) {
+    rawLines = document.querySelectorAll(sel);
+    console.debug(`[${GM_info.script.name}][processData]\nTRANSCRIPT_SELECTORS: ${sel}`, rawLines);
+    if (rawLines.length > 0) break;
+  }
+  if (rawLines.length === 0) {
+    alert('Empty transcript!');
+    return;
+  }
+
+  rawLines.forEach(elem => {
     lines.push(elem.textContent.trim());
   });
 
   const filename = cleanFilename(`${channel.name} - ${title}.${compactDate}.txt`);
   const downloadCommand = `youtube-download "${videoUrl}" ".mp3"`;
   const transcript = cleanTranscript(lines.join(' '));
+  if (!transcript) {
+    alert('Empty transcript!');
+    return;
+  }
 
   const result = `${filename}
 ${downloadCommand}
