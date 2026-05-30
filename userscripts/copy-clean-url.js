@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Copy Clean URL
 // @description  Copy the clean URL to clipboard.
-// @version      260219.02
+// @version      260530.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -40,7 +40,7 @@ function getCleanUrl() {
 // MAIN ============================================================================================
 
 function main() {
-  console.debug(`[${GM_info.script.name}][main] called`);
+  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
 
   const result = getCleanUrl();
 

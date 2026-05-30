@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      260425.01
+// @version      260530.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -110,7 +110,7 @@ ${transcript}
 // MAIN ============================================================================================
 
 function main() {
-  console.debug(`[${GM_info.script.name}][main] called`);
+  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
 
   if (!window.location.pathname.startsWith('/watch')) {
     alert('This is not a YouTube "watch" video page.');

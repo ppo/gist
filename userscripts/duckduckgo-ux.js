@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Duck Duck Go UX
 // @description  Improve Duck Duck Go UX.
-// @version      260128.01
+// @version      260530.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://duckduckgo.com/*
@@ -49,7 +49,7 @@ function hideAds(ads) {
 // MAIN ============================================================================================
 
 function main() {
-  console.debug(`[${GM_info.script.name}][main] called`);
+  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
 
   checkAds();
 }

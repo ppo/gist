@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Amazon UX
 // @description  Improve Amazon UX.
-// @version      260219.02
+// @version      260530.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.amazon.*/*/dp/*
@@ -28,7 +28,7 @@ function mustCleanCurrentUrl() {
 // MAIN ============================================================================================
 
 function main() {
-  console.debug(`[${GM_info.script.name}][main] called`);
+  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
 
   // Note: If current URL is changed, the page is reloaded.
   if (mustCleanCurrentUrl()) {

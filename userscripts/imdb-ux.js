@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IMDb UX
 // @description  Improve IMDb UX.
-// @version      260128.01
+// @version      260530.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.imdb.com/*
@@ -44,7 +44,7 @@ function mustCleanCurrentUrl() {
 // MAIN ============================================================================================
 
 function main() {
-  console.debug(`[${GM_info.script.name}][main] called`);
+  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
 
   if (mustCleanCurrentUrl()) {
     console.debug(`[${GM_info.script.name}][main] mustCleanCurrentUrl === true`);

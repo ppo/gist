@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Video Link
 // @description  Create a Markdown string with information about the video, and copy it to the clipboard.
-// @version      260219.02
+// @version      260530.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -21,7 +21,7 @@
 
 
 function main() {
-  console.debug(`[${GM_info.script.name}][main] called`);
+  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
 
   if (!youtube_isVideoPage()) {
     alert('This is not a YouTube video page.');

@@ -1,4 +1,5 @@
-console.debug('[Utils][loaded] Version 260315.02');
+_VERSION = '260530.01';
+console.debug(`[Utils ${_VERSION}] Loaded`);
 
 
 // BROWSER FEATURES ================================================================================
