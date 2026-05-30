@@ -1,5 +1,5 @@
 _VERSION = '260530.01';
-console.debug(`[Utils ${_VERSION}] Loaded`);
+console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
 // BROWSER FEATURES ================================================================================
