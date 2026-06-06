@@ -1,4 +1,4 @@
-_VERSION = '260530.01';
+_VERSION = '260606.01';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
