@@ -356,7 +356,7 @@ function hide(elem) {
 
 // Usage: waitForElement('.selector', e => { … });
 function waitForElement(selector, callback, timeout=2000) {
-  console.debug('[Utils][waitForElement] called');
+  console.debug('[Utils][waitForElement] called', `Selector: '${selector}'`);
 
   const elem = document.querySelector(selector);
   if (elem) {
