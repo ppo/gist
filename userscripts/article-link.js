@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      260702.04
+// @version      260702.05
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -60,14 +60,10 @@ function formatResult(url, title, date, price) {
   switch (specialSite) {
     case 'AMAZON':
       const cleanUrl = amazon_getCleanUrl();
-      result = `[Amazon] [${title}](${cleanUrl})${price}`;  // Price has a leading space if defined.
+      result = `[Amazon] [${title}](${cleanUrl})${price}`;
       break;
 
-    case 'DECATHLON':
-      e = document.querySelector('.vp-price-amount');
-      price = e ? e.textContent.replace(',', '.').replace('&nbsp;', '').trim() : '';
-      result = `[Decathlon] [${title}](${url})${price}`;  // Price has a leading space if defined.
-      break;
+    case 'DECATHLON': result = `[Decathlon] [${title}](${url})${price}`; break;
 
     case 'GITHUB':
       const link = `[${title}](${url})`;
@@ -75,15 +71,8 @@ function formatResult(url, title, date, price) {
       result = e ? `**${link}:** ${e.innerText.trim()}` : `**${link}**`;
       break;
 
-    case 'IKEA':
-      e = document.querySelector('#pip-buy-module-content .pip-price__sr-text');
-      price = e ? e.textContent.replace('Price ', '').replace(',', '.').trim() : '';
-      result = `[IKEA] [${title}](${url})${price}`;  // Price has a leading space if defined.
-      break;
-
-    case 'WIKIPEDIA':
-      result = `[${title}](${url})`;
-      break;
+    case 'IKEA': result = `[IKEA] [${title}](${url})${price}`; break;
+    case 'WIKIPEDIA': result = `[${title}](${url})`; break;
   }
 
   console.debug(`[${GM_info.script.name}][formatResult] return:`, result);
