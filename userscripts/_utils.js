@@ -1,4 +1,4 @@
-_VERSION = '260702.03';
+_VERSION = '260702.04';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -47,6 +47,12 @@ const SNACKBAR_CSS = {
 
 
 // GENERAL HELPERS =================================================================================
+
+// Today as YYMMDD.
+function getToday() {
+  return new Date().toISOString().replaceAll('-', '').substr(2, 6);
+}
+
 
 function titleCase(s, force=false) {
     if (!s) return s;

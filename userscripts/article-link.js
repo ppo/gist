@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      260702.03
+// @version      260702.04
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -49,27 +49,24 @@ let specialSite = null;
 
 // HELPERS =========================================================================================
 
-function formatResult(url, title, date) {
+function formatResult(url, title, date, price) {
   console.debug(`[${GM_info.script.name}][formatResult] called`);
 
   let result = `[${title}](${url})` + (date ? ` (${date})` : '');
-  const today = new Date().toISOString().replaceAll('-', '').substr(2, 6);
   let e;
-  let price;
+
+  price = price ? ` (${price})` : '';
 
   switch (specialSite) {
     case 'AMAZON':
-      e = document.querySelector('#tp-tool-tip-subtotal-price-value .a-offscreen')
-        || document.querySelector('.slot-price');
-      price = e ? e.textContent.replace(',', '.').trim() : '';
       const cleanUrl = amazon_getCleanUrl();
-      result = `[Amazon] [${title}](${cleanUrl})` + (price ? ` (${today}: ${price})` : '');;
+      result = `[Amazon] [${title}](${cleanUrl})${price}`;  // Price has a leading space if defined.
       break;
 
-      case 'DECATHLON':
+    case 'DECATHLON':
       e = document.querySelector('.vp-price-amount');
       price = e ? e.textContent.replace(',', '.').replace('&nbsp;', '').trim() : '';
-      result = `[Decathlon] [${title}](${url})` + (price ? ` (${today}: ${price})` : '');
+      result = `[Decathlon] [${title}](${url})${price}`;  // Price has a leading space if defined.
       break;
 
     case 'GITHUB':
@@ -81,7 +78,7 @@ function formatResult(url, title, date) {
     case 'IKEA':
       e = document.querySelector('#pip-buy-module-content .pip-price__sr-text');
       price = e ? e.textContent.replace('Price ', '').replace(',', '.').trim() : '';
-      result = `[IKEA] [${title}](${url})` + (price ? ` (${today}: ${price})` : '');;
+      result = `[IKEA] [${title}](${url})${price}`;  // Price has a leading space if defined.
       break;
 
     case 'WIKIPEDIA':
@@ -91,6 +88,60 @@ function formatResult(url, title, date) {
 
   console.debug(`[${GM_info.script.name}][formatResult] return:`, result);
   return result;
+}
+
+
+function getPrice() {
+  console.debug(`[${GM_info.script.name}][getPrice] called`);
+
+  switch (specialSite) {
+    case 'AMAZON':
+      e = document.querySelector('#tp-tool-tip-subtotal-price-value .a-offscreen')
+        || document.querySelector('.slot-price');
+      price = e ? e.textContent.replace(',', '.').trim() : '';
+      break;
+
+    case 'DECATHLON':
+      e = document.querySelector('.vp-price-amount');
+      price = e ? e.textContent.replace(',', '.').replace(' ', '').trim() : '';
+      break;
+
+    case 'IKEA':
+      e = document.querySelector('#pip-buy-module-content .pip-price__sr-text');
+      price = e ? e.textContent.replace('Price ', '').replace(',', '.').trim() : '';
+      break;
+  }
+
+  price = price ? `${getToday()}: ${price}` : null;
+
+  console.debug(`[${GM_info.script.name}][getPrice] return:`, price);
+  return price;
+}
+
+
+function getDate() {
+  console.debug(`[${GM_info.script.name}][getDate] called`);
+
+  let dt;
+
+  switch (specialSite) {
+    case 'YOUTUBE': dt = youtube_getDate(); break;
+    default:
+      let e;
+      e = findFirstElement(HEAD_TIME_SELECTORS, ['head']);
+      if (e) {
+        dt = e.getAttribute('content');
+      } else {
+        e = findFirstElement(TIME_SELECTORS, NAMESPACES);
+        if (e) dt = e.dateTime || e.innerText.trim();
+      }
+      break;
+  }
+
+  dt = dt ? formatDateTime('compact-date', dt) : null;
+
+  console.debug(`[${GM_info.script.name}][getDate] return:`, dt);
+  return dt;
 }
 
 
@@ -129,32 +180,6 @@ function getTitle() {
 }
 
 
-function getDate() {
-  console.debug(`[${GM_info.script.name}][getDate] called`);
-
-  let dt;
-
-  switch (specialSite) {
-    case 'YOUTUBE': dt = youtube_getDate(); break;
-    default:
-      let e;
-      e = findFirstElement(HEAD_TIME_SELECTORS, ['head']);
-      if (e) {
-        dt = e.getAttribute('content');
-      } else {
-        e = findFirstElement(TIME_SELECTORS, NAMESPACES);
-        if (e) dt = e.dateTime || e.innerText.trim();
-      }
-      break;
-  }
-
-  dt = dt ? formatDateTime('compact-date', dt) : null;
-
-  console.debug(`[${GM_info.script.name}][getDate] return:`, dt);
-  return dt;
-}
-
-
 // MAIN ============================================================================================
 
 function main() {
@@ -169,7 +194,8 @@ function main() {
   } else {
     const url = window.location.href.replace(/\?$/, '');
     const date = getDate();
-    const result = formatResult(url, title, date);
+    const price = getPrice();
+    const result = formatResult(url, title, date, price);
 
     console.debug(`[${GM_info.script.name}][main] result:`, result);
     copyToClipboard(result);
