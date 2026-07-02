@@ -21,7 +21,7 @@ const PARAM_NAME = 'ref_';
 // HELPERS =========================================================================================
 
 function cleanUrl(elem) {
-  console.debug(`[${GM_info.script.name}][cleanUrl] called`);
+  console.debug(`[${GM_info.script.name}][cleanUrl] called; elem:`, elem);
 
   const url = new URL(elem.href);
   const params = new URLSearchParams(url.search);

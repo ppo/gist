@@ -37,7 +37,7 @@ function checkAds() {
 
 
 function hideAds(ads) {
-  console.debug(`[${GM_info.script.name}][hideAds] called`);
+  console.debug(`[${GM_info.script.name}][hideAds] called; ads:`, ads);
 
   ads.forEach(e => {
     console.debug(`[${GM_info.script.name}][hideAds] hiding`, e);

@@ -47,7 +47,7 @@ function cleanTranscript(transcript) {
 
 
 function processData(elem) {
-  console.debug(`[${GM_info.script.name}][processData] called`);
+  console.debug(`[${GM_info.script.name}][processData] called; elem:`, elem);
 
   const isNewStructure = document.querySelector('transcript-segment-view-model') !== null;  // 260310: Old = 'ytd-transcript-renderer'
 
