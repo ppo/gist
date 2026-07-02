@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      260702.07
+// @version      260702.08
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -63,7 +63,10 @@ function formatResult(url, title, date, price) {
       result = `[Amazon] [${title}](${cleanUrl})${price}`;
       break;
 
-    case 'DECATHLON': result = `[Decathlon] [${title}](${url})${price}`; break;
+    case 'DECATHLON':
+      let tldSuffix = getTldSuffix();
+      result = `[Decathlon${tldSuffix}] [${title}](${url})${price}`;
+      break;
 
     case 'GITHUB':
       const link = `[${title}](${url})`;

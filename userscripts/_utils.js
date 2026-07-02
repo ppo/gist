@@ -1,4 +1,4 @@
-_VERSION = '260702.07';
+_VERSION = '260702.08';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -49,7 +49,7 @@ const SNACKBAR_CSS = {
 // GENERAL HELPERS =================================================================================
 
 function cleanPrice(price) {
-  console.debug('[Utils][cleanPrice] called');
+  console.debug('[Utils][cleanPrice] called; price:', price);
 
   if (price) {
     price = price
@@ -64,6 +64,29 @@ function cleanPrice(price) {
   console.debug('[Utils][cleanPrice] return:', price);
   return price;
 }
+
+
+function getTld() {
+  console.debug('[Utils][getTld] called');
+
+  const tld = window.location.origin.split('.').pop();
+
+  console.debug('[Utils][getTld] return:', tld);
+  return tld;
+}
+
+
+function getTldSuffix(exclude='be') {
+  console.debug('[Utils][getTldTitle] called; exclude:', exclude);
+
+  let tld = getTld();
+  if (tld === exclude) tld = null;
+  if (tld) tld = ` ${tld.toLocaleUpperCase()}`;
+
+  console.debug('[Utils][getTldTitle] return:', tld);
+  return tld;
+}
+
 
 // Today as YYMMDD.
 function getToday() {
