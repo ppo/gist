@@ -1,4 +1,4 @@
-_VERSION = '260702.02';
+_VERSION = '260702.03';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -51,7 +51,7 @@ const SNACKBAR_CSS = {
 function titleCase(s, force=false) {
     if (!s) return s;
     return s.toLowerCase().split(' ').map(word => (
-        word.charAt(0).toUpperCase() + (force ? word.slice(1).toUpperCase() : word.slice(1))
+        word.charAt(0).toUpperCase() + (force ? word.slice(1).toLowerCase() : word.slice(1))
       )).join(' ');
 }
 

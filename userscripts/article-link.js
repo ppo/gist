@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      260702.02
+// @version      260702.03
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -105,11 +105,8 @@ function getTitle() {
 
     case 'DECATHLON':
       title = document.querySelector('h1.vp-title-m')?.textContent.trim();
-      const brand = titleCase(
-        document.querySelector('.product-info__brand .vp-title-s')?.textContent.trim(),
-        true
-      );
-      if (brand) title = `${brand} ${title}`;
+      const brand = document.querySelector('.product-info__brand .vp-title-s')?.textContent.trim();
+      if (brand) title = `${titleCase(brand, true)} ${title}`;
       break;
 
     case 'GITHUB':
