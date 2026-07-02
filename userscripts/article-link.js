@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      260702.08
+// @version      260702.09
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -49,23 +49,27 @@ let specialSite = null;
 
 // HELPERS =========================================================================================
 
-function formatResult(url, title, date, price) {
-  console.debug(`[${GM_info.script.name}][formatResult] called`);
+function formatResult(title) {
+  console.debug(`[${GM_info.script.name}][formatResult] called; title:`, title);
 
-  let result = `[${title}](${url})` + (date ? ` (${date})` : '');
+  const url = window.location.href.replace(/\?$/, '');
+  const date = getDate();
+  const price = getPrice();
+  const info = formatInfo([date, price]);
+  const priceInfo = formatInfo([price]);
+
+  let result = `[${title}](${url})${info}`;
   let e;
-
-  price = price ? ` (${price})` : '';
 
   switch (specialSite) {
     case 'AMAZON':
       const cleanUrl = amazon_getCleanUrl();
-      result = `[Amazon] [${title}](${cleanUrl})${price}`;
+      result = `[Amazon] [${title}](${cleanUrl})${priceInfo}`;
       break;
 
     case 'DECATHLON':
       let tldSuffix = getTldSuffix();
-      result = `[Decathlon${tldSuffix}] [${title}](${url})${price}`;
+      result = `[Decathlon${tldSuffix}] [${title}](${url})${priceInfo}`;
       break;
 
     case 'GITHUB':
@@ -74,7 +78,7 @@ function formatResult(url, title, date, price) {
       result = e ? `**${link}:** ${e.innerText.trim()}` : `**${link}**`;
       break;
 
-    case 'IKEA': result = `[IKEA] [${title}](${url})${price}`; break;
+    case 'IKEA': result = `[IKEA] [${title}](${url})${priceInfo}`; break;
     case 'WIKIPEDIA': result = `[${title}](${url})`; break;
   }
 
@@ -93,18 +97,21 @@ function getPrice() {
     case 'AMAZON':
       e = document.querySelector('#tp-tool-tip-subtotal-price-value .a-offscreen')
         || document.querySelector('.slot-price');
+      price = e?.textContent;
       break;
 
-    case 'DECATHLON': e = document.querySelector('.vp-price-amount'); break;
+    case 'DECATHLON':
+      e = document.querySelector('.vp-price-amount');
+      price = e?.textContent;
+      break;
 
     case 'IKEA':
       e = document.querySelector('#pip-buy-module-content .pip-price__sr-text');
-      price = cleanPrice(e?.textContent.replace('Price ', ''));
+      price = e?.textContent.replace('Price ', '');
       break;
   }
 
-  if (!price && e) price = cleanPrice(e?.textContent);
-  price = price ? `${getToday()}: ${price}` : null;
+  price = price ? formatPrice(price) : null;
 
   console.debug(`[${GM_info.script.name}][getPrice] return:`, price);
   return price;
@@ -184,10 +191,7 @@ function main() {
     console.debug(`[${GM_info.script.name}][main] title not found`);
     alert('Article title not found. Select it.');
   } else {
-    const url = window.location.href.replace(/\?$/, '');
-    const date = getDate();
-    const price = getPrice();
-    const result = formatResult(url, title, date, price);
+    const result = formatResult(title);
 
     console.debug(`[${GM_info.script.name}][main] result:`, result);
     copyToClipboard(result);

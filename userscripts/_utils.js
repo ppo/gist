@@ -1,4 +1,4 @@
-_VERSION = '260702.08';
+_VERSION = '260702.09';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -48,8 +48,19 @@ const SNACKBAR_CSS = {
 
 // GENERAL HELPERS =================================================================================
 
-function cleanPrice(price) {
-  console.debug('[Utils][cleanPrice] called; price:', price);
+function formatInfo(args) {
+  console.debug('[Utils][formatInfo] called; args:', args);
+
+  args = args.filter((a) => a);
+  const info = args.length > 0 ? ` (${args.join(', ')})` : '';
+
+  console.debug('[Utils][formatInfo] return:', info);
+  return info;
+}
+
+
+function formatPrice(price) {
+  console.debug('[Utils][formatPrice] called; price:', price);
 
   if (price) {
     price = price
@@ -59,9 +70,11 @@ function cleanPrice(price) {
       .trim();
     const m = price.match(/[$€]/);
     if (m) price = `${price.replace(m[0], '')}${m[0]}`;
+
+    price = `${price}@${getToday()}`;
   }
 
-  console.debug('[Utils][cleanPrice] return:', price);
+  console.debug('[Utils][formatPrice] return:', price);
   return price;
 }
 
@@ -80,7 +93,7 @@ function getTldSuffix(exclude='be') {
   console.debug('[Utils][getTldTitle] called; exclude:', exclude);
 
   let tld = getTld();
-  if (tld === exclude) tld = null;
+  if (tld === exclude) tld = '';
   if (tld) tld = ` ${tld.toLocaleUpperCase()}`;
 
   console.debug('[Utils][getTldTitle] return:', tld);
