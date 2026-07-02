@@ -172,7 +172,7 @@ function getTitle() {
   }
 
   if (!title && e) title = e.textContent.trim();
-  title = title || null;
+  if (!title) title = null;
 
   console.debug(`[${GM_info.script.name}][getTitle] return:`, title);
   return title;

@@ -107,16 +107,16 @@ function getToday() {
 }
 
 
-function titleCase(s, force=false) {
+function titleCase(value, force=false) {
   console.debug('[Utils][titleCase] called');
 
-  if (!s) return s;
-  s = s.toLowerCase().split(' ').map(word => (
+  if (!value) return value;
+  value = value.toLowerCase().split(' ').map(word => (
       word.charAt(0).toUpperCase() + (force ? word.slice(1).toLowerCase() : word.slice(1))
     )).join(' ');
 
-  console.debug('[Utils][titleCase] return:', s);
-  return s;
+  console.debug('[Utils][titleCase] return:', value);
+  return value;
 }
 
 
