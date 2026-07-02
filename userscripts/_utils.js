@@ -1,5 +1,49 @@
-_VERSION = '260606.01';
+_VERSION = '260702.01';
 console.debug(`[Utils v${_VERSION}] Loaded`);
+
+
+const SPECIAL_SITES = {
+  ALIEXPRESS: 'aliexpress.com',
+  AMAZON:     'amazon.',
+  DECATHLON:  'decathlon.',
+  GITHUB:     'github.com',
+  IKEA:       'ikea.com',
+  WIKIPEDIA:  'wikipedia.org',
+  YOUTUBE:    'youtube.com',
+}
+
+const KEEP_UPPERCASE = [
+  '3D', 'AI', 'BMW', 'CEO', 'CNC', 'CTO', 'DIY', 'HQ', 'HVAC', 'IA', 'MCP', 'OS', 'PC', 'RAG',
+  'RV', 'USB', 'VW',
+];
+
+const RE_YOUTUBE_VIDEO_ID = /\/(watch\?v=|shorts\/)([^&]+)/;
+
+const AMAZON_PRODUCT_ID_REGEXES = [
+  /\/dp\/([A-Z0-9]+)/,
+  /\/gp\/product\/([A-Z0-9]+)/,
+];
+const RE_AMAZON_PRODUCT_ID = /\/(dp|gp\/product)\/([A-Z0-9]+)/;
+const RE_AMAZON_SEO_URL = /\/[^\/]+\/(dp|gp\/product)\/[A-Z0-9]+\//;
+
+const SNACKBAR_CSS = {
+  all: 'initial',
+  backgroundColor: '#ffca28',
+  border: '3px solid #fff',
+  boxShadow: 'rgba(0, 0, 0, 0.5) 3px 6px 12px',
+  color: '#000',
+  fontFamily: 'sans-serif',
+  left: '50%',
+  maxHeight: '75%',
+  maxWidth: '75%',
+  minWidth: '250px',
+  overflow: 'auto',
+  padding: '1rem 1.25rem',
+  position: 'fixed',
+  top: '50%',
+  transform: 'translate(-50%, -50%)',
+  zIndex: '9999',
+};
 
 
 // BROWSER FEATURES ================================================================================
@@ -485,26 +529,6 @@ function slugify(value) {
 
 // UI ==============================================================================================
 
-const SNACKBAR_CSS = {
-  all: 'initial',
-  backgroundColor: '#ffca28',
-  border: '3px solid #fff',
-  boxShadow: 'rgba(0, 0, 0, 0.5) 3px 6px 12px',
-  color: '#000',
-  fontFamily: 'sans-serif',
-  left: '50%',
-  maxHeight: '75%',
-  maxWidth: '75%',
-  minWidth: '250px',
-  overflow: 'auto',
-  padding: '1rem 1.25rem',
-  position: 'fixed',
-  top: '50%',
-  transform: 'translate(-50%, -50%)',
-  zIndex: '9999',
-};
-
-
 // Display a temporary message – or fixed until clicked if `!timeout`.
 function snackbar(message, timeout=2000) {
   console.debug('[Utils][snackbar] called');
@@ -535,12 +559,6 @@ function snackbar(message, timeout=2000) {
 
 // ALL UPPERCASE WORDS TO TITLE CASE ===============================================================
 
-const KEEP_UPPERCASE = [
-  '3D', 'AI', 'BMW', 'CEO', 'CNC', 'CTO', 'DIY', 'HQ', 'HVAC', 'IA', 'MCP', 'OS', 'PC', 'RAG',
-  'RV', 'USB', 'VW',
-];
-
-
 function toTitleCase(value) {
   console.debug('[Utils][toTitleCase] called');
 
@@ -568,15 +586,13 @@ function convertUpperCaseWords(value) {
 
 // MISC ============================================================================================
 
+// Detect if it's a know site.
 function getSpecialSite() {
   console.debug('[Utils][getSpecialSite] called');
 
-  if (window.location.host.includes('aliexpress.com')) return 'ALIEXPRESS';
-  if (window.location.host.includes('amazon.'))        return 'AMAZON';
-  if (window.location.host.includes('github.com'))     return 'GITHUB';
-  if (window.location.host.includes('ikea.com'))       return 'IKEA';
-  if (window.location.host.includes('wikipedia.org'))  return 'WIKIPEDIA';
-  if (window.location.host.includes('youtube.com'))    return 'YOUTUBE';
+  for (const [key, value] of Object.entries(SPECIAL_SITES)) {
+    if (window.location.host.includes(value)) return key;
+  }
 }
 
 
@@ -591,14 +607,6 @@ function sleep(ms, callback) {
 
 
 // AMAZON ==========================================================================================
-
-const AMAZON_PRODUCT_ID_REGEXES = [
-  /\/dp\/([A-Z0-9]+)/,
-  /\/gp\/product\/([A-Z0-9]+)/,
-];
-const RE_AMAZON_PRODUCT_ID = /\/(dp|gp\/product)\/([A-Z0-9]+)/;
-const RE_AMAZON_SEO_URL = /\/[^\/]+\/(dp|gp\/product)\/[A-Z0-9]+\//;
-
 
 function amazon_getCleanUrl(location) {
   console.debug('[Utils][amazon_getCleanUrl] called');
@@ -626,9 +634,6 @@ function amazon_getProductId(location) {
 
 
 // YOUTUBE =========================================================================================
-
-const RE_YOUTUBE_VIDEO_ID = /\/(watch\?v=|shorts\/)([^&]+)/;
-
 
 function youtube_getVideoUrl(location) {
   console.debug('[Utils][youtube_getVideoUrl] called');

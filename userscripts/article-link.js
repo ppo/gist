@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      260530.01
+// @version      260702.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -61,20 +61,37 @@ function formatResult(url, title, date) {
     case 'AMAZON':
       e = document.querySelector('#tp-tool-tip-subtotal-price-value .a-offscreen')
         || document.querySelector('.slot-price');
-      price = e ? ' ' + e.textContent.replace(',', '.').trim() : '';
+      price = e ? e.textContent.replace(',', '.').trim() : '';
       const cleanUrl = amazon_getCleanUrl();
-      result = `[Amazon] [${title}](${cleanUrl})${price} (${today})`;
+      result = `[Amazon] [${title}](${cleanUrl})` + (price ? ` (${today}: ${price})` : '');;
       break;
+
+      case 'DECATHLON':
+      e = document.querySelector('.product-info__brand .vp-title-s');
+      if (e) {
+          let brand = e.textContent.trim();
+          if (brand) {
+            brand = brand.charAt(0).toUpperCase() + brand.slice(1);
+            title=`${brand} ${title}`;
+          }
+      }
+      e = document.querySelector('.vp-price-amount');
+      price = e ? e.textContent.replace(',', '.').replace('&nbsp;', '').trim() : '';
+      result = `[Decathlon] [${title}](${url})` + (price ? ` (${today}: ${price})` : '');
+      break;
+
     case 'GITHUB':
       const link = `[${title}](${url})`;
       e = document.querySelector('.Layout-sidebar .about-margin h2 + p');
       result = e ? `**${link}:** ${e.innerText.trim()}` : `**${link}**`;
       break;
+
     case 'IKEA':
       e = document.querySelector('#pip-buy-module-content .pip-price__sr-text');
-      price = e ? ' ' + e.textContent.replace('Price ', '').replace(',', '.').trim() : '';
-      result = `[IKEA] [${title}](${url})${price} (${today})`;
+      price = e ? e.textContent.replace('Price ', '').replace(',', '.').trim() : '';
+      result = `[IKEA] [${title}](${url})` + (price ? ` (${today}: ${price})` : '');;
       break;
+
     case 'WIKIPEDIA':
       result = `[${title}](${url})`;
       break;
