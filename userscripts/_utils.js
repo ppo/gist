@@ -1,4 +1,4 @@
-_VERSION = '260702.06';
+_VERSION = '260702.07';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -54,13 +54,14 @@ function cleanPrice(price) {
   if (price) {
     price = price
       .replace(',', '.')
-      .replace(/( |&nbsp;)+/g, '')
+      .replace('&nbsp;', '')
+      .replace(/\s/, '')
       .trim();
     const m = price.match(/[$€]/);
     if (m) price = `${price.replace(m[0], '')}${m[0]}`;
   }
 
-  console.debug('[Utils][cleanPrice] price', price);
+  console.debug('[Utils][cleanPrice] return:', price);
   return price;
 }
 
@@ -78,7 +79,7 @@ function titleCase(s, force=false) {
       word.charAt(0).toUpperCase() + (force ? word.slice(1).toLowerCase() : word.slice(1))
     )).join(' ');
 
-  console.debug('[Utils][titleCase] s', s);
+  console.debug('[Utils][titleCase] return:', s);
   return s;
 }
 

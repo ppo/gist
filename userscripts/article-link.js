@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      260702.06
+// @version      260702.07
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -84,6 +84,7 @@ function getPrice() {
   console.debug(`[${GM_info.script.name}][getPrice] called`);
 
   let e;
+  let price;
 
   switch (specialSite) {
     case 'AMAZON':
