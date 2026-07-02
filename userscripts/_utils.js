@@ -1,4 +1,4 @@
-_VERSION = '260702.05';
+_VERSION = '260702.06';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -49,6 +49,8 @@ const SNACKBAR_CSS = {
 // GENERAL HELPERS =================================================================================
 
 function cleanPrice(price) {
+  console.debug('[Utils][cleanPrice] called');
+
   if (price) {
     price = price
       .replace(',', '.')
@@ -57,6 +59,8 @@ function cleanPrice(price) {
     const m = price.match(/[$€]/);
     if (m) price = `${price.replace(m[0], '')}${m[0]}`;
   }
+
+  console.debug('[Utils][cleanPrice] price', price);
   return price;
 }
 
@@ -67,10 +71,15 @@ function getToday() {
 
 
 function titleCase(s, force=false) {
-    if (!s) return s;
-    return s.toLowerCase().split(' ').map(word => (
-        word.charAt(0).toUpperCase() + (force ? word.slice(1).toLowerCase() : word.slice(1))
-      )).join(' ');
+  console.debug('[Utils][titleCase] called');
+
+  if (!s) return s;
+  s = s.toLowerCase().split(' ').map(word => (
+      word.charAt(0).toUpperCase() + (force ? word.slice(1).toLowerCase() : word.slice(1))
+    )).join(' ');
+
+  console.debug('[Utils][titleCase] s', s);
+  return s;
 }
 
 
