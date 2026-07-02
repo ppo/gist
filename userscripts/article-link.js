@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      260702.05
+// @version      260702.06
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -99,7 +99,7 @@ function getPrice() {
       break;
   }
 
-  if (!price && e) price = cleanPrice(e.textContent);
+  if (!price && e) price = cleanPrice(e?.textContent);
   price = price ? `${getToday()}: ${price}` : null;
 
   console.debug(`[${GM_info.script.name}][getPrice] return:`, price);
