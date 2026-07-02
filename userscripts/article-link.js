@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      260702.01
+// @version      260702.02
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -67,14 +67,6 @@ function formatResult(url, title, date) {
       break;
 
       case 'DECATHLON':
-      e = document.querySelector('.product-info__brand .vp-title-s');
-      if (e) {
-          let brand = e.textContent.trim();
-          if (brand) {
-            brand = brand.charAt(0).toUpperCase() + brand.slice(1);
-            title=`${brand} ${title}`;
-          }
-      }
       e = document.querySelector('.vp-price-amount');
       price = e ? e.textContent.replace(',', '.').replace('&nbsp;', '').trim() : '';
       result = `[Decathlon] [${title}](${url})` + (price ? ` (${today}: ${price})` : '');
@@ -106,20 +98,34 @@ function getTitle() {
   console.debug(`[${GM_info.script.name}][getTitle] called`);
 
   let e;
+  let title;
 
   switch (specialSite) {
     case 'AMAZON': e = document.getElementById('productTitle'); break;
-    case 'GITHUB':
-      e = document.querySelector('article .markdown-heading h1.heading-element');
-      if (!e) e = document.querySelector('#repo-title-component a');
+
+    case 'DECATHLON':
+      title = document.querySelector('h1.vp-title-m')?.textContent.trim();
+      const brand = titleCase(
+        document.querySelector('.product-info__brand .vp-title-s')?.textContent.trim(),
+        true
+      );
+      if (brand) title = `${brand} ${title}`;
       break;
+
+    case 'GITHUB':
+      const e = document.querySelector('article .markdown-heading h1.heading-element')
+        || document.querySelector('#repo-title-component a');
+      break;
+
     case 'IKEA': e = document.querySelector('#pip-buy-module-content h1'); break;
     case 'WIKIPEDIA': e = document.querySelector('#firstHeading > span'); break;
     case 'YOUTUBE': e = youtube_getTitle(); break;
+
     default: e = findFirstElement(HEADING_SELECTORS, NAMESPACES);
   }
 
-  const title = e ? e.textContent.trim() : null;
+  if (!title && e) title = e.textContent.trim();
+  title = title || null;
 
   console.debug(`[${GM_info.script.name}][getTitle] return:`, title);
   return title;

@@ -1,4 +1,4 @@
-_VERSION = '260702.01';
+_VERSION = '260702.02';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -44,6 +44,16 @@ const SNACKBAR_CSS = {
   transform: 'translate(-50%, -50%)',
   zIndex: '9999',
 };
+
+
+// GENERAL HELPERS =================================================================================
+
+function titleCase(s, force=false) {
+    if (!s) return s;
+    return s.toLowerCase().split(' ').map(word => (
+        word.charAt(0).toUpperCase() + (force ? word.slice(1).toUpperCase() : word.slice(1))
+      )).join(' ');
+}
 
 
 // BROWSER FEATURES ================================================================================
