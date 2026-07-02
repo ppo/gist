@@ -83,24 +83,23 @@ function formatResult(url, title, date, price) {
 function getPrice() {
   console.debug(`[${GM_info.script.name}][getPrice] called`);
 
+  let e;
+
   switch (specialSite) {
     case 'AMAZON':
       e = document.querySelector('#tp-tool-tip-subtotal-price-value .a-offscreen')
         || document.querySelector('.slot-price');
-      price = e ? e.textContent.replace(',', '.').trim() : '';
       break;
 
-    case 'DECATHLON':
-      e = document.querySelector('.vp-price-amount');
-      price = e ? e.textContent.replace(',', '.').replace(' ', '').trim() : '';
-      break;
+    case 'DECATHLON': e = document.querySelector('.vp-price-amount'); break;
 
     case 'IKEA':
       e = document.querySelector('#pip-buy-module-content .pip-price__sr-text');
-      price = e ? e.textContent.replace('Price ', '').replace(',', '.').trim() : '';
+      price = cleanPrice(e?.textContent.replace('Price ', ''));
       break;
   }
 
+  if (!price && e) price = cleanPrice(e.textContent);
   price = price ? `${getToday()}: ${price}` : null;
 
   console.debug(`[${GM_info.script.name}][getPrice] return:`, price);

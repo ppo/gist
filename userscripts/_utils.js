@@ -1,4 +1,4 @@
-_VERSION = '260702.04';
+_VERSION = '260702.05';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -47,6 +47,18 @@ const SNACKBAR_CSS = {
 
 
 // GENERAL HELPERS =================================================================================
+
+function cleanPrice(price) {
+  if (price) {
+    price = price
+      .replace(',', '.')
+      .replace(/( |&nbsp;)+/g, '')
+      .trim();
+    const m = price.match(/[$€]/);
+    if (m) price = `${price.replace(m[0], '')}${m[0]}`;
+  }
+  return price;
+}
 
 // Today as YYMMDD.
 function getToday() {
