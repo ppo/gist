@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      260702.09
+// @version      260702.10
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -87,37 +87,6 @@ function formatResult(title) {
 }
 
 
-function getPrice() {
-  console.debug(`[${GM_info.script.name}][getPrice] called`);
-
-  let e;
-  let price;
-
-  switch (specialSite) {
-    case 'AMAZON':
-      e = document.querySelector('#tp-tool-tip-subtotal-price-value .a-offscreen')
-        || document.querySelector('.slot-price');
-      price = e?.textContent;
-      break;
-
-    case 'DECATHLON':
-      e = document.querySelector('.vp-price-amount');
-      price = e?.textContent;
-      break;
-
-    case 'IKEA':
-      e = document.querySelector('#pip-buy-module-content .pip-price__sr-text');
-      price = e?.textContent.replace('Price ', '');
-      break;
-  }
-
-  price = price ? formatPrice(price) : null;
-
-  console.debug(`[${GM_info.script.name}][getPrice] return:`, price);
-  return price;
-}
-
-
 function getDate() {
   console.debug(`[${GM_info.script.name}][getDate] called`);
 
@@ -144,6 +113,37 @@ function getDate() {
 }
 
 
+function getPrice() {
+  console.debug(`[${GM_info.script.name}][getPrice] called`);
+
+  let e;
+  let price;
+
+  switch (specialSite) {
+    case 'AMAZON':
+      e = document.querySelector('#tp-tool-tip-subtotal-price-value .a-offscreen')
+        || document.querySelector('.slot-price');
+      price = e?.textContent;
+      break;
+
+    case 'DECATHLON':
+      e = document.querySelector('.vp-price-amount');
+      price = e?.textContent;
+      break;
+
+    case 'IKEA':
+      e = document.querySelector('.pipcom-price__sr-text');
+      price = e?.textContent.replace('Price ', '');
+      break;
+  }
+
+  price = price ? formatPrice(price) : null;
+
+  console.debug(`[${GM_info.script.name}][getPrice] return:`, price);
+  return price;
+}
+
+
 function getTitle() {
   console.debug(`[${GM_info.script.name}][getTitle] called`);
 
@@ -160,11 +160,11 @@ function getTitle() {
       break;
 
     case 'GITHUB':
-      const e = document.querySelector('article .markdown-heading h1.heading-element')
+      e = document.querySelector('article .markdown-heading h1.heading-element')
         || document.querySelector('#repo-title-component a');
       break;
 
-    case 'IKEA': e = document.querySelector('#pip-buy-module-content h1'); break;
+    case 'IKEA': e = document.querySelector('h1'); break;
     case 'WIKIPEDIA': e = document.querySelector('#firstHeading > span'); break;
     case 'YOUTUBE': e = youtube_getTitle(); break;
 
