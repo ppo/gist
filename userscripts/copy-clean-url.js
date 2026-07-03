@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Copy Clean URL
 // @description  Copy the clean URL to clipboard.
-// @version      260530.01
+// @version      260703.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -15,37 +15,15 @@
 // Userscript Manager: Violentmonkey
 
 
-// HELPERS =========================================================================================
-
-function getCleanUrl() {
-  console.debug(`[${GM_info.script.name}][getCleanUrl] called`);
-
-  let match;
-  const specialSite = getSpecialSite();
-
-  const url = new URL(window.location.href);
-  url.hash = '';
-
-  switch (specialSite) {
-    case 'ALIEXPRESS': url.search = ''; break;
-    case 'AMAZON': return amazon_getCleanUrl();
-    case 'YOUTUBE': return youtube_getVideoUrl();
-  }
-
-  console.debug(`[${GM_info.script.name}][getCleanUrl] return:`, url);
-  return url.toString();
-}
-
-
 // MAIN ============================================================================================
 
 function main() {
   console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
 
-  const result = getCleanUrl();
+  const url = getCleanUrl();
 
-  console.debug(`[${GM_info.script.name}][main] result:`, result);
-  copyToClipboard(result);
+  console.debug(`[${GM_info.script.name}][main] url:`, url);
+  copyToClipboard(url);
 }
 
 

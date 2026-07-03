@@ -1,4 +1,4 @@
-_VERSION = '260702.09';
+_VERSION = '260703.01';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -8,6 +8,7 @@ const SPECIAL_SITES = {
   DECATHLON:  'decathlon.',
   GITHUB:     'github.com',
   IKEA:       'ikea.com',
+  IMDB:       'imdb.com',
   WIKIPEDIA:  'wikipedia.org',
   YOUTUBE:    'youtube.com',
 }
@@ -98,25 +99,6 @@ function getTldSuffix(exclude='be') {
 
   console.debug('[Utils][getTldTitle] return:', tld);
   return tld;
-}
-
-
-// Today as YYMMDD.
-function getToday() {
-  return new Date().toISOString().replaceAll('-', '').substr(2, 6);
-}
-
-
-function titleCase(value, force=false) {
-  console.debug('[Utils][titleCase] called');
-
-  if (!value) return value;
-  value = value.toLowerCase().split(' ').map(word => (
-      word.charAt(0).toUpperCase() + (force ? word.slice(1).toLowerCase() : word.slice(1))
-    )).join(' ');
-
-  console.debug('[Utils][titleCase] return:', value);
-  return value;
 }
 
 
@@ -429,6 +411,12 @@ function getTimezoneOffset(value) {
 }
 
 
+// Today as YYMMDD.
+function getToday() {
+  return new Date().toISOString().replaceAll('-', '').substr(2, 6);
+}
+
+
 function strToDate(value, withTime=false) {
   console.debug('[Utils][strToDate] called');
 
@@ -601,6 +589,23 @@ function slugify(value) {
 }
 
 
+// Convert value in Title Case.
+// `force` lowercase each word remainder.
+function toTitleCase(value, force=false) {
+  console.debug('[Utils][toTitleCase] called');
+
+  if (!value) return value;
+  if (force) value = value.toLowerCase();
+
+  value = value.toLowerCase().split(' ').map(word => (
+      word.charAt(0).toUpperCase() + word.slice(1)
+    )).join(' ');
+
+  console.debug('[Utils][toTitleCase] return:', value);
+  return value;
+}
+
+
 // UI ==============================================================================================
 
 // Display a temporary message – or fixed until clicked if `!timeout`.
@@ -633,13 +638,6 @@ function snackbar(message, timeout=2000) {
 
 // ALL UPPERCASE WORDS TO TITLE CASE ===============================================================
 
-function toTitleCase(value) {
-  console.debug('[Utils][toTitleCase] called');
-
-  return value.charAt(0).toUpperCase() + value.substring(1).toLowerCase();
-}
-
-
 function mustConvertUpperCase(value) {
   console.debug('[Utils][mustConvertUpperCase] called');
 
@@ -659,6 +657,25 @@ function convertUpperCaseWords(value) {
 
 
 // MISC ============================================================================================
+
+function getCleanUrl(search=false) {
+  console.debug('[Utils][getCleanUrl] called');
+
+  const url = new URL(window.location.href);
+  url.hash = '';
+  if (search) url.search = '';
+
+  switch (getSpecialSite()) {
+    case 'ALIEXPRESS': url.search = ''; break;
+    case 'AMAZON': return amazon_getCleanUrl();
+    case 'IMDB': url.search = ''; break;
+    case 'YOUTUBE': return youtube_getVideoUrl();
+  }
+
+  console.debug('[Utils][getCleanUrl] return:', url);
+  return url.toString();
+}
+
 
 // Detect if it's a know site.
 function getSpecialSite() {
