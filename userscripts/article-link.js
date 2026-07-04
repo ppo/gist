@@ -44,43 +44,37 @@ const HEAD_TIME_SELECTORS = [
 ];
 
 
-let specialSite = null;
-
-
 // HELPERS =========================================================================================
 
 function formatResult(title) {
   console.debug(`[${GM_info.script.name}][formatResult] called; title:`, title);
 
-  const url = window.location.href.replace(/\?$/, '');
-  const date = getDate();
-  const price = getPrice();
-  const info = formatInfo([date, price]);
-  const priceInfo = formatInfo([price]);
+  let infos = [];  // Falsy values are removed in `formatInfo()`.
+  let prefix = '';
 
-  let result = `[${title}](${url})${info}`;
-  let e;
+  const url = getCleanUrl();
+  if (KNOWN_SITE_CONFIG.features & F_DATE)   infos.push(getDate());
+  if (KNOWN_SITE_CONFIG.features & F_PRICE)  infos.push(getPrice());
+  if (KNOWN_SITE_CONFIG.prefix) {
+    const sitePrefix = KNOWN_SITE_CONFIG.prefix === true
+      ? KNOWN_SITE_CONFIG.name
+      : KNOWN_SITE_CONFIG.prefix;
+    prefix = `[${sitePrefix}] `;
+  }
 
-  switch (specialSite) {
-    case 'AMAZON':
-      const cleanUrl = amazon_getCleanUrl();
-      result = `[Amazon] [${title}](${cleanUrl})${priceInfo}`;
-      break;
-
+  switch (KNOWN_SITE) {
     case 'DECATHLON':
-      let tldSuffix = getTldSuffix();
-      result = `[Decathlon${tldSuffix}] [${title}](${url})${priceInfo}`;
+      prefix = `[${KNOWN_SITE_CONFIG.name}${getTldSuffix()}] `;
       break;
 
     case 'GITHUB':
-      const link = `[${title}](${url})`;
-      e = document.querySelector('.Layout-sidebar .about-margin h2 + p');
-      result = e ? `**${link}:** ${e.innerText.trim()}` : `**${link}**`;
+      const e = document.querySelector('.Layout-sidebar .about-margin h2 + p');
+      if (e) title = `**${title}:** ${e.innerText.trim()}`;
       break;
-
-    case 'IKEA': result = `[IKEA] [${title}](${url})${priceInfo}`; break;
-    case 'WIKIPEDIA': result = `[${title}](${url})`; break;
   }
+
+  const suffix = formatInfo(infos);
+  let result = `${prefix}[${title}](${url})${suffix}`;
 
   console.debug(`[${GM_info.script.name}][formatResult] return:`, result);
   return result;
@@ -92,7 +86,7 @@ function getDate() {
 
   let dt;
 
-  switch (specialSite) {
+  switch (KNOWN_SITE) {
     case 'YOUTUBE': dt = youtube_getDate(); break;
     default:
       let e;
@@ -119,7 +113,7 @@ function getPrice() {
   let e;
   let price;
 
-  switch (specialSite) {
+  switch (KNOWN_SITE) {
     case 'AMAZON':
       e = document.querySelector('#tp-tool-tip-subtotal-price-value .a-offscreen')
         || document.querySelector('.slot-price');
@@ -150,8 +144,10 @@ function getTitle() {
   let e;
   let title;
 
-  switch (specialSite) {
-    case 'AMAZON': e = document.getElementById('productTitle'); break;
+  switch (KNOWN_SITE) {
+    case 'AMAZON':
+      e = document.getElementById('productTitle');
+      break;
 
     case 'DECATHLON':
       title = document.querySelector('h1.vp-title-m')?.textContent.trim();
@@ -166,7 +162,7 @@ function getTitle() {
 
     case 'IKEA': e = document.querySelector('h1'); break;
     case 'WIKIPEDIA': e = document.querySelector('#firstHeading > span'); break;
-    case 'YOUTUBE': e = youtube_getTitle(); break;
+    case 'YOUTUBE': ttile = youtube_getTitle(); break;
 
     default: e = findFirstElement(HEADING_SELECTORS, NAMESPACES);
   }
@@ -184,9 +180,7 @@ function getTitle() {
 function main() {
   console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
 
-  specialSite = getSpecialSite();
-
-  const title = window.getSelection().toString().trim() || getTitle();
+  const title = getSelectedText() || getTitle();
   if (!title) {
     console.debug(`[${GM_info.script.name}][main] title not found`);
     alert('Article title not found. Select it.');

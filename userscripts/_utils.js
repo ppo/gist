@@ -2,16 +2,25 @@ _VERSION = '260703.01';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
-const SPECIAL_SITES = {
-  ALIEXPRESS: 'aliexpress.com',
-  AMAZON:     'amazon.',
-  DECATHLON:  'decathlon.',
-  GITHUB:     'github.com',
-  IKEA:       'ikea.com',
-  IMDB:       'imdb.com',
-  WIKIPEDIA:  'wikipedia.org',
-  YOUTUBE:    'youtube.com',
+// Features for known sites.
+const F_URL_SEARCH = 2**0;  // Remove URL search params.
+const F_DATE       = 2**1;  // Page contains date.
+const F_PRICE      = 2**2;  // Page contains price.
+const F_PREFIX     = 2**3;  // Include site name as prefix.
+
+const KNOWN_SITES_CONFIG = {
+  ALIEXPRESS: { name: 'AliExpress', host: 'aliexpress.com',          prefix: true, features: F_PRICE },
+  AMAZON:     { name: 'Amazon',     host: 'amazon.',                 prefix: true, features: F_PRICE },
+  DECATHLON:  { name: 'Decathlon',  host: 'decathlon.',              prefix: true, features: F_PRICE },
+  GITHUB:     { name: 'GitHub',     host: 'github.com',              prefix: null, features: 0       },
+  IKEA:       { name: 'IKEA',       host: 'ikea.com',                prefix: true, features: F_PRICE },
+  IMDB:       { name: 'IMDb',       host: 'imdb.com',                prefix: null, features: 0       },
+  PUBMED:     { name: 'PubMed',     host: 'pubmed.ncbi.nlm.nih.gov', prefix: true, features: F_DATE  },
+  WIKIPEDIA:  { name: 'Wikipedia',  host: 'wikipedia.org',           prefix: '⍵',  features: 0       },
+  YOUTUBE:    { name: 'YouTube',    host: 'youtube.com',             prefix: null, features: F_DATE  },
 }
+var KNOWN_SITE;
+var KNOWN_SITE_CONFIG;
 
 const KEEP_UPPERCASE = [
   '3D', 'AI', 'BMW', 'CEO', 'CNC', 'CTO', 'DIY', 'HQ', 'HVAC', 'IA', 'MCP', 'OS', 'PC', 'RAG',
@@ -119,6 +128,15 @@ function downloadFile(content, filename, type='text/plain') {
 
   // Clean up the object URL
   setTimeout(() => URL.revokeObjectURL(url), 100);
+}
+
+
+function getSelectedText() {
+  console.debug('[Utils][getSelectedText] called');
+  const selectedText = window.getSelection().toString().trim() || null;
+
+  console.debug('[Utils][getSelectedText] return:', selectedText);
+  return selectedText;
 }
 
 
@@ -456,19 +474,23 @@ function formatPrice(price) {
 function getCleanUrl(search=false) {
   console.debug('[Utils][getCleanUrl] called');
 
+  let urlStr;
   const url = new URL(window.location.href);
   url.hash = '';
   if (search) url.search = '';
 
-  switch (getSpecialSite()) {
-    case 'ALIEXPRESS': url.search = ''; break;
-    case 'AMAZON': return amazon_getCleanUrl();
-    case 'IMDB': url.search = ''; break;
-    case 'YOUTUBE': return youtube_getVideoUrl();
+
+  switch (KNOWN_SITE) {
+    case 'AMAZON':  urlStr = amazon_getCleanUrl(); break;
+    case 'YOUTUBE': urlStr = youtube_getVideoUrl(); break;
+    default:
+      if (KNOWN_SITE_CONFIG.features & F_URL_SEARCH) url.search = '';
   }
 
-  console.debug('[Utils][getCleanUrl] return:', url);
-  return url.toString();
+  const cleanUrl = urlStr ? urlStr : url.toString();
+
+  console.debug('[Utils][getCleanUrl] return:', cleanUrl);
+  return cleanUrl;
 }
 
 
@@ -693,12 +715,20 @@ function sleep(ms, callback) {
 // KNOWN SITES =====================================================================================
 
 // Detect if it's a know site.
-function getSpecialSite() {
-  console.debug('[Utils][getSpecialSite] called');
+function initKnownSite() {
+  console.debug('[Utils][initKnownSite] called');
 
-  for (const [key, value] of Object.entries(SPECIAL_SITES)) {
-    if (window.location.host.includes(value)) return key;
+  for (const [key, config] of Object.entries(KNOWN_SITES_CONFIG)) {
+    if (window.location.host.includes(config.host)) {
+      KNOWN_SITE = key;
+      KNOWN_SITE_CONFIG = config;
+      break;
+    }
   }
+
+  console.debug('[Utils][initKnownSite] KNOWN_SITE:', KNOWN_SITE);
+  console.debug('[Utils][initKnownSite] KNOWN_SITE_CONFIG:', KNOWN_SITE_CONFIG);
+  return KNOWN_SITE;
 }
 
 
@@ -822,3 +852,8 @@ function youtube_isVideoPage(location) {
   if (!location) location = window.location;
   return RE_YOUTUBE_VIDEO_ID.test(location.href);
 }
+
+
+// COMMON INITIALIZATION ===========================================================================
+
+initKnownSite();
