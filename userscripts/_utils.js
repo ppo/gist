@@ -52,7 +52,7 @@ const SNACKBAR_CSS = {
 function formatInfo(args) {
   console.debug('[Utils][formatInfo] called; args:', args);
 
-  args = args.filter((a) => a);
+  args = args.filter((a) => a);  // Remove falsy items
   const info = args.length > 0 ? ` (${args.join(', ')})` : '';
 
   console.debug('[Utils][formatInfo] return:', info);
@@ -711,7 +711,10 @@ function amazon_getCleanUrl(location) {
   const productId = amazon_getProductId();
   if (productId) url.pathname = `/dp/${productId}`;
 
-  return url.toString();
+  const cleanUrl = url.toString();
+
+  console.debug('[Utils][getCleanUrl] return:', cleanUrl);
+  return cleanUrl;
 }
 
 
@@ -720,7 +723,10 @@ function amazon_getProductId(location) {
 
   if (!location) location = window.location;
   match = location.pathname.match(RE_AMAZON_PRODUCT_ID);
-  return match ? match[2] : null;
+  const productId = match ? match[2] : null;
+
+  console.debug('[Utils][amazon_getProductId] return:', productId);
+  return productId;
 }
 
 
@@ -736,16 +742,16 @@ function youtube_getVideoUrl(location) {
   const match = location.href.match(RE_YOUTUBE_VIDEO_ID);
   if (match) {
     url.pathname = match[2];
-    console.debug('[Utils][youtube_getVideoUrl] matching', match);
+    console.debug('[Utils][youtube_getVideoUrl] match:', match);
   } else {
     const e = document.querySelector('ytd-watch-metadata');
     url.pathname = e.getAttribute('video-id').trim();
-    console.debug('[Utils][youtube_getVideoUrl] use video-id', e);
+    console.debug('[Utils][youtube_getVideoUrl] use video-id:', e);
   }
 
   const videoUrl = url.pathname === '/' ? null : url.toString();
-  console.debug('[Utils][youtube_getVideoUrl] return', videoUrl);
 
+  console.debug('[Utils][youtube_getVideoUrl] return:', videoUrl);
   return videoUrl;
 }
 
@@ -755,7 +761,11 @@ function youtube_getChannelInfo() {
 
   const e = document.querySelector('#owner .ytd-channel-name a')
     || document.querySelector('#owner #attributed-channel-name a');
-  return { name: e.textContent.trim(), url: e.href };
+
+  const channelInfo = { name: e.textContent.trim(), url: e.href };
+
+  console.debug('[Utils][youtube_getChannelInfo] return:', channelInfo);
+  return channelInfo
 }
 
 
@@ -775,7 +785,10 @@ function youtube_getDate() {
     value = e.getAttribute('content');
   }
 
-  return value ? strToDate(value) : null;
+  const date = value ? strToDate(value) : null;
+
+  console.debug('[Utils][youtube_getDate] return:', date);
+  return date;
 }
 
 
@@ -783,7 +796,10 @@ function youtube_getDuration() {
   console.debug('[Utils][youtube_getDuration] called');
 
   const e = document.querySelector('ytd-player .ytp-time-duration');
-  return e.textContent.trim();
+  const duration = e?.textContent.trim();
+
+  console.debug('[Utils][youtube_getDuration] return:', duration);
+  return duration;
 }
 
 
@@ -791,8 +807,10 @@ function youtube_getTitle() {
   console.debug('[Utils][youtube_getTitle] called');
 
   const e = document.querySelector('ytd-watch-metadata #title h1 yt-formatted-string');
-  const title = e.textContent.replace(/ +/g, s => ' '); // Remove multiple spaces.
-  return title.trim();
+  const title = e?.textContent.replace(/ +/g, s => ' ').trim(); // Remove multiple spaces.
+
+  console.debug('[Utils][youtube_getTitle] return:', title);
+  return title;
 }
 
 
