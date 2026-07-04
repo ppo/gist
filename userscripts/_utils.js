@@ -47,61 +47,6 @@ const SNACKBAR_CSS = {
 };
 
 
-// GENERAL HELPERS =================================================================================
-
-function formatInfo(args) {
-  console.debug('[Utils][formatInfo] called; args:', args);
-
-  args = args.filter((a) => a);  // Remove falsy items
-  const info = args.length > 0 ? ` (${args.join(', ')})` : '';
-
-  console.debug('[Utils][formatInfo] return:', info);
-  return info;
-}
-
-
-function formatPrice(price) {
-  console.debug('[Utils][formatPrice] called; price:', price);
-
-  if (price) {
-    price = price
-      .replace(',', '.')
-      .replace('&nbsp;', '')
-      .replace(/\s/, '')
-      .trim();
-    const m = price.match(/[$€]/);
-    if (m) price = `${price.replace(m[0], '')}${m[0]}`;
-
-    price = `${price}@${getToday()}`;
-  }
-
-  console.debug('[Utils][formatPrice] return:', price);
-  return price;
-}
-
-
-function getTld() {
-  console.debug('[Utils][getTld] called');
-
-  const tld = window.location.origin.split('.').pop();
-
-  console.debug('[Utils][getTld] return:', tld);
-  return tld;
-}
-
-
-function getTldSuffix(exclude='be') {
-  console.debug('[Utils][getTldTitle] called; exclude:', exclude);
-
-  let tld = getTld();
-  if (tld === exclude) tld = '';
-  if (tld) tld = ` ${tld.toLocaleUpperCase()}`;
-
-  console.debug('[Utils][getTldTitle] return:', tld);
-  return tld;
-}
-
-
 // BROWSER FEATURES ================================================================================
 
 /**
@@ -473,7 +418,84 @@ function waitForElement(selector, callback, timeout=2000) {
 }
 
 
-// STRING ==========================================================================================
+// FORMATTERS ======================================================================================
+
+function formatInfo(args) {
+  console.debug('[Utils][formatInfo] called; args:', args);
+
+  args = args.filter((a) => a);  // Remove falsy items
+  const info = args.length > 0 ? ` (${args.join(', ')})` : '';
+
+  console.debug('[Utils][formatInfo] return:', info);
+  return info;
+}
+
+
+function formatPrice(price) {
+  console.debug('[Utils][formatPrice] called; price:', price);
+
+  if (price) {
+    price = price
+      .replace(',', '.')
+      .replace('&nbsp;', '')
+      .replace(/\s/, '')
+      .trim();
+    const m = price.match(/[$€]/);
+    if (m) price = `${price.replace(m[0], '')}${m[0]}`;
+
+    price = `${price}@${getToday()}`;
+  }
+
+  console.debug('[Utils][formatPrice] return:', price);
+  return price;
+}
+
+
+// GETTERS =========================================================================================
+
+function getCleanUrl(search=false) {
+  console.debug('[Utils][getCleanUrl] called');
+
+  const url = new URL(window.location.href);
+  url.hash = '';
+  if (search) url.search = '';
+
+  switch (getSpecialSite()) {
+    case 'ALIEXPRESS': url.search = ''; break;
+    case 'AMAZON': return amazon_getCleanUrl();
+    case 'IMDB': url.search = ''; break;
+    case 'YOUTUBE': return youtube_getVideoUrl();
+  }
+
+  console.debug('[Utils][getCleanUrl] return:', url);
+  return url.toString();
+}
+
+
+
+function getTld() {
+  console.debug('[Utils][getTld] called');
+
+  const tld = window.location.origin.split('.').pop();
+
+  console.debug('[Utils][getTld] return:', tld);
+  return tld;
+}
+
+
+function getTldSuffix(exclude='be') {
+  console.debug('[Utils][getTldTitle] called; exclude:', exclude);
+
+  let tld = getTld();
+  if (tld === exclude) tld = '';
+  if (tld) tld = ` ${tld.toLocaleUpperCase()}`;
+
+  console.debug('[Utils][getTldTitle] return:', tld);
+  return tld;
+}
+
+
+// TEXT ============================================================================================
 
 // Clean filename string.
 function cleanFilename(value) {
@@ -606,6 +628,26 @@ function toTitleCase(value, force=false) {
 }
 
 
+// ALL UPPERCASE WORDS TO TITLE CASE ---------------------------------------------------------------
+
+function mustConvertUpperCase(value) {
+  console.debug('[Utils][mustConvertUpperCase] called');
+
+  return value.length > 1
+    && value === value.toUpperCase()
+    && KEEP_UPPERCASE.indexOf(value) === -1;
+}
+
+
+function convertUpperCaseWords(value) {
+  console.debug('[Utils][convertUpperCaseWords] called');
+
+  return value.replace(/\b[A-Z]+\b/g, match => {
+    return mustConvertUpperCase(match) ? toTitleCase(match) : match;
+  });
+}
+
+
 // UI ==============================================================================================
 
 // Display a temporary message – or fixed until clicked if `!timeout`.
@@ -636,56 +678,7 @@ function snackbar(message, timeout=2000) {
 }
 
 
-// ALL UPPERCASE WORDS TO TITLE CASE ===============================================================
-
-function mustConvertUpperCase(value) {
-  console.debug('[Utils][mustConvertUpperCase] called');
-
-  return value.length > 1
-    && value === value.toUpperCase()
-    && KEEP_UPPERCASE.indexOf(value) === -1;
-}
-
-
-function convertUpperCaseWords(value) {
-  console.debug('[Utils][convertUpperCaseWords] called');
-
-  return value.replace(/\b[A-Z]+\b/g, match => {
-    return mustConvertUpperCase(match) ? toTitleCase(match) : match;
-  });
-}
-
-
 // MISC ============================================================================================
-
-function getCleanUrl(search=false) {
-  console.debug('[Utils][getCleanUrl] called');
-
-  const url = new URL(window.location.href);
-  url.hash = '';
-  if (search) url.search = '';
-
-  switch (getSpecialSite()) {
-    case 'ALIEXPRESS': url.search = ''; break;
-    case 'AMAZON': return amazon_getCleanUrl();
-    case 'IMDB': url.search = ''; break;
-    case 'YOUTUBE': return youtube_getVideoUrl();
-  }
-
-  console.debug('[Utils][getCleanUrl] return:', url);
-  return url.toString();
-}
-
-
-// Detect if it's a know site.
-function getSpecialSite() {
-  console.debug('[Utils][getSpecialSite] called');
-
-  for (const [key, value] of Object.entries(SPECIAL_SITES)) {
-    if (window.location.host.includes(value)) return key;
-  }
-}
-
 
 // Wait for the given time (`ms`) then executes the callback.
 // Or return immediately a Promise if no callback provided.
@@ -697,7 +690,19 @@ function sleep(ms, callback) {
 }
 
 
-// AMAZON ==========================================================================================
+// KNOWN SITES =====================================================================================
+
+// Detect if it's a know site.
+function getSpecialSite() {
+  console.debug('[Utils][getSpecialSite] called');
+
+  for (const [key, value] of Object.entries(SPECIAL_SITES)) {
+    if (window.location.host.includes(value)) return key;
+  }
+}
+
+
+// AMAZON ------------------------------------------------------------------------------------------
 
 function amazon_getCleanUrl(location) {
   console.debug('[Utils][amazon_getCleanUrl] called');
@@ -730,31 +735,7 @@ function amazon_getProductId(location) {
 }
 
 
-// YOUTUBE =========================================================================================
-
-function youtube_getVideoUrl(location) {
-  console.debug('[Utils][youtube_getVideoUrl] called');
-
-  if (!location) location = window.location;
-
-  const url = new URL('https://youtu.be');
-
-  const match = location.href.match(RE_YOUTUBE_VIDEO_ID);
-  if (match) {
-    url.pathname = match[2];
-    console.debug('[Utils][youtube_getVideoUrl] match:', match);
-  } else {
-    const e = document.querySelector('ytd-watch-metadata');
-    url.pathname = e.getAttribute('video-id').trim();
-    console.debug('[Utils][youtube_getVideoUrl] use video-id:', e);
-  }
-
-  const videoUrl = url.pathname === '/' ? null : url.toString();
-
-  console.debug('[Utils][youtube_getVideoUrl] return:', videoUrl);
-  return videoUrl;
-}
-
+// YOUTUBE -----------------------------------------------------------------------------------------
 
 function youtube_getChannelInfo() {
   console.debug('[Utils][youtube_getChannelInfo] called');
@@ -811,6 +792,29 @@ function youtube_getTitle() {
 
   console.debug('[Utils][youtube_getTitle] return:', title);
   return title;
+}
+
+function youtube_getVideoUrl(location) {
+  console.debug('[Utils][youtube_getVideoUrl] called');
+
+  if (!location) location = window.location;
+
+  const url = new URL('https://youtu.be');
+
+  const match = location.href.match(RE_YOUTUBE_VIDEO_ID);
+  if (match) {
+    url.pathname = match[2];
+    console.debug('[Utils][youtube_getVideoUrl] match:', match);
+  } else {
+    const e = document.querySelector('ytd-watch-metadata');
+    url.pathname = e.getAttribute('video-id').trim();
+    console.debug('[Utils][youtube_getVideoUrl] use video-id:', e);
+  }
+
+  const videoUrl = url.pathname === '/' ? null : url.toString();
+
+  console.debug('[Utils][youtube_getVideoUrl] return:', videoUrl);
+  return videoUrl;
 }
 
 
