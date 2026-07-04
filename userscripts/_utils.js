@@ -84,13 +84,13 @@ function copyToClipboard(value, message=true, timeout=undefined) {
 
       message = message.innerHTML;
     } else {
-      console.debug('[Utils][copyToClipboard] message !== true', message);
+      console.debug('[Utils][copyToClipboard] message !== true:', message);
     }
 
-    console.debug('[Utils][copyToClipboard] calling snackbar()', message, timeout);
+    console.debug('[Utils][copyToClipboard] calling snackbar():', message, timeout);
     snackbar(message, timeout);
   } else {
-    console.debug('[Utils][copyToClipboard] no message', message);
+    console.debug('[Utils][copyToClipboard] no message:', message);
   }
 }
 
