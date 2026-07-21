@@ -1,4 +1,4 @@
-_VERSION = '260703.01';
+_VERSION = '260721.01';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -23,8 +23,8 @@ var KNOWN_SITE;
 var KNOWN_SITE_CONFIG;
 
 const KEEP_UPPERCASE = [
-  '3D', 'AI', 'BMW', 'CEO', 'CNC', 'CTO', 'DIY', 'HQ', 'HVAC', 'IA', 'MCP', 'OS', 'PC', 'RAG',
-  'RV', 'USB', 'VW',
+  '3D', 'AI', 'BMW', 'CEO', 'CNC', 'CTO', 'DIY', 'GPS', 'GPX', 'HQ', 'HVAC', 'IA', 'MCP', 'OS',
+  'PC', 'RAG', 'RV', 'USB', 'VW',
 ];
 
 const RE_YOUTUBE_VIDEO_ID = /\/(watch\?v=|shorts\/)([^&]+)/;
