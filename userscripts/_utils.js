@@ -416,10 +416,17 @@ function findFirstElement(selectors, namespaces) {
 }
 
 
-function hide(elem) {
-  console.debug('[Utils][hide] called');
+function hideElem(elem) {
+  // console.debug('[Utils][hideElem] called');
 
   elem.style.display = 'none';
+}
+
+
+function hide(selector) {
+  // console.debug('[Utils][hide] called');
+
+  hideElem(document.querySelector(selector));
 }
 
 
@@ -428,7 +435,7 @@ function hideAll(selectors) {
 
   for (let selector of selectors) {
     document.querySelectorAll(selector).forEach(e => {
-      hide(e);
+      hideElem(e);
     });
   }
 }
