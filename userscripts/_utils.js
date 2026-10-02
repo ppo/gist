@@ -1,4 +1,4 @@
-_VERSION = '260823.01';
+_VERSION = '261002.01';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -420,6 +420,17 @@ function hide(elem) {
   console.debug('[Utils][hide] called');
 
   elem.style.display = 'none';
+}
+
+
+function hideAll(selectors) {
+  console.debug('[Utils][hideAll] called');
+
+  for (let selector of selectors) {
+    document.querySelectorAll(selector).forEach(e => {
+      hide(e);
+    });
+  }
 }
 
 
