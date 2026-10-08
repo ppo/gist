@@ -1,4 +1,4 @@
-_VERSION = '261002.01';
+_VERSION = '261008.01';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -419,7 +419,7 @@ function findFirstElement(selectors, namespaces) {
 function hideElem(elem) {
   // console.debug('[Utils][hideElem] called');
 
-  elem.style.display = 'none';
+  if (elem) elem.style.display = 'none';
 }
 
 
