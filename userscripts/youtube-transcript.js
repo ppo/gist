@@ -76,7 +76,6 @@ function processData(elem) {
   });
 
   const filename = cleanFilename(`${channel.name} - ${title}.${compactDate}.txt`);
-  const downloadCommand = `youtube-download "${videoUrl}" ".mp3"`;
   const transcript = cleanTranscript(lines.join(' '));
   if (!transcript) {
     alert('Empty transcript!');
@@ -84,7 +83,6 @@ function processData(elem) {
   }
 
   const result = `${filename}
-${downloadCommand}
 ---
 url: ${videoUrl}
 title: ${JSON.stringify(title)}
