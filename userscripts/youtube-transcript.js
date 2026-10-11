@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      260530.01
+// @version      261011.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -27,29 +27,32 @@
 
 // SETTINGS ========================================================================================
 
-const TRANSCRIPT_SELECTORS = [
-  '#panels [visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"] transcript-segment-view-model .yt-core-attributed-string',  // 260310
-  '#panels [visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"] transcript-segment-view-model .ytAttributedStringHost',  // 260425
-  '#panels [visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"] #body #segments-container .segment-text',
+const SELECTOR_VISIBLE_PANEL = '#panels [visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"]';
+const SELECTOR_PANEL_OPEN = 'button[aria-label="Show transcript"]';
+const SELECTOR_PANEL_CLOSE = `${SELECTOR_VISIBLE_PANEL} button[aria-label="Close"]`;
+
+const SELECTOR_CONTAINER = [
+  `${SELECTOR_VISIBLE_PANEL} ytd-transcript-renderer`,   // Old (without chapters)
+  `${SELECTOR_VISIBLE_PANEL} yt-section-list-renderer`,  // New (with chapters)
+].join(', ');
+
+const SELECTOR_ELEMENTS = [  // Selector used on/under `SELECTOR_CONTAINER`.
+  '#body #segments-container .segment-text',                        // Old (without chapters)
+  'timeline-chapter-view-model .ytwTimelineChapterViewModelTitle',  // New: Chapter
+  'transcript-segment-view-model .ytAttributedStringHost',          // New: Content
+].join(', ');
+
+const TRANSCRIPT_REPLACEMENTS = [
+  [ /[  \t]+/g, ' ' ],
+  [ / ?\[(music|musique)\] ?/gi, ' ' ],
+  [ / ?\[(panting|sighs|sighs and gasps|snorts)\] ?/gi, ' ' ],
 ];
+
 
 // HELPERS =========================================================================================
 
-function cleanTranscript(transcript) {
-  console.debug(`[${GM_info.script.name}][cleanTranscript] called`);
-
-  const REPLACEMENTS = [
-    [ / ?\[(music|musique)\] ?/gi, ' ' ],
-    [ /[  \t\n]+/g, ' ' ],
-  ];
-  return replaceMap(transcript, REPLACEMENTS);
-}
-
-
 function processData(elem) {
   console.debug(`[${GM_info.script.name}][processData] called; elem:`, elem);
-
-  const isNewStructure = document.querySelector('transcript-segment-view-model') !== null;  // 260310: Old = 'ytd-transcript-renderer'
 
   const videoUrl = youtube_getVideoUrl();
   const channel = youtube_getChannelInfo();
@@ -59,28 +62,31 @@ function processData(elem) {
   const compactDate = formatDateTime('compact-date', ytDate);
   const duration = youtube_getDuration();
 
-  const lines = [];
-  let rawLines;
-  for (let sel of TRANSCRIPT_SELECTORS) {
-    rawLines = document.querySelectorAll(sel);
-    console.debug(`[${GM_info.script.name}][processData]\nTRANSCRIPT_SELECTORS: ${sel}`, rawLines);
-    if (rawLines.length > 0) break;
-  }
-  if (rawLines.length === 0) {
-    alert('Empty transcript!');
-    return;
-  }
+  let transcript = '';
 
-  rawLines.forEach(elem => {
-    lines.push(elem.textContent.trim());
+  const container = document.querySelector(SELECTOR_CONTAINER);
+  container.querySelectorAll(SELECTOR_ELEMENTS).forEach(elem => {
+    let isNewChapter = false;
+    const s = elem.textContent.trim();
+
+    if (elem.tagName === 'H3') {
+      if (transcript.length > 0) transcript += '\n\n\n';
+      transcript += `# ${s}\n\n`;
+      isNewChapter = true;
+    } else {
+      if (!isNewChapter) transcript += ' ';
+      transcript += s;
+      isNewChapter = false;
+    }
   });
 
-  const filename = cleanFilename(`${channel.name} - ${title}.${compactDate}.txt`);
-  const transcript = cleanTranscript(lines.join(' '));
+  transcript = replaceMap(transcript, TRANSCRIPT_REPLACEMENTS);
   if (!transcript) {
     alert('Empty transcript!');
     return;
   }
+
+  const filename = cleanFilename(`${channel.name} - ${title}.${compactDate}.md`);
 
   const result = `${filename}
 ---
@@ -96,12 +102,10 @@ channel:
 ${transcript}
 `;
 
-  console.debug(`[${GM_info.script.name}][processData] result:`, result);
   copyToClipboard(result);
 
-  const closeBtn = document.querySelector('#panels [visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"] button[aria-label="Close"]')  // 260310: New coming?
-    || document.querySelector('button[aria-label="Close transcript"]');
-  if (closeBtn) closeBtn.click();
+  // Close transcript panel.
+  document.querySelector(SELECTOR_PANEL_CLOSE)?.click();
 }
 
 
@@ -115,9 +119,9 @@ function main() {
     return;
   }
 
-  document.querySelector('button[aria-label="Show transcript"]').click();
-  waitForElement('ytd-transcript-renderer', processData);
-  waitForElement('transcript-segment-view-model', processData);  // 260310: New coming?
+  // Open transcript panel and wait for it before processing.
+  document.querySelector(SELECTOR_PANEL_OPEN).click();
+  waitForElement(SELECTOR_CONTAINER, processData);
 }
 
 
