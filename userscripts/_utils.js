@@ -1,4 +1,4 @@
-_VERSION = '261008.01';
+_VERSION = '261011.01';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -69,14 +69,19 @@ const SNACKBAR_CSS = {
 function copyToClipboard(value, message=true, timeout=undefined) {
   console.debug('[Utils][copyToClipboard] called');
 
-  GM_setClipboard(value);
-  // const e = document.createElement('textarea');
-  // e.value = value;
-  // document.body.appendChild(e);
-  // e.select();
+  try {
+    GM_setClipboard(value);
+  } catch (error) {
+    console.debug('[Utils][copyToClipboard] `GM_setClipboard()` not availabe, use fallback code.');
 
-  // document.execCommand('copy');
-  // document.body.removeChild(e);
+    const e = document.createElement('textarea');
+    e.value = value;
+    document.body.appendChild(e);
+    e.select();
+
+    document.execCommand('copy');
+    document.body.removeChild(e);
+  }
 
   if (message) {
     if (message === true) {
@@ -93,10 +98,10 @@ function copyToClipboard(value, message=true, timeout=undefined) {
 
       message = message.innerHTML;
     } else {
-      console.debug('[Utils][copyToClipboard] message !== true:', message);
+      console.debug('[Utils][copyToClipboard] message !== true:');  // , message);
     }
 
-    console.debug('[Utils][copyToClipboard] calling snackbar():', message, timeout);
+    console.debug('[Utils][copyToClipboard] calling snackbar():');  // , message, timeout);
     snackbar(message, timeout);
   } else {
     console.debug('[Utils][copyToClipboard] no message:', message);
@@ -393,6 +398,7 @@ function strToDate(value, withTime=false) {
 
 // DOM =============================================================================================
 
+// DEPRECATED: Use `GM_addStyle()` – requires: `@grant GM_addStyle`
 function createCssStyle(css) {
   console.debug('[Utils][createCssStyle] called');
 
