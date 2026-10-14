@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      261011.01
+// @version      261014.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -29,18 +29,28 @@
 
 const SELECTOR_VISIBLE_PANEL = '#panels [visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"]';
 const SELECTOR_PANEL_OPEN = 'button[aria-label="Show transcript"]';
-const SELECTOR_PANEL_CLOSE = `${SELECTOR_VISIBLE_PANEL} button[aria-label="Close"]`;
+const SELECTOR_PANEL_CLOSE = [
+  `${SELECTOR_VISIBLE_PANEL} button[aria-label="Close"]`,
+  `${SELECTOR_VISIBLE_PANEL} button[aria-label="Close transcript"]`,
+].join(', ');
 
 const SELECTOR_CONTAINER = [
   `${SELECTOR_VISIBLE_PANEL} ytd-transcript-renderer`,   // Old (without chapters)
   `${SELECTOR_VISIBLE_PANEL} yt-section-list-renderer`,  // New (with chapters)
 ].join(', ');
 
-const SELECTOR_ELEMENTS = [  // Selector used on/under `SELECTOR_CONTAINER`.
-  '#body #segments-container .segment-text',                        // Old (without chapters)
-  'timeline-chapter-view-model .ytwTimelineChapterViewModelTitle',  // New: Chapter
-  'transcript-segment-view-model .ytAttributedStringHost',          // New: Content
-].join(', ');
+const SELECTOR_HEADINGS = [
+  '.ytShelfHeaderLayoutTitle',          // New: Chapter (h2)
+  '.ytwTimelineChapterViewModelTitle',  // New: Chapter (h3)  // 'timeline-chapter-view-model .ytwTimelineChapterViewModelTitle'
+];
+const SELECTOR_SEGMENTS = [
+  '#body #segments-container .segment-text',                // Old (without chapters)
+  'transcript-segment-view-model .ytAttributedStringHost',  // New (with chapters)
+];
+
+// Selector used on/under `SELECTOR_CONTAINER`.
+const SELECTOR_ELEMENTS = [...SELECTOR_HEADINGS, ...SELECTOR_SEGMENTS].join(', ');
+const IS_HEADING_SELECTOR = SELECTOR_HEADINGS.join(', ');
 
 const TRANSCRIPT_REPLACEMENTS = [
   [ /[  \t]+/g, ' ' ],
@@ -63,19 +73,20 @@ function processData(elem) {
   const duration = youtube_getDuration();
 
   let transcript = '';
+  let isNewChapter = true;
 
   const container = document.querySelector(SELECTOR_CONTAINER);
   container.querySelectorAll(SELECTOR_ELEMENTS).forEach(elem => {
-    let isNewChapter = false;
-    const s = elem.textContent.trim();
+    const content = elem.textContent.trim();
+    if (!content) return;
 
-    if (elem.tagName === 'H3') {
+    if (elem.matches(IS_HEADING_SELECTOR)) {
       if (transcript.length > 0) transcript += '\n\n\n';
-      transcript += `# ${s}\n\n`;
+      transcript += `# ${content}\n\n`;
       isNewChapter = true;
     } else {
       if (!isNewChapter) transcript += ' ';
-      transcript += s;
+      transcript += content;
       isNewChapter = false;
     }
   });
