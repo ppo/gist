@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      261014.01
+// @version      261015.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -81,7 +81,7 @@ function processData(elem) {
     if (!content) return;
 
     if (elem.matches(IS_HEADING_SELECTOR)) {
-      if (transcript.length > 0) transcript += '\n\n\n';
+      if (transcript.length > 0) transcript += '\n\n';
       transcript += `# ${content}\n\n`;
       isNewChapter = true;
     } else {
