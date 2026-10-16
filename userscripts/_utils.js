@@ -446,7 +446,7 @@ function hide(selector) {
 
 
 function hideAll(selectors) {
-  console.debug('[Utils][hideAll] called');
+  // console.debug('[Utils][hideAll] called');
 
   for (let selector of selectors) {
     document.querySelectorAll(selector).forEach(e => {
@@ -472,18 +472,18 @@ function waitForElement(selector, callback, timeout=2000) {
 // FORMATTERS ======================================================================================
 
 function formatInfo(args) {
-  console.debug('[Utils][formatInfo] called; args:', args);
+  // console.debug('[Utils][formatInfo] called; args:', args);
 
   args = args.filter((a) => a);  // Remove falsy items
   const info = args.length > 0 ? ` (${args.join(', ')})` : '';
 
-  console.debug('[Utils][formatInfo] return:', info);
+  // console.debug('[Utils][formatInfo] return:', info);
   return info;
 }
 
 
 function formatPrice(price) {
-  console.debug('[Utils][formatPrice] called; price:', price);
+  // console.debug('[Utils][formatPrice] called; price:', price);
 
   if (price) {
     price = price
@@ -500,7 +500,7 @@ function formatPrice(price) {
     price = `${price}@${getToday()}`;
   }
 
-  console.debug('[Utils][formatPrice] return:', price);
+  // console.debug('[Utils][formatPrice] return:', price);
   return price;
 }
 
@@ -525,30 +525,30 @@ function getCleanUrl(search=false) {
 
   const cleanUrl = urlStr ? urlStr : url.toString();
 
-  console.debug('[Utils][getCleanUrl] return:', cleanUrl);
+  // console.debug('[Utils][getCleanUrl] return:', cleanUrl);
   return cleanUrl;
 }
 
 
 
 function getTld() {
-  console.debug('[Utils][getTld] called');
+  // console.debug('[Utils][getTld] called');
 
   const tld = window.location.origin.split('.').pop();
 
-  console.debug('[Utils][getTld] return:', tld);
+  // console.debug('[Utils][getTld] return:', tld);
   return tld;
 }
 
 
 function getTldSuffix(exclude='be') {
-  console.debug('[Utils][getTldTitle] called; exclude:', exclude);
+  // console.debug('[Utils][getTldTitle] called; exclude:', exclude);
 
   let tld = getTld();
   if (tld === exclude) tld = '';
   if (tld) tld = ` ${tld.toLocaleUpperCase()}`;
 
-  console.debug('[Utils][getTldTitle] return:', tld);
+  // console.debug('[Utils][getTldTitle] return:', tld);
   return tld;
 }
 
@@ -557,7 +557,7 @@ function getTldSuffix(exclude='be') {
 
 // Clean filename string.
 function cleanFilename(value) {
-  console.debug('[Utils][cleanFilename] called');
+  // console.debug('[Utils][cleanFilename] called');
 
   const REPLACEMENTS = [
     [ /[‘’]/g,     "'"   ],  // Smart single quotes
@@ -647,7 +647,7 @@ function html2markdown(html) {
  * @returns {string} Text with all replacements applied.
  */
 function replaceMap(text, replacements) {
-  console.debug('[Utils][replaceMap] called');
+  // console.debug('[Utils][replaceMap] called; text', text);
 
   let result = '';
   if (text) {
@@ -661,7 +661,7 @@ function replaceMap(text, replacements) {
 
 // Generate a slug based on the given value.
 function slugify(value) {
-  console.debug('[Utils][slugify] called');
+  // console.debug('[Utils][slugify] called');
 
   return value
     .toString()
@@ -677,7 +677,7 @@ function slugify(value) {
 // Convert value in Title Case.
 // `force` lowercase each word remainder.
 function toTitleCase(value, force=false) {
-  console.debug('[Utils][toTitleCase] called');
+  // console.debug('[Utils][toTitleCase] called');
 
   if (!value) return value;
   if (force) value = value.toLowerCase();
@@ -686,7 +686,7 @@ function toTitleCase(value, force=false) {
       word.charAt(0).toUpperCase() + word.slice(1)
     )).join(' ');
 
-  console.debug('[Utils][toTitleCase] return:', value);
+  // console.debug('[Utils][toTitleCase] return:', value);
   return value;
 }
 
@@ -694,7 +694,7 @@ function toTitleCase(value, force=false) {
 // ALL UPPERCASE WORDS TO TITLE CASE ---------------------------------------------------------------
 
 function mustConvertUpperCase(value) {
-  console.debug('[Utils][mustConvertUpperCase] called');
+  // console.debug('[Utils][mustConvertUpperCase] called');
 
   return value.length > 1
     && value === value.toUpperCase()
@@ -703,7 +703,7 @@ function mustConvertUpperCase(value) {
 
 
 function convertUpperCaseWords(value) {
-  console.debug('[Utils][convertUpperCaseWords] called');
+  // console.debug('[Utils][convertUpperCaseWords] called');
 
   return value.replace(/\b[A-Z]+\b/g, match => {
     return mustConvertUpperCase(match) ? toTitleCase(match) : match;
@@ -751,7 +751,7 @@ function snackbar(messageText, messageHtml, timeout=2000) {
 // Wait for the given time (`ms`) then executes the callback.
 // Or return immediately a Promise if no callback provided.
 function sleep(ms, callback) {
-  console.debug('[Utils][sleep] called');
+  console.debug('[Utils][sleep] called; ms:'), ms;
 
   const p = new Promise(resolve => setTimeout(resolve, ms));
   return callback ? p.then(callback) : p;
@@ -772,8 +772,7 @@ function initKnownSite() {
     }
   }
 
-  console.debug('[Utils][initKnownSite] KNOWN_SITE:', KNOWN_SITE);
-  console.debug('[Utils][initKnownSite] KNOWN_SITE_CONFIG:', KNOWN_SITE_CONFIG);
+  console.debug('[Utils][initKnownSite] return:', KNOWN_SITE, KNOWN_SITE_CONFIG);
   return KNOWN_SITE;
 }
 
@@ -794,7 +793,7 @@ function amazon_getCleanUrl(location) {
 
   const cleanUrl = url.toString();
 
-  console.debug('[Utils][getCleanUrl] return:', cleanUrl);
+  // console.debug('[Utils][getCleanUrl] return:', cleanUrl);
   return cleanUrl;
 }
 
@@ -806,7 +805,7 @@ function amazon_getProductId(location) {
   match = location.pathname.match(RE_AMAZON_PRODUCT_ID);
   const productId = match ? match[2] : null;
 
-  console.debug('[Utils][amazon_getProductId] return:', productId);
+  // console.debug('[Utils][amazon_getProductId] return:', productId);
   return productId;
 }
 
