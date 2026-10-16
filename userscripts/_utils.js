@@ -360,6 +360,19 @@ function formatDateTime(format, value, timezone) {
 }
 
 
+function formatDuration(duration) {
+  console.debug('[Utils][formatDuration] called');
+
+  const hours = String(Math.floor(duration / 3600)).padStart(2, '0');
+  const minutes = String(Math.floor(duration % 3600 / 60)).padStart(2, '0');
+  const seconds = String(duration % 60).padStart(2, '0');
+
+  const formatted = (hours === '00' ? '' : `${hours}:`) + `${minutes}:${seconds}`;
+
+  return formatted;
+}
+
+
 /**
  * Returns the difference to UTC without colon between hours and minutes.
  *
@@ -553,6 +566,13 @@ function getTldSuffix(exclude='be') {
 }
 
 
+function initUrl(url) {
+  // console.debug('[Utils][initUrl] called; url:', url);
+
+  return url || window.location.href;
+}
+
+
 // TEXT ============================================================================================
 
 // Clean filename string.
@@ -568,6 +588,24 @@ function cleanFilename(value) {
     [ /[""]/g,     "'"   ],  // Double quotes as single quotes
   ];
   return replaceMap(value, REPLACEMENTS);
+}
+
+
+function cleanString(str) {
+  // console.debug('[Utils][cleanString] called; str:', str);
+
+  return str
+    .replace(/ +/g, ' ')  // Remove multiple spaces.
+    .replace(/ +([:?!])/g, '$1')  // French punctuations.
+    .replace(/([0-9]) ([€$])/g, '$1$2')  // Money symbols.
+    .trim();
+}
+
+
+function cleanUrl(url) {
+  // console.debug('[Utils][cleanUrl] called; url:', url);
+
+  return url.replace('http://', 'https://');
 }
 
 
@@ -636,6 +674,19 @@ function html2markdown(html) {
   ];
 
   return replaceMap(td.turndown(html), REPLACEMENTS);
+}
+
+
+function html2text(html) {
+  // console.debug('[Utils][html2text] called; html', html);
+  console.debug('[Utils][html2text] called');
+
+  if (!html) return '';
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const text = (doc.body.textContent || '').replace(/\s+/g, ' ').trim();
+
+  console.debug('[Utils][html2text] return:', text);
+  return text;
 }
 
 
