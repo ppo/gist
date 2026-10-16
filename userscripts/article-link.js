@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      260703.01
+// @version      261016.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -51,6 +51,7 @@ function formatResult(title) {
 
   let infos = [];  // Falsy values are removed in `formatInfo()`.
   let prefix = '';
+  let result = '';
 
   const url = getCleanUrl();
   if (KNOWN_SITE_CONFIG.features & F_DATE)   infos.push(getDate());
@@ -68,13 +69,21 @@ function formatResult(title) {
       break;
 
     case 'GITHUB':
-      const e = document.querySelector('.Layout-sidebar .about-margin h2 + p');
-      if (e) title = `**${title}:** ${e.innerText.trim()}`;
+      result = `[${title}](${url})`;
+
+      const description = document.querySelector('p[class^="SidebarAbout"]')
+        || document.querySelector('.application-main header h1 + div');
+      if (description) result = `**${result}:** ${description.textContent.trim()}`;
+
+      const website = document.querySelector('span[class^="SidebarAbout"] a')
+        || document.querySelector('.application-main header ul a[rel="nofollow"]');
+      if (website) result += ` • [website](${website.href})`;
       break;
   }
 
   const suffix = formatInfo(infos);
-  let result = `${prefix}[${title}](${url})${suffix}`;
+  if (!result) result = `[${title}](${url})`;
+  result = `${prefix}${result}${suffix}`;
 
   console.debug(`[${GM_info.script.name}][formatResult] return:`, result);
   return result;
@@ -157,7 +166,8 @@ function getTitle() {
 
     case 'GITHUB':
       e = document.querySelector('article .markdown-heading h1.heading-element')
-        || document.querySelector('#repo-title-component a');
+        || document.querySelector('#repo-title-component a')
+        || document.querySelector('.application-main header h1');
       break;
 
     case 'IKEA': e = document.querySelector('h1'); break;
@@ -187,7 +197,7 @@ function main() {
   } else {
     const result = formatResult(title);
 
-    console.debug(`[${GM_info.script.name}][main] result:`, result);
+    // console.debug(`[${GM_info.script.name}][main] result:`, result);
     copyToClipboard(result);
   }
 }
