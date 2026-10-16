@@ -487,8 +487,8 @@ function formatPrice(price) {
 
   if (price) {
     price = price
-      .replace(',', '.')
-      .replace('&nbsp;', '')
+      .replaceAll(',', '.')
+      .replaceAll('&nbsp;', '')
       .replace(/\s/, '')
       .trim();
 
