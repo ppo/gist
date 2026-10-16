@@ -1,4 +1,4 @@
-_VERSION = '261011.01';
+_VERSION = '261016.01';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -531,7 +531,7 @@ function getCleanUrl(search=false) {
 
   switch (KNOWN_SITE) {
     case 'AMAZON':  urlStr = amazon_getCleanUrl(); break;
-    case 'YOUTUBE': urlStr = youtube_getVideoUrl(); break;
+    case 'YOUTUBE': urlStr = youtube_getVideoData().url; break;
     default:
       if (KNOWN_SITE_CONFIG.features & F_URL_SEARCH) url.search = '';
   }
@@ -863,90 +863,123 @@ function amazon_getProductId(location) {
 
 // YOUTUBE -----------------------------------------------------------------------------------------
 
-function youtube_getChannelInfo() {
-  console.debug('[Utils][youtube_getChannelInfo] called');
+function youtube_getShortVideoUrl(videoId) {
+  // console.debug('[Utils][youtube_getShortVideoUrl] called');
 
-  const e = document.querySelector('#owner .ytd-channel-name a')
-    || document.querySelector('#owner #attributed-channel-name a');
-
-  const channelInfo = { name: e.textContent.trim(), url: e.href };
-
-  console.debug('[Utils][youtube_getChannelInfo] return:', channelInfo);
-  return channelInfo
+  return `https://youtu.be/${videoId}`;
 }
 
 
-function youtube_getDate() {
-  console.debug('[Utils][youtube_getDate] called');
+function youtube_toShortVideoUrl(url) {
+  // console.debug('[Utils][youtube_toShortVideoUrl] called');
 
-  let e, value;
-  try {
-    e = document.querySelector('#info-strings yt-formatted-string.ytd-video-primary-info-renderer');
-    value = e.textContent.replace('Premiered', '').trim();
-  } catch {
-    value = null;
+  url = initUrl(url);
+  let shortUrl = null;
+
+  const match = url.match(RE_YOUTUBE_VIDEO_ID);
+  if (match) {
+    const videoId = match[2];
+    shortUrl = youtube_getShortVideoUrl(videoId);
+  } else {
+    console.error('[Utils][youtube_toShortVideoUrl] Not a video URL', url);
   }
 
-  if (!value) {
-    e = document.querySelector('meta[itemprop="datePublished"]');
-    value = e.getAttribute('content');
-  }
-
-  const date = value ? strToDate(value) : null;
-
-  console.debug('[Utils][youtube_getDate] return:', date);
-  return date;
+  console.debug('[Utils][youtube_toShortVideoUrl] return:', shortUrl);
+  return shortUrl;
 }
 
 
-function youtube_getDuration() {
-  console.debug('[Utils][youtube_getDuration] called');
+function youtube_cleanDescription(description) {
+  // console.debug('[Utils][youtube_cleanDescription] called');
 
-  const e = document.querySelector('ytd-player .ytp-time-duration');
-  const duration = e?.textContent.trim();
-
-  console.debug('[Utils][youtube_getDuration] return:', duration);
-  return duration;
+  return description.trim();
 }
 
 
-function youtube_getTitle() {
-  console.debug('[Utils][youtube_getTitle] called');
+function youtube_cleanTitle(title) {
+  // console.debug('[Utils][youtube_cleanTitle] called');
 
-  const e = document.querySelector('ytd-watch-metadata #title h1 yt-formatted-string');
-  const title = e?.textContent.replace(/ +/g, s => ' ').trim(); // Remove multiple spaces.
-
-  console.debug('[Utils][youtube_getTitle] return:', title);
+  title = cleanString(title);
+  title = convertUpperCaseWords(title);
   return title;
 }
 
-function youtube_getVideoUrl(location) {
-  console.debug('[Utils][youtube_getVideoUrl] called');
+var youtube_player = null;
+var youtube_videoData = null;
 
-  if (!location) location = window.location;
+function youtube_getVideo() {
+  console.debug('[Utils][youtube_getVideo] called');
+  console.debug('[Utils][youtube_getVideo] lazy loading:', youtube_player, youtube_videoData);
 
-  const url = new URL('https://youtu.be');
-
-  const match = location.href.match(RE_YOUTUBE_VIDEO_ID);
-  if (match) {
-    url.pathname = match[2];
-    console.debug('[Utils][youtube_getVideoUrl] match:', match);
-  } else {
-    const e = document.querySelector('ytd-watch-metadata');
-    url.pathname = e.getAttribute('video-id').trim();
-    console.debug('[Utils][youtube_getVideoUrl] use video-id:', e);
+  if (!youtube_player) youtube_player = document.getElementById('movie_player');
+  if (!youtube_player) {
+    console.error('[Utils][youtube_getVideo] No video player', youtube_player);
+    return;
   }
 
-  const videoUrl = url.pathname === '/' ? null : url.toString();
+  const data = youtube_player.getPlayerResponse();
+  console.debug('[Utils][youtube_getVideo] data:', data);
 
-  console.debug('[Utils][youtube_getVideoUrl] return:', videoUrl);
-  return videoUrl;
+  const video = {
+    player: youtube_player,
+    data,
+    videoId: data.videoDetails.videoId,
+    videoDetails: data.videoDetails,  // Alternative: `player.getVideoData()`.
+    microformat: data.microformat?.playerMicroformatRenderer || {},
+    thumbnails: data.microformat?.thumbnail?.thumbnails || [],
+  };
+
+  console.debug('[Utils][youtube_getVideo] return:', video);
+  return video;
 }
 
 
-function youtube_isVideoPage(location) {
-  if (!location) location = window.location;
-  return RE_YOUTUBE_VIDEO_ID.test(location.href);
+function youtube_getVideoData() {
+  console.debug('[Utils][youtube_getVideoData] called');
+  console.debug('[Utils][youtube_getVideoData] lazy loading:', youtube_player, youtube_videoData);
+
+  if (youtube_videoData) {
+    console.debug('[Utils][youtube_getVideoData] Use lazy:', youtube_videoData);
+    return youtube_videoData;
+  }
+
+  const video = youtube_getVideo();
+  if (!video) {
+    console.debug('[Utils][youtube_getVideoData] youtube_getVideo():', video);
+    return;
+  }
+
+  const data = {
+    id: video.videoId,
+    url: youtube_getShortVideoUrl(video.videoId),
+    title: youtube_cleanTitle(video.videoDetails.title),
+    description: youtube_cleanDescription(video.videoDetails.shortDescription),
+    date: new Date(video.microformat.publishDate),
+    channel: {
+      name: video.videoDetails.author,
+      url: cleanUrl(video.microformat.ownerProfileUrl),
+    },
+    duration: Number(video.videoDetails.lengthSeconds),  // In seconds.
+    currentTime: Math.floor(video.player.getCurrentTime()),  // In seconds.
+      // Alternative: `document.querySelector('video').currentTime`.
+    // thumbnail: video.thumbnails ? video.thumbnails[0].url : null,  // Format: `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`.
+    humanized: {},  // Defined below.
+  };
+
+  data.humanized.date = formatDateTime('compact-date', data.date) || '?';
+  data.humanized.duration = formatDuration(data.duration);
+
+  console.debug('[Utils][youtube_getVideoData] return:', data);
+  youtube_videoData = data;
+  return data;
+}
+
+
+function youtube_isVideoPage(url) {
+  // console.debug('[Utils][youtube_isVideoPage] called');
+
+  url = initUrl(url);
+  return RE_YOUTUBE_VIDEO_ID.test(url);
 }
 
 

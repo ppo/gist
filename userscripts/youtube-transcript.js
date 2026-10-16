@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      261015.01
+// @version      261016.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
-// @match        *://www.youtube.com/*
+// @match        *://www.youtube.com/watch*
 // @run-at       document-idle
 // @grant        GM_registerMenuCommand
 // @grant        GM_setClipboard
@@ -52,10 +52,18 @@ const SELECTOR_SEGMENTS = [
 const SELECTOR_ELEMENTS = [...SELECTOR_HEADINGS, ...SELECTOR_SEGMENTS].join(', ');
 const IS_HEADING_SELECTOR = SELECTOR_HEADINGS.join(', ');
 
+const ANNOTATIONS = [
+  'music',
+  'musique',
+  'panting',
+  'sighs',
+  'sighs and gasps',
+  'snorts',
+  'applause',
+];
 const TRANSCRIPT_REPLACEMENTS = [
   [ /[  \t]+/g, ' ' ],
-  [ / ?\[(music|musique)\] ?/gi, ' ' ],
-  [ / ?\[(panting|sighs|sighs and gasps|snorts)\] ?/gi, ' ' ],
+  [ new RegExp(`\\s*\\[(${ANNOTATIONS.join('|')})\\]\\s*`, 'gi'), ' ' ],
 ];
 
 
@@ -64,26 +72,26 @@ const TRANSCRIPT_REPLACEMENTS = [
 function processData(elem) {
   console.debug(`[${GM_info.script.name}][processData] called; elem:`, elem);
 
-  const videoUrl = youtube_getVideoUrl();
-  const channel = youtube_getChannelInfo();
-  const title = convertUpperCaseWords(youtube_getTitle());
-  const ytDate = youtube_getDate();
-  const date = formatDateTime('date', ytDate) || 'null';
-  const compactDate = formatDateTime('compact-date', ytDate);
-  const duration = youtube_getDuration();
+  const data = youtube_getVideoData();
+  const date = formatDateTime('date', data.date) || 'null';
+  const compactDate = formatDateTime('compact-date', data.date);
 
   let transcript = '';
   let isNewChapter = true;
 
+  // Process transcript DOM elements.
   const container = document.querySelector(SELECTOR_CONTAINER);
   container.querySelectorAll(SELECTOR_ELEMENTS).forEach(elem => {
     const content = elem.textContent.trim();
     if (!content) return;
 
+    // Append heading.
     if (elem.matches(IS_HEADING_SELECTOR)) {
       if (transcript.length > 0) transcript += '\n\n';
       transcript += `# ${content}\n\n`;
       isNewChapter = true;
+
+    // Append text segment.
     } else {
       if (!isNewChapter) transcript += ' ';
       transcript += content;
@@ -91,23 +99,25 @@ function processData(elem) {
     }
   });
 
+  // Clean transcript.
   transcript = replaceMap(transcript, TRANSCRIPT_REPLACEMENTS);
+
   if (!transcript) {
     alert('Empty transcript!');
     return;
   }
 
-  const filename = cleanFilename(`${channel.name} - ${title}.${compactDate}.md`);
+  const filename = cleanFilename(`${data.channel.name} - ${data.title}.${compactDate}.md`);
 
   const result = `${filename}
 ---
-url: ${videoUrl}
-title: ${JSON.stringify(title)}
+url: ${data.url}
+title: ${JSON.stringify(data.title)}
 date: ${date}
-duration: ${duration}
+duration: ${data.humanized.duration}
 channel:
-  name: ${JSON.stringify(channel.name)}
-  url: ${channel.url}
+  name: ${JSON.stringify(data.channel.name)}
+  url: ${data.channel.url}
 ---
 
 ${transcript}

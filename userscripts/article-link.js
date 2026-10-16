@@ -87,7 +87,7 @@ function getDate() {
   let dt;
 
   switch (KNOWN_SITE) {
-    case 'YOUTUBE': dt = youtube_getDate(); break;
+    case 'YOUTUBE': dt = youtube_getVideoData().date; break;
     default:
       let e;
       e = findFirstElement(HEAD_TIME_SELECTORS, ['head']);
@@ -162,7 +162,7 @@ function getTitle() {
 
     case 'IKEA': e = document.querySelector('h1'); break;
     case 'WIKIPEDIA': e = document.querySelector('#firstHeading > span'); break;
-    case 'YOUTUBE': ttile = youtube_getTitle(); break;
+    case 'YOUTUBE': title = youtube_getVideoData().title; break;
 
     default: e = findFirstElement(HEADING_SELECTORS, NAMESPACES);
   }

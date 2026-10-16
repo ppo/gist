@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Video Link
 // @description  Create a Markdown string with information about the video, and copy it to the clipboard.
-// @version      260530.01
+// @version      261016.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -16,8 +16,7 @@
 // Userscript Manager: Violentmonkey
 
 
-// RESULT FORMAT:
-//   [video title](video url) (YYMMDD, 00:00, [channel name](channel url))
+// RESULT FORMAT: `[video title](video url) (YYMMDD, 00:00, [channel name](channel url))`
 
 
 function main() {
@@ -28,13 +27,9 @@ function main() {
     return;
   }
 
-  const videoUrl = youtube_getVideoUrl();
-  const channel = youtube_getChannelInfo();
-  const title = convertUpperCaseWords(youtube_getTitle());
-  const date = formatDateTime('compact-date', youtube_getDate()) || '?';
-  const duration = youtube_getDuration();
+  const { title, url, humanized, channel } = youtube_getVideoData();
 
-  const result = `[${title}](${videoUrl}) (${date}, ${duration}, [${channel.name}](${channel.url}))`;
+  const result = `[${title}](${url}) (${humanized.date}, ${humanized.duration}, [${channel.name}](${channel.url}))`;
 
   console.debug(`[${GM_info.script.name}][main] result:`, result);
   copyToClipboard(result);
