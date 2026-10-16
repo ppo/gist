@@ -354,7 +354,9 @@ function formatDateTime(format, value, timezone) {
   };
 
   // Format the date
-  return actualFormat.split('').map(char => formatMap[char] || char).join('');
+  const formatted = actualFormat.split('').map(char => formatMap[char] || char).join('');
+
+  return formatted;
 }
 
 
@@ -378,7 +380,10 @@ function getTimezoneOffset(value) {
   const absOffset = Math.abs(offset);
   const offsetHours = String(Math.floor(absOffset / 60)).padStart(2, '0');
   const offsetMinutes = String(absOffset % 60).padStart(2, '0');
-  return `${sign}${offsetHours}${offsetMinutes}`;
+
+  const timezoneOffset = `${sign}${offsetHours}${offsetMinutes}`;
+
+  return timezoneOffset;
 }
 
 
@@ -395,6 +400,7 @@ function strToDate(value, withTime=false) {
   if (withTime && isNaN(date.getTime())) {
     throw new Error(`Value doesn't include a time: ${value}`);
   }
+
   return date;
 }
 
@@ -485,9 +491,12 @@ function formatPrice(price) {
       .replace('&nbsp;', '')
       .replace(/\s/, '')
       .trim();
+
+    // Force the symbol at the end.
     const m = price.match(/[$€]/);
     if (m) price = `${price.replace(m[0], '')}${m[0]}`;
 
+    // Prepend the date.
     price = `${price}@${getToday()}`;
   }
 
@@ -640,8 +649,13 @@ function html2markdown(html) {
 function replaceMap(text, replacements) {
   console.debug('[Utils][replaceMap] called');
 
-  if (!text) return '';
-  return replacements.reduce((t, [search, replace]) => t.replaceAll(search, replace), text);
+  let result = '';
+  if (text) {
+    result = replacements.reduce((t, [search, replace]) => t.replaceAll(search, replace), text);
+  }
+
+  // console.debug('[Utils][replaceMap] return:', result);
+  return result;
 }
 
 
