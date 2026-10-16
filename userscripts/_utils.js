@@ -85,24 +85,27 @@ function copyToClipboard(value, message=true, timeout=undefined) {
 
   if (message) {
     if (message === true) {
-      message = document.createElement('div');
+      let messageText = '';
+      const messageHtml = document.createElement('div');
 
+      messageText = 'Value copied to clipboard:';
       const heading = document.createElement('p');
       heading.style = 'font-weight: bold; margin-bottom: 1rem';
-      heading.textContent = 'Value copied to clipboard:';
-      message.appendChild(heading);
+      heading.textContent = messageText;
+      messageHtml.appendChild(heading);
 
+      messageText += `\n\n${value}`;
       const pre = document.createElement('pre');
       pre.textContent = value;
-      message.appendChild(pre);
+      messageHtml.appendChild(pre);
 
-      message = message.innerHTML;
+      // messageHtml = messageHtml.innerHTML;
     } else {
       console.debug('[Utils][copyToClipboard] message !== true:');  // , message);
     }
 
-    console.debug('[Utils][copyToClipboard] calling snackbar():');  // , message, timeout);
-    snackbar(message, timeout);
+    console.debug('[Utils][copyToClipboard] calling snackbar()');  // , messageText, timeout);
+    snackbar(messageText, messageHtml, timeout);
   } else {
     console.debug('[Utils][copyToClipboard] no message:', message);
   }
@@ -697,29 +700,34 @@ function convertUpperCaseWords(value) {
 // UI ==============================================================================================
 
 // Display a temporary message – or fixed until clicked if `!timeout`.
-function snackbar(message, timeout=2000) {
+function snackbar(messageText, messageHtml, timeout=2000) {
   console.debug('[Utils][snackbar] called');
+
+  if (KNOWN_SITE === 'YOUTUBE') {
+    alert(messageText);
+    return;
+  }
 
   try {
     // Fix for error "Requires 'TrustedHTML' assignment"
     // Source: https://github.com/Tampermonkey/tampermonkey/issues/1334#issuecomment-927277844
     window.trustedTypes.createPolicy('default', { createHTML: (string, sink) => string });
   } catch (error) {
-    console.debug('[Utils][snackbar] createPolicy() ERROR:', error);
+    console.error('[Utils][snackbar] createPolicy()', error);
   }
 
   try {
     const elem = document.createElement('div');
-    elem.innerHTML = message;
+    elem.appendChild(messageHtml);
     Object.assign(elem.style, SNACKBAR_CSS);
     document.body.appendChild(elem);
-    console.debug('[Utils][snackbar] DOM updated', elem);
+    // console.debug('[Utils][snackbar] DOM updated', elem);
 
     const destroy = () => { document.body.removeChild(elem); };
     elem.addEventListener('click', destroy);
     if (timeout) setTimeout(destroy, timeout);
   } catch (error) {
-    console.debug('[Utils][snackbar] ERROR:', error);
+    console.error('[Utils][snackbar] Cannot create', error);
   }
 }
 
