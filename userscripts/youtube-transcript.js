@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      261016.01
+// @version      261017.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/watch*
@@ -63,7 +63,7 @@ const ANNOTATIONS = [
 ];
 const TRANSCRIPT_REPLACEMENTS = [
   [ /[  \t]+/g, ' ' ],
-  [ new RegExp(`\\s*\\[(${ANNOTATIONS.join('|')})\\]\\s*`, 'gi'), ' ' ],
+  [ new RegExp(` *\\[(${ANNOTATIONS.join('|')})\\] *`, 'gi'), ' ' ],
 ];
 
 
