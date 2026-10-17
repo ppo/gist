@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      261017.01
+// @version      261017.02
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/watch*
@@ -53,13 +53,19 @@ const SELECTOR_ELEMENTS = [...SELECTOR_HEADINGS, ...SELECTOR_SEGMENTS].join(', '
 const IS_HEADING_SELECTOR = SELECTOR_HEADINGS.join(', ');
 
 const ANNOTATIONS = [
+  'applause and cheering',
+  'applause',
+  'cheering and applause',
+  'cheering',
+  'laughter and cheering',
+  'laughter',
   'music',
   'musique',
   'panting',
-  'sighs',
   'sighs and gasps',
+  'sighs and snorts',
+  'sighs',
   'snorts',
-  'applause',
 ];
 const TRANSCRIPT_REPLACEMENTS = [
   [ /[  \t]+/g, ' ' ],
