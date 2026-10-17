@@ -1,4 +1,4 @@
-_VERSION = '261017.01';
+_VERSION = '261017.02';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -84,9 +84,11 @@ function copyToClipboard(value, message=true, timeout=undefined) {
   }
 
   if (message) {
+    let messageText = '';
+    let messageHtml = null;
+
     if (message === true) {
-      let messageText = '';
-      const messageHtml = document.createElement('div');
+      messageHtml = document.createElement('div');
 
       messageText = 'Value copied to clipboard:';
       const heading = document.createElement('p');
@@ -101,6 +103,7 @@ function copyToClipboard(value, message=true, timeout=undefined) {
 
       // messageHtml = messageHtml.innerHTML;
     } else {
+      messageText = message;
       console.debug('[Utils][copyToClipboard] message !== true:');  // , message);
     }
 
@@ -702,7 +705,10 @@ function replaceMap(text, replacements) {
 
   let result = '';
   if (text) {
-    result = replacements.reduce((t, [search, replace]) => t.replaceAll(search, replace), text);
+    result = replacements.reduce(
+      (t, [search, replace]) => t.replaceAll(search, replace),
+      text
+    );
   }
 
   // console.debug('[Utils][replaceMap] return:', result);
@@ -783,7 +789,12 @@ function snackbar(messageText, messageHtml, timeout=2000) {
 
   try {
     const elem = document.createElement('div');
-    elem.appendChild(messageHtml);
+    if (messageHtml) {
+      elem.appendChild(messageHtml);
+    } else {
+      elem.innerText = messageText;
+    }
+
     Object.assign(elem.style, SNACKBAR_CSS);
     document.body.appendChild(elem);
     // console.debug('[Utils][snackbar] DOM updated', elem);

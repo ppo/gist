@@ -64,6 +64,7 @@ const ANNOTATIONS = [
 const TRANSCRIPT_REPLACEMENTS = [
   [ /[  \t]+/g, ' ' ],
   [ new RegExp(` *\\[(${ANNOTATIONS.join('|')})\\] *`, 'gi'), ' ' ],
+  [ / +\n/g, '\n' ],  // Trim lines. Note: Keep as last replacement.
 ];
 
 
