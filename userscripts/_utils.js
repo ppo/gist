@@ -1,4 +1,4 @@
-_VERSION = '261016.01';
+_VERSION = '261017.01';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -23,8 +23,8 @@ var KNOWN_SITE;
 var KNOWN_SITE_CONFIG;
 
 const KEEP_UPPERCASE = [
-  '3D', 'AI', 'BMW', 'CEO', 'CNC', 'CTO', 'DCF', 'DIY', 'GPS', 'GPX', 'HQ', 'HVAC', 'IA', 'MCP',
-  'MYOG', 'OS', 'PC', 'RAG', 'RV', 'UL', 'USB', 'VW',
+  '3D', 'AI', 'BMW', 'CEO', 'CNC', 'CTO', 'DCF', 'DIY', 'GPS', 'GPX', 'HQ', 'HVAC', 'IA', 'LWB',
+  'MCP', 'MYOG', 'OS', 'PC', 'RAG', 'RV', 'SWB', 'UL', 'USB', 'VW',
 ];
 
 const RE_YOUTUBE_VIDEO_ID = /\/(watch\?v=|shorts\/)([^&]+)/;
@@ -506,7 +506,7 @@ function formatPrice(price) {
       .trim();
 
     // Force the symbol at the end.
-    const m = price.match(/[$€]/);
+    const m = price.match(/[$€£]/);
     if (m) price = `${price.replace(m[0], '')}${m[0]}`;
 
     // Prepend the date.
@@ -596,8 +596,8 @@ function cleanString(str) {
 
   return str
     .replace(/ +/g, ' ')  // Remove multiple spaces.
-    .replace(/ +([:?!])/g, '$1')  // French punctuations.
-    .replace(/([0-9]) ([€$])/g, '$1$2')  // Money symbols.
+    .replace(/ +([:?!])/g, '$1')  // No space before punctuations (rule in French).
+    .replace(/([0-9]) ([$€£])/g, '$1$2')  // No space between amount and currency symbol.
     .trim();
 }
 
