@@ -915,24 +915,21 @@ function youtube_cleanTitle(title) {
   return title;
 }
 
-var youtube_player = null;
-var youtube_videoData = null;
 
 function youtube_getVideo() {
   console.debug('[Utils][youtube_getVideo] called');
-  console.debug('[Utils][youtube_getVideo] lazy loading:', youtube_player, youtube_videoData);
 
-  if (!youtube_player) youtube_player = document.getElementById('movie_player');
-  if (!youtube_player) {
-    console.error('[Utils][youtube_getVideo] No video player', youtube_player);
+  const player = document.getElementById('movie_player');
+  if (!player) {
+    console.error('[Utils][youtube_getVideo] No video player', player);
     return;
   }
 
-  const data = youtube_player.getPlayerResponse();
+  const data = player.getPlayerResponse();
   console.debug('[Utils][youtube_getVideo] data:', data);
 
   const video = {
-    player: youtube_player,
+    player,
     data,
     videoId: data.videoDetails.videoId,
     videoDetails: data.videoDetails,  // Alternative: `player.getVideoData()`.
@@ -947,12 +944,6 @@ function youtube_getVideo() {
 
 function youtube_getVideoData() {
   console.debug('[Utils][youtube_getVideoData] called');
-  console.debug('[Utils][youtube_getVideoData] lazy loading:', youtube_player, youtube_videoData);
-
-  if (youtube_videoData) {
-    console.debug('[Utils][youtube_getVideoData] Use lazy:', youtube_videoData);
-    return youtube_videoData;
-  }
 
   const video = youtube_getVideo();
   if (!video) {
@@ -981,7 +972,6 @@ function youtube_getVideoData() {
   data.humanized.duration = formatDuration(data.duration);
 
   console.debug('[Utils][youtube_getVideoData] return:', data);
-  youtube_videoData = data;
   return data;
 }
 
