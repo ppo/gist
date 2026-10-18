@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      261017.02
+// @version      261018.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
-// @match        *://www.youtube.com/watch*
+// @match        *://www.youtube.com/*
 // @run-at       document-idle
 // @grant        GM_registerMenuCommand
 // @grant        GM_setClipboard
@@ -142,6 +142,10 @@ ${transcript}
 function main() {
   console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
 
+  if (window.location.pathname.startsWith('/shorts/')) {
+    window.location.href = youtube_toShortVideoUrl();
+    return;
+  }
   if (!window.location.pathname.startsWith('/watch')) {
     alert('This is not a YouTube "watch" video page.');
     return;
