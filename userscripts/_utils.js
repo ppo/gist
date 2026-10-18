@@ -1,4 +1,4 @@
-_VERSION = '261017.02';
+_VERSION = '261018.01';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -774,18 +774,18 @@ function convertUpperCaseWords(value) {
 function snackbar(messageText, messageHtml, timeout=2000) {
   console.debug('[Utils][snackbar] called');
 
-  if (KNOWN_SITE === 'YOUTUBE') {
-    alert(messageText);
-    return;
-  }
+  // if (KNOWN_SITE === 'YOUTUBE') {
+  //   alert(messageText);
+  //   return;
+  // }
 
-  try {
-    // Fix for error "Requires 'TrustedHTML' assignment"
-    // Source: https://github.com/Tampermonkey/tampermonkey/issues/1334#issuecomment-927277844
-    window.trustedTypes.createPolicy('default', { createHTML: (string, sink) => string });
-  } catch (error) {
-    console.error('[Utils][snackbar] createPolicy()', error);
-  }
+  // try {
+  //   // Fix for error "Requires 'TrustedHTML' assignment"
+  //   // Source: https://github.com/Tampermonkey/tampermonkey/issues/1334#issuecomment-927277844
+  //   window.trustedTypes.createPolicy('default', { createHTML: (string, sink) => string });
+  // } catch (error) {
+  //   console.error('[Utils][snackbar] createPolicy()', error);
+  // }
 
   try {
     const elem = document.createElement('div');
