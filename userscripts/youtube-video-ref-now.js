@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         YouTube Video ©@
+// @name         YouTube Video Reference
 // @description  Create a Markdown link to the video at current time, and copy it to the clipboard.
-// @version      261016.01
+// @version      261018.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/watch*
@@ -21,11 +21,6 @@
 
 function main() {
   console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
-
-  if (!youtube_isVideoPage()) {
-    alert('This is not a YouTube video page.');
-    return;
-  }
 
   const { channel, url, currentTime } = youtube_getVideoData();
 
