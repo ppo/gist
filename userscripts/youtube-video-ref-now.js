@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         YouTube Video Reference
+// @name         YouTube Reference
 // @description  Create a Markdown link to the video at current time, and copy it to the clipboard.
-// @version      261018.01
+// @version      261018.02
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/watch*

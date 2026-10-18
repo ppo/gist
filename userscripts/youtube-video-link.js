@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         YouTube Video Link
+// @name         YouTube Link
 // @description  Create a Markdown string with information about the video, and copy it to the clipboard.
-// @version      261016.01
+// @version      261018.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
