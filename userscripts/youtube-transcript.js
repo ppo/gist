@@ -142,10 +142,13 @@ ${transcript}
 function main() {
   console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
 
+  // Redirect Shorts page to Watch.
   if (window.location.pathname.startsWith('/shorts/')) {
     window.location.href = youtube_toShortVideoUrl();
     return;
   }
+
+  // `@match` on the whole site for SPA using fake navigation.
   if (!window.location.pathname.startsWith('/watch')) {
     alert('This is not a YouTube "watch" video page.');
     return;

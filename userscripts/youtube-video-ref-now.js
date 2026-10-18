@@ -22,6 +22,7 @@
 function main() {
   console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
 
+  // `@match` on the whole site for SPA using fake navigation.
   if (!youtube_isVideoPage()) {
     alert('This is not a YouTube video page.');
     return;
