@@ -1,4 +1,4 @@
-_VERSION = '261018.01';
+_VERSION = '261020.01';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -35,6 +35,7 @@ const RE_AMAZON_PRODUCT_ID = /\/(dp|gp\/product)\/([A-Z0-9]+)/;
 const RE_AMAZON_SEO_URL = /\/[^\/]+\/(dp|gp\/product)\/[A-Z0-9]+\//;
 
 const IMDB_UNCLEAN_PARAM = 'ref_';
+const RE_IMDB_MOVIE_ID = /\/title\/([^\/]+)/;
 
 const RE_YOUTUBE_VIDEO_ID = /\/(watch\?v=|shorts\/)([^&]+)/;
 

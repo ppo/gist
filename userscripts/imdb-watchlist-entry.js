@@ -4,8 +4,10 @@
 // @version      260703.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
-// @match        *://www.imdb.com/*
+// @match        *://www.imdb.com/title/*
 // @run-at       document-idle
+// @grant        GM_registerMenuCommand
+// @grant        GM_setClipboard
 // @require      https://raw.githubusercontent.com/ppo/gist/main/userscripts/_utils.js
 // @downloadURL  https://raw.githubusercontent.com/ppo/gist/main/userscripts/imdb-watchlist-entry.js
 // @homepageURL  https://github.com/ppo/gist/blob/main/userscripts/imdb-watchlist-entry.js
@@ -19,15 +21,22 @@
 function main() {
   console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
 
-  const url = getCleanUrl();
-  const title = document.querySelector('h1')?.textContent.trim();
-  const year = document.querySelector('h1+ul a[href*="releaseinfo"]')?.textContent.trim();
+  const urlStr = initUrl();
+  const match = urlStr.match(RE_IMDB_MOVIE_ID);
+  const movieId = match ? match[1] : null;
+
+  const header = document.querySelector('section.ipc-page-section h1').parentElement;
+  const title = header.querySelector('h1')?.textContent.trim();
+  const originalTitle = header.querySelector('h1 + div')?.textContent.replace('Original title: ', '').trim();
+  const year = document.querySelector('ul a[href*="/releaseinfo/"]')?.textContent.trim();
+
   const slug = slugify(`${title}-${year}`);
-  const result = `{ slug: '${slug}', imdb: '${url}' },`;
+  const result = `{ slug: '${slug}', imdbId: ${JSON.stringify(movieId)} },`
+      + (originalTitle ? `  // ${originalTitle}` : '');
 
   console.debug(`[${GM_info.script.name}] result:`, result);
   copyToClipboard(result);
 }
 
 
-(function() { main(); })();
+GM_registerMenuCommand(GM_info.script.name, main);
