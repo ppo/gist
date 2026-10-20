@@ -33,7 +33,7 @@ function main() {
   // Note: If current URL is changed, the page is reloaded.
   if (mustCleanCurrentUrl()) {
     console.debug(`[${GM_info.script.name}][main] mustCleanCurrentUrl === true`);
-    window.location = amazon_getCleanUrl(window.location);
+    window.location.href = amazon_getCleanUrl();
   } else {
     console.debug(`[${GM_info.script.name}][main] mustCleanCurrentUrl === false`);
     document.querySelectorAll('a[href*="/dp/"], a[href*="/gp/product/"]').forEach(elem => {

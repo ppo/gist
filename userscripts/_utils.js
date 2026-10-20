@@ -27,14 +27,16 @@ const KEEP_UPPERCASE = [
   'MCP', 'MYOG', 'OS', 'PC', 'RAG', 'RV', 'SWB', 'UL', 'USB', 'VW',
 ];
 
-const RE_YOUTUBE_VIDEO_ID = /\/(watch\?v=|shorts\/)([^&]+)/;
-
 const AMAZON_PRODUCT_ID_REGEXES = [
   /\/dp\/([A-Z0-9]+)/,
   /\/gp\/product\/([A-Z0-9]+)/,
 ];
 const RE_AMAZON_PRODUCT_ID = /\/(dp|gp\/product)\/([A-Z0-9]+)/;
 const RE_AMAZON_SEO_URL = /\/[^\/]+\/(dp|gp\/product)\/[A-Z0-9]+\//;
+
+const IMDB_UNCLEAN_PARAM = 'ref_';
+
+const RE_YOUTUBE_VIDEO_ID = /\/(watch\?v=|shorts\/)([^&]+)/;
 
 const SNACKBAR_CSS = {
   all: 'initial',
@@ -523,23 +525,26 @@ function formatPrice(price) {
 
 // GETTERS =========================================================================================
 
-function getCleanUrl(search=false) {
+function getCleanUrl(urlStr=undefined, search=false) {
   console.debug('[Utils][getCleanUrl] called');
 
-  let urlStr;
-  const url = new URL(window.location.href);
+  let cleanUrl;
+  urlStr = initUrl(urlStr);
+  const url = new URL(urlStr);
+  const params = new URLSearchParams(url.search);
+
   url.hash = '';
   if (search) url.search = '';
-
+  if (KNOWN_SITE_CONFIG.features & F_URL_SEARCH) url.search = '';
 
   switch (KNOWN_SITE) {
-    case 'AMAZON':  urlStr = amazon_getCleanUrl(); break;
-    case 'YOUTUBE': urlStr = youtube_getVideoData().url; break;
-    default:
-      if (KNOWN_SITE_CONFIG.features & F_URL_SEARCH) url.search = '';
+    case 'AMAZON':  cleanUrl = amazon_getCleanUrl(); break;
+    case 'IMDB':    params.delete(IMDB_UNCLEAN_PARAM); break;
+    case 'YOUTUBE': cleanUrl = youtube_getVideoData().url; break;
   }
 
-  const cleanUrl = urlStr ? urlStr : url.toString();
+  if (!search && url.search) url.search = params.toString();
+  if (!cleanUrl) cleanUrl = url.toString();
 
   // console.debug('[Utils][getCleanUrl] return:', cleanUrl);
   return cleanUrl;
@@ -841,12 +846,11 @@ function initKnownSite() {
 
 // AMAZON ------------------------------------------------------------------------------------------
 
-function amazon_getCleanUrl(location) {
+function amazon_getCleanUrl(urlStr) {
   console.debug('[Utils][amazon_getCleanUrl] called');
 
-  if (!location) location = window.location;
-
-  const url = new URL(location.href);
+  urlStr = initUrl(urlStr);
+  const url = new URL(urlStr);
   url.hash = '';
   url.search = '';
 
@@ -855,16 +859,18 @@ function amazon_getCleanUrl(location) {
 
   const cleanUrl = url.toString();
 
-  // console.debug('[Utils][getCleanUrl] return:', cleanUrl);
+  // console.debug('[Utils][amazon_getCleanUrl] return:', cleanUrl);
   return cleanUrl;
 }
 
 
-function amazon_getProductId(location) {
+function amazon_getProductId(urlStr) {
   console.debug('[Utils][amazon_getProductId] called');
 
-  if (!location) location = window.location;
-  match = location.pathname.match(RE_AMAZON_PRODUCT_ID);
+  urlStr = initUrl(urlStr);
+  const url = new URL(urlStr);
+
+  match = url.pathname.match(RE_AMAZON_PRODUCT_ID);
   const productId = match ? match[2] : null;
 
   // console.debug('[Utils][amazon_getProductId] return:', productId);
@@ -881,18 +887,18 @@ function youtube_getShortVideoUrl(videoId) {
 }
 
 
-function youtube_toShortVideoUrl(url) {
+function youtube_toShortVideoUrl(urlStr) {
   // console.debug('[Utils][youtube_toShortVideoUrl] called');
 
-  url = initUrl(url);
+  urlStr = initUrl(urlStr);
   let shortUrl = null;
 
-  const match = url.match(RE_YOUTUBE_VIDEO_ID);
+  const match = urlStr.match(RE_YOUTUBE_VIDEO_ID);
   if (match) {
     const videoId = match[2];
     shortUrl = youtube_getShortVideoUrl(videoId);
   } else {
-    console.error('[Utils][youtube_toShortVideoUrl] Not a video URL', url);
+    console.error('[Utils][youtube_toShortVideoUrl] Not a video URL', urlStr);
   }
 
   console.debug('[Utils][youtube_toShortVideoUrl] return:', shortUrl);
