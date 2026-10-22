@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IMDb Watchlist Entry
 // @description  Generate entry for my watchlist.
-// @version      260703.01
+// @version      261022.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.imdb.com/title/*
@@ -31,7 +31,7 @@ function main() {
   const year = document.querySelector('ul a[href*="/releaseinfo/"]')?.textContent.trim();
 
   const slug = slugify(`${title}-${year}`);
-  const result = `{ slug: '${slug}', imdbId: ${JSON.stringify(movieId)} },`
+  const result = `{ slug: '${slug}', imdbId: ${JSON.stringify(movieId).replaceAll('"', "'")} },`
       + (originalTitle ? `  // ${originalTitle}` : '');
 
   console.debug(`[${GM_info.script.name}] result:`, result);
