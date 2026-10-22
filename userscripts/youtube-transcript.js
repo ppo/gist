@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      261018.01
+// @version      261022.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -115,8 +115,11 @@ function processData(elem) {
   }
 
   const filename = cleanFilename(`${data.channel.name} - ${data.title}.${compactDate}.md`);
+  const videoFilename = filename.replace(`.${compactDate}.md`, ` [${data.id}].${compactDate}.mp4`);
+  const videoDownload = `youtube-download "${data.id}" "${videoFilename}"`;
 
   const result = `${filename}
+${videoDownload}
 ---
 url: ${data.url}
 title: ${JSON.stringify(data.title)}
