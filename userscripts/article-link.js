@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      261016.01
+// @version      261023.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -165,9 +165,15 @@ function getTitle() {
       break;
 
     case 'GITHUB':
-      e = document.querySelector('article .markdown-heading h1.heading-element')
-        || document.querySelector('#repo-title-component a')
-        || document.querySelector('.application-main header h1');
+      title = window.location.pathname.slice(1);
+      // e = document.querySelector('article .markdown-heading h1.heading-element')
+      //   || document.querySelector('#repo-title-component a')
+      //   || document.querySelector('.application-main header h1');
+      // const readmeTitle = e.textContent.trim();
+      // const userRepo = window.location.pathname.slice(1);
+      // title = userRepo.toLocaleLowerCase().endsWith(readmeTitle.toLocaleLowerCase())
+      //   ? userRepo
+      //   : readmeTitle;
       break;
 
     case 'IKEA': e = document.querySelector('h1'); break;
