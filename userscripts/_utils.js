@@ -1,4 +1,4 @@
-_VERSION = '261020.01';
+_VERSION = '261025.01';
 console.debug(`[Utils v${_VERSION}] Loaded`);
 
 
@@ -728,9 +728,10 @@ function slugify(value) {
 
   return value
     .toString()
+    .normalize('NFKD').replace(/\p{Diacritic}/gu, '')  // Normalize
     .toLowerCase()
     .trim()
-    .replace(/\s+/g, '-')      // Replace spaces with -
+    .replace(/[\s']+/g, '-')   // Replace whitespaces and ' with -
     .replace(/&/g, '-and-')    // Replace & with 'and'
     .replace(/[^\w\-]+/g, '')  // Remove all non-word chars except -
     .replace(/\-\-+/g, '-');   // Replace multiple - with single -
