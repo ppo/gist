@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      261026.01
+// @version      261101.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -57,6 +57,7 @@ const ANNOTATIONS = [
   'applause',
   'cheering and applause',
   'cheering',
+  'clears throat',
   'laughter and cheering',
   'laughter',
   'music',
