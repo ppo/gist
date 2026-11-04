@@ -1,6 +1,6 @@
 const DEBUG = false;
 
-_VERSION = '261105.00';
+_VERSION = '261105.01';
 _DEBUG_PREFIX = `[Utils v${_VERSION}]`
 
 console.debug(`${_DEBUG_PREFIX} Loaded`);
