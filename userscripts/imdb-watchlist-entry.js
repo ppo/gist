@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IMDb Watchlist Entry
 // @description  Generate entry for my watchlist.
-// @version      261022.01
+// @version      261105.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.imdb.com/title/*
@@ -19,7 +19,7 @@
 // MAIN ============================================================================================
 
 function main() {
-  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
+  debug('main');
 
   const urlStr = initUrl();
   const match = urlStr.match(RE_IMDB_MOVIE_ID);
@@ -34,7 +34,7 @@ function main() {
   const result = `{ slug: '${slug}', imdbId: ${JSON.stringify(movieId).replaceAll('"', "'")} },`
       + (originalTitle ? `  // ${originalTitle}` : '');
 
-  console.debug(`[${GM_info.script.name}] result:`, result);
+  debug('main', null, {result});
   copyToClipboard(result);
 }
 

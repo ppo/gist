@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Link
 // @description  Create a Markdown string with information about the article, and copy it to the clipboard.
-// @version      261023.01
+// @version      261105.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*/*
@@ -47,15 +47,15 @@ const HEAD_TIME_SELECTORS = [
 // HELPERS =========================================================================================
 
 function formatResult(title) {
-  console.debug(`[${GM_info.script.name}][formatResult] called; title:`, title);
+  debug('formatResult', undefined, title);
 
   let infos = [];  // Falsy values are removed in `formatInfo()`.
   let prefix = '';
   let result = '';
 
   const url = getCleanUrl();
-  if (KNOWN_SITE_CONFIG.features & F_DATE)   infos.push(getDate());
-  if (KNOWN_SITE_CONFIG.features & F_PRICE)  infos.push(getPrice());
+  if (KNOWN_SITE_CONFIG.features & F_DATE)  infos.push(getDate());
+  if (KNOWN_SITE_CONFIG.features & F_PRICE) infos.push(getPrice());
   if (KNOWN_SITE_CONFIG.prefix) {
     const sitePrefix = KNOWN_SITE_CONFIG.prefix === true
       ? KNOWN_SITE_CONFIG.name
@@ -85,13 +85,13 @@ function formatResult(title) {
   if (!result) result = `[${title}](${url})`;
   result = `${prefix}${result}${suffix}`;
 
-  console.debug(`[${GM_info.script.name}][formatResult] return:`, result);
+  debug('formatResult', 'return', result);
   return result;
 }
 
 
 function getDate() {
-  console.debug(`[${GM_info.script.name}][getDate] called`);
+  debug('getDate');
 
   let dt;
 
@@ -111,13 +111,13 @@ function getDate() {
 
   dt = dt ? formatDateTime('compact-date', dt) : null;
 
-  console.debug(`[${GM_info.script.name}][getDate] return:`, dt);
+  debug('getDate', 'return', dt);
   return dt;
 }
 
 
 function getPrice() {
-  console.debug(`[${GM_info.script.name}][getPrice] called`);
+  debug('getPrice');
 
   let e;
   let price;
@@ -142,13 +142,13 @@ function getPrice() {
 
   price = price ? formatPrice(price) : null;
 
-  console.debug(`[${GM_info.script.name}][getPrice] return:`, price);
+  debug('getPrice', 'return', price);
   return price;
 }
 
 
 function getTitle() {
-  console.debug(`[${GM_info.script.name}][getTitle] called`);
+  debug('getTitle');
 
   let e;
   let title;
@@ -186,7 +186,7 @@ function getTitle() {
   if (!title && e) title = e.textContent.trim();
   if (!title) title = null;
 
-  console.debug(`[${GM_info.script.name}][getTitle] return:`, title);
+  debug('getTitle', 'return', title);
   return title;
 }
 
@@ -194,16 +194,17 @@ function getTitle() {
 // MAIN ============================================================================================
 
 function main() {
-  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
+  debug('main');
 
-  const title = getSelectedText() || getTitle();
+  let title = getSelectedText();
+  if (!title) title = getTitle();
   if (!title) {
-    console.debug(`[${GM_info.script.name}][main] title not found`);
+    debug('main', 'title not found');
     alert('Article title not found. Select it.');
   } else {
     const result = formatResult(title);
 
-    // console.debug(`[${GM_info.script.name}][main] result:`, result);
+    // debug('main', null, {result});
     copyToClipboard(result);
   }
 }

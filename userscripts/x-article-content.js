@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         X Article Content
 // @description  Copy X Article content.
-// @version      260530.01
+// @version      261105.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://x.com/*/status/*
@@ -20,7 +20,7 @@
 // MAIN ============================================================================================
 
 function main() {
-  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
+  debug('main');
 
   const article = document.querySelector('article')
   const userElem = article.querySelectorAll('[data-testid="User-Name"] a');
@@ -53,7 +53,7 @@ user:
 ${content}
 `;
 
-  console.debug(`[${GM_info.script.name}][main] result:`, result);
+  debug('main', null, {result});
   copyToClipboard(result);
 }
 

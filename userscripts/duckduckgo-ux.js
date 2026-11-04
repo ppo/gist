@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Duck Duck Go UX
 // @description  Improve Duck Duck Go UX.
-// @version      260530.01
+// @version      261105.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://duckduckgo.com/*
@@ -24,7 +24,7 @@ var numChecks = 0;
 // HELPERS =========================================================================================
 
 function checkAds() {
-  console.debug(`[${GM_info.script.name}][checkAds] called`);
+  debug('checkAds');
 
   numChecks++;
   const ads = document.querySelectorAll('[data-layout="ad"]');
@@ -37,10 +37,10 @@ function checkAds() {
 
 
 function hideAds(ads) {
-  console.debug(`[${GM_info.script.name}][hideAds] called; ads:`, ads);
+  debug('hideAds', undefined, ads);
 
   ads.forEach(e => {
-    console.debug(`[${GM_info.script.name}][hideAds] hiding`, e);
+    debug('hideAds', 'hiding', e);
     e.setAttribute('hidden', true);
   });
 }
@@ -49,7 +49,7 @@ function hideAds(ads) {
 // MAIN ============================================================================================
 
 function main() {
-  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
+  debug('main');
 
   checkAds();
 }

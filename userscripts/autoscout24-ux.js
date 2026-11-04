@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AutoScout24 UX
 // @description
-// @version      261002.01
+// @version      261105.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://*autoscout24.tld/*
@@ -17,7 +17,7 @@
 // HELPERS =========================================================================================
 
 function processList() {
-  console.debug(`[${GM_info.script.name}][processList] called`);
+  debug('processList');
 
   hideAll([
     'article[data-relevance_adjustment="sponsored"]',
@@ -27,7 +27,7 @@ function processList() {
 
 
 function processDetail() {
-  console.debug(`[${GM_info.script.name}][processDetail] called`);
+  debug('processDetail');
 
   hideAll([
     '[class^="AdTop"] + hr',
@@ -54,7 +54,7 @@ function processDetail() {
 // MAIN ============================================================================================
 
 function main() {
-  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
+  debug('main');
 
   if (window.location.pathname.startsWith('/fr/lst/')) processList();
   else if (window.location.pathname.startsWith('/fr/offres/')) processDetail();

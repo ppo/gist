@@ -1,5 +1,9 @@
-_VERSION = '261025.01';
-console.debug(`[Utils v${_VERSION}] Loaded`);
+const DEBUG = false;
+
+_VERSION = '261105.00';
+_DEBUG_PREFIX = `[Utils v${_VERSION}]`
+
+console.debug(`${_DEBUG_PREFIX} Loaded`);
 
 
 // Features for known sites.
@@ -59,6 +63,46 @@ const SNACKBAR_CSS = {
 };
 
 
+// GENERAL =========================================================================================
+
+function debug(origin, label=undefined, args=undefined) {
+  if (!DEBUG) return;
+
+  if (label === undefined) label = 'called';
+  if (label === null) label = '';
+  if (label && args) label += ':';
+  const message = `[${GM_info.script.name} v${GM_info.script.version}][${origin}] ${label || ''}`.trim();
+
+  const displayType = args
+  ? (args.constructor.name === 'Object'
+    ? (Object.keys(args).length === 1
+    ? 'single-key-value'
+    : 'grouped-key-value')
+    : 'single-value')
+    : 'no-args';
+
+    switch (displayType) {
+      case 'single-key-value':
+        const [key, value] = Object.entries(args)[0];
+        console.debug(`${message} ${key} =`, value);
+        break;
+      case 'grouped-key-value':
+        console.group(message);
+        for (const [key, value] of Object.entries(args)) {
+          console.debug(`${key} =`, value);
+        }
+        console.groupEnd();
+        break;
+      case 'single-value':
+        console.debug(message, args);
+        break;
+      case 'no-args':
+        console.debug(message);
+        break;
+    }
+}
+
+
 // BROWSER FEATURES ================================================================================
 
 /**
@@ -70,12 +114,12 @@ const SNACKBAR_CSS = {
  * @param {integer} timeout - Display duration of the snackbar.
 */
 function copyToClipboard(value, message=true, timeout=undefined) {
-  console.debug('[Utils][copyToClipboard] called');
+  debug('copyToClipboard', undefined, {value, message, timeout});
 
   try {
     GM_setClipboard(value);
   } catch (error) {
-    console.debug('[Utils][copyToClipboard] `GM_setClipboard()` not availabe, use fallback code.');
+    debug('copyToClipboard', '"GM_setClipboard()" not availabe, use fallback code');
 
     const e = document.createElement('textarea');
     e.value = value;
@@ -107,13 +151,13 @@ function copyToClipboard(value, message=true, timeout=undefined) {
       // messageHtml = messageHtml.innerHTML;
     } else {
       messageText = message;
-      console.debug('[Utils][copyToClipboard] message !== true:');  // , message);
+      debug('copyToClipboard', 'message !== true');
     }
 
-    console.debug('[Utils][copyToClipboard] calling snackbar()');  // , messageText, timeout);
+    debug('copyToClipboard', 'calling snackbar()');
     snackbar(messageText, messageHtml, timeout);
   } else {
-    console.debug('[Utils][copyToClipboard] no message:', message);
+    debug('copyToClipboard', 'no message');
   }
 }
 
@@ -126,7 +170,7 @@ function copyToClipboard(value, message=true, timeout=undefined) {
  * @param {string} [type] - MIME type (defaults to 'text/plain')
  */
 function downloadFile(content, filename, type='text/plain') {
-  console.debug('[Utils][downloadFile] called');
+  debug('downloadFile', undefined, {content, filename, type});
 
   const blob = new Blob([content], { type: `${type};charset=utf-8` });
   const url = URL.createObjectURL(blob);
@@ -146,10 +190,10 @@ function downloadFile(content, filename, type='text/plain') {
 
 
 function getSelectedText() {
-  console.debug('[Utils][getSelectedText] called');
+  debug('getSelectedText');
   const selectedText = window.getSelection().toString().trim() || null;
 
-  console.debug('[Utils][getSelectedText] return:', selectedText);
+  debug('getSelectedText', 'return', selectedText);
   return selectedText;
 }
 
@@ -169,7 +213,7 @@ function getSelectedText() {
  * @returns {string} ICS file content.
  */
 function createIcs(data, prodId='-//Generic Script//Calendar Event//EN') {
-  console.debug('[Utils][createIcs] called');
+  debug('createIcs', undefined, {data, prodId});
 
   const ESCAPE_MAP = [
     [ /\\/g, '\\\\' ],
@@ -245,7 +289,7 @@ function createIcs(data, prodId='-//Generic Script//Calendar Event//EN') {
  *   switchTimezone(new Date(), 'local') // Keep as local time (no-op)
  */
 function changeTimezone(value, timezone) {
-  console.debug('[Utils][changeTimezone] called');
+  debug('changeTimezone', undefined, {value, timezone});
 
  const date = strToDate(value, true);
 
@@ -292,7 +336,7 @@ function changeTimezone(value, timezone) {
      parseInt(partsMap.second),
    );
  } catch (error) {
-    console.debug('[Utils][changeTimezone] ERROR:', error);
+    debug('changeTimezone', 'ERROR:', error);
     throw new Error(`Unsupported timezone: ${timezone}`);
  }
 }
@@ -309,7 +353,7 @@ function changeTimezone(value, timezone) {
  * @see https://www.php.net/manual/en/datetime.format.php
  */
 function formatDateTime(format, value, timezone) {
-  console.debug('[Utils][formatDateTime] called');
+  debug('formatDateTime', undefined, {format, value, timezone});
 
   if (!value) value = new Date();
 
@@ -367,7 +411,7 @@ function formatDateTime(format, value, timezone) {
 
 
 function formatDuration(duration) {
-  console.debug('[Utils][formatDuration] called');
+  debug('formatDuration', undefined, duration);
 
   const hours = String(Math.floor(duration / 3600)).padStart(2, '0');
   const minutes = String(Math.floor(duration % 3600 / 60)).padStart(2, '0');
@@ -387,7 +431,7 @@ function formatDuration(duration) {
  * @throws {Error} When invalid time is provided.
  */
 function getTimezoneOffset(value) {
-  console.debug('[Utils][getTimezoneOffset] called');
+  debug('getTimezoneOffset', undefined, value);
 
   // Initialize date
   const date = strToDate(value, true);
@@ -413,7 +457,7 @@ function getToday() {
 
 
 function strToDate(value, withTime=false) {
-  console.debug('[Utils][strToDate] called');
+  debug('strToDate', undefined, {value, withTime});
 
   const date = value ? new Date(value) : new Date();
   if (withTime && isNaN(date.getTime())) {
@@ -428,7 +472,7 @@ function strToDate(value, withTime=false) {
 
 // DEPRECATED: Use `GM_addStyle()` – requires: `@grant GM_addStyle`
 function createCssStyle(css) {
-  console.debug('[Utils][createCssStyle] called');
+  debug('createCssStyle', undefined, css);
 
   var style = document.createElement('style');
   style.type = 'text/css';
@@ -439,7 +483,7 @@ function createCssStyle(css) {
 
 // Find the first element matching a series of selectors, located under a series of namespaces.
 function findFirstElement(selectors, namespaces) {
-  console.debug('[Utils][findFirstElement] called');
+  debug('findFirstElement', undefined, {selectors, namespaces});
 
   for (let selector of selectors) {
     for (let namespace of namespaces) {
@@ -451,21 +495,21 @@ function findFirstElement(selectors, namespaces) {
 
 
 function hideElem(elem) {
-  // console.debug('[Utils][hideElem] called');
+  // debug('hideElem', undefined, elem);
 
   if (elem) elem.style.display = 'none';
 }
 
 
 function hide(selector) {
-  // console.debug('[Utils][hide] called');
+  // debug('hide', undefined, selector);
 
   hideElem(document.querySelector(selector));
 }
 
 
 function hideAll(selectors) {
-  // console.debug('[Utils][hideAll] called');
+  // debug('hideAll', undefined, selectors);
 
   for (let selector of selectors) {
     document.querySelectorAll(selector).forEach(e => {
@@ -477,7 +521,7 @@ function hideAll(selectors) {
 
 // Usage: waitForElement('.selector', e => { … });
 function waitForElement(selector, callback, timeout=2000) {
-  console.debug('[Utils][waitForElement] called', `Selector: '${selector}'`);
+  debug('waitForElement', undefined, {selector, callback, timeout});
 
   const elem = document.querySelector(selector);
   if (elem) {
@@ -491,18 +535,18 @@ function waitForElement(selector, callback, timeout=2000) {
 // FORMATTERS ======================================================================================
 
 function formatInfo(args) {
-  // console.debug('[Utils][formatInfo] called; args:', args);
+  // debug('formatInfo', undefined, args);
 
   args = args.filter((a) => a);  // Remove falsy items
   const info = args.length > 0 ? ` (${args.join(', ')})` : '';
 
-  // console.debug('[Utils][formatInfo] return:', info);
+  // debug('formatInfo', 'return', info);
   return info;
 }
 
 
 function formatPrice(price) {
-  // console.debug('[Utils][formatPrice] called; price:', price);
+  // debug('formatPrice', undefined, price);
 
   if (price) {
     price = price
@@ -519,7 +563,7 @@ function formatPrice(price) {
     price = `${price}@${getToday()}`;
   }
 
-  // console.debug('[Utils][formatPrice] return:', price);
+  // debug('formatPrice', 'return', price);
   return price;
 }
 
@@ -527,7 +571,7 @@ function formatPrice(price) {
 // GETTERS =========================================================================================
 
 function getCleanUrl(urlStr=undefined, search=false) {
-  console.debug('[Utils][getCleanUrl] called');
+  debug('getCleanUrl', undefined, {urlStr, search});
 
   let cleanUrl;
   urlStr = initUrl(urlStr);
@@ -547,36 +591,36 @@ function getCleanUrl(urlStr=undefined, search=false) {
   if (!search && url.search) url.search = params.toString();
   if (!cleanUrl) cleanUrl = url.toString();
 
-  // console.debug('[Utils][getCleanUrl] return:', cleanUrl);
+  // debug('getCleanUrl', 'return', cleanUrl);
   return cleanUrl;
 }
 
 
 
 function getTld() {
-  // console.debug('[Utils][getTld] called');
+  // debug('getTld');
 
   const tld = window.location.origin.split('.').pop();
 
-  // console.debug('[Utils][getTld] return:', tld);
+  // debug('getTld', 'return', tld);
   return tld;
 }
 
 
 function getTldSuffix(exclude='be') {
-  // console.debug('[Utils][getTldTitle] called; exclude:', exclude);
+  // debug('getTldTitle', undefined, exclude);
 
   let tld = getTld();
   if (tld === exclude) tld = '';
   if (tld) tld = ` ${tld.toLocaleUpperCase()}`;
 
-  // console.debug('[Utils][getTldTitle] return:', tld);
+  // debug('getTldTitle', 'return', tld);
   return tld;
 }
 
 
 function initUrl(url) {
-  // console.debug('[Utils][initUrl] called; url:', url);
+  // debug('initUrl', undefined, url);
 
   return url || window.location.href;
 }
@@ -586,7 +630,7 @@ function initUrl(url) {
 
 // Clean filename string.
 function cleanFilename(value) {
-  // console.debug('[Utils][cleanFilename] called');
+  // debug('cleanFilename', undefined, value);
 
   const REPLACEMENTS = [
     [ /[‘’]/g,     "'"   ],  // Smart single quotes
@@ -601,7 +645,7 @@ function cleanFilename(value) {
 
 
 function cleanString(str) {
-  // console.debug('[Utils][cleanString] called; str:', str);
+  // debug('cleanString', undefined, str);
 
   return str
     .replace(/ +/g, ' ')  // Remove multiple spaces.
@@ -612,7 +656,7 @@ function cleanString(str) {
 
 
 function cleanUrl(url) {
-  // console.debug('[Utils][cleanUrl] called; url:', url);
+  // debug('cleanUrl', 'called:', url);
 
   return url.replace('http://', 'https://');
 }
@@ -622,7 +666,7 @@ function cleanUrl(url) {
 // ⚠️ Userscript must require Turndown before this library:
 //   @require https://cdn.jsdelivr.net/npm/turndown/dist/turndown.min.js
 function html2markdown(html) {
-  console.debug('[Utils][html2markdown] called');
+  debug('html2markdown', undefined, html);
 
   const td = new TurndownService({
     headingStyle: 'atx',       // `#` for headings (default: setext)
@@ -687,14 +731,13 @@ function html2markdown(html) {
 
 
 function html2text(html) {
-  // console.debug('[Utils][html2text] called; html', html);
-  console.debug('[Utils][html2text] called');
+  // debug('html2text', undefined, html);
 
   if (!html) return '';
   const doc = new DOMParser().parseFromString(html, 'text/html');
   const text = (doc.body.textContent || '').replace(/\s+/g, ' ').trim();
 
-  console.debug('[Utils][html2text] return:', text);
+  debug('html2text', 'return', text);
   return text;
 }
 
@@ -707,7 +750,7 @@ function html2text(html) {
  * @returns {string} Text with all replacements applied.
  */
 function replaceMap(text, replacements) {
-  // console.debug('[Utils][replaceMap] called; text', text);
+  // debug('replaceMap', undefined, {text, replacements});
 
   let result = '';
   if (text) {
@@ -717,14 +760,14 @@ function replaceMap(text, replacements) {
     );
   }
 
-  // console.debug('[Utils][replaceMap] return:', result);
+  // debug('replaceMap', 'return', result);
   return result;
 }
 
 
 // Generate a slug based on the given value.
 function slugify(value) {
-  // console.debug('[Utils][slugify] called');
+  // debug('slugify', undefined, value);
 
   return value
     .toString()
@@ -741,7 +784,7 @@ function slugify(value) {
 // Convert value in Title Case.
 // `force` lowercase each word remainder.
 function toTitleCase(value, force=false) {
-  // console.debug('[Utils][toTitleCase] called');
+  // debug('toTitleCase', undefined, {value, force});
 
   if (!value) return value;
   if (force) value = value.toLowerCase();
@@ -750,7 +793,7 @@ function toTitleCase(value, force=false) {
       word.charAt(0).toUpperCase() + word.slice(1)
     )).join(' ');
 
-  // console.debug('[Utils][toTitleCase] return:', value);
+  // debug('toTitleCase', 'return', value);
   return value;
 }
 
@@ -758,7 +801,7 @@ function toTitleCase(value, force=false) {
 // ALL UPPERCASE WORDS TO TITLE CASE ---------------------------------------------------------------
 
 function mustConvertUpperCase(value) {
-  // console.debug('[Utils][mustConvertUpperCase] called');
+  // debug('mustConvertUpperCase', undefined, value);
 
   return value.length > 1
     && value === value.toUpperCase()
@@ -767,7 +810,7 @@ function mustConvertUpperCase(value) {
 
 
 function convertUpperCaseWords(value) {
-  // console.debug('[Utils][convertUpperCaseWords] called');
+  // debug('convertUpperCaseWords', undefined, value);
 
   return value.replace(/\b[A-Z]+\b/g, match => {
     return mustConvertUpperCase(match) ? toTitleCase(match) : match;
@@ -779,7 +822,7 @@ function convertUpperCaseWords(value) {
 
 // Display a temporary message – or fixed until clicked if `!timeout`.
 function snackbar(messageText, messageHtml, timeout=2000) {
-  console.debug('[Utils][snackbar] called');
+  debug('snackbar', undefined, {messageText, messageHtml, timeout});
 
   // if (KNOWN_SITE === 'YOUTUBE') {
   //   alert(messageText);
@@ -791,7 +834,7 @@ function snackbar(messageText, messageHtml, timeout=2000) {
   //   // Source: https://github.com/Tampermonkey/tampermonkey/issues/1334#issuecomment-927277844
   //   window.trustedTypes.createPolicy('default', { createHTML: (string, sink) => string });
   // } catch (error) {
-  //   console.error('[Utils][snackbar] createPolicy()', error);
+  //   console.error(`${_DEBUG_PREFIX}[snackbar] createPolicy()`, error);
   // }
 
   try {
@@ -804,13 +847,13 @@ function snackbar(messageText, messageHtml, timeout=2000) {
 
     Object.assign(elem.style, SNACKBAR_CSS);
     document.body.appendChild(elem);
-    // console.debug('[Utils][snackbar] DOM updated', elem);
+    // debug('snackbar', 'DOM updated', elem);
 
     const destroy = () => { document.body.removeChild(elem); };
     elem.addEventListener('click', destroy);
     if (timeout) setTimeout(destroy, timeout);
   } catch (error) {
-    console.error('[Utils][snackbar] Cannot create', error);
+    console.error(`${_DEBUG_PREFIX}[snackbar] Cannot create`, error);
   }
 }
 
@@ -820,7 +863,7 @@ function snackbar(messageText, messageHtml, timeout=2000) {
 // Wait for the given time (`ms`) then executes the callback.
 // Or return immediately a Promise if no callback provided.
 function sleep(ms, callback) {
-  console.debug('[Utils][sleep] called; ms:'), ms;
+  debug('sleep', undefined, ms);
 
   const p = new Promise(resolve => setTimeout(resolve, ms));
   return callback ? p.then(callback) : p;
@@ -831,7 +874,7 @@ function sleep(ms, callback) {
 
 // Detect if it's a know site.
 function initKnownSite() {
-  console.debug('[Utils][initKnownSite] called');
+  debug('initKnownSite');
 
   for (const [key, config] of Object.entries(KNOWN_SITES_CONFIG)) {
     if (window.location.host.includes(config.host)) {
@@ -841,7 +884,7 @@ function initKnownSite() {
     }
   }
 
-  console.debug('[Utils][initKnownSite] return:', KNOWN_SITE, KNOWN_SITE_CONFIG);
+  debug('initKnownSite', 'return', {KNOWN_SITE, KNOWN_SITE_CONFIG});
   return KNOWN_SITE;
 }
 
@@ -849,7 +892,7 @@ function initKnownSite() {
 // AMAZON ------------------------------------------------------------------------------------------
 
 function amazon_getCleanUrl(urlStr) {
-  console.debug('[Utils][amazon_getCleanUrl] called');
+  debug('amazon_getCleanUrl', undefined, urlStr);
 
   urlStr = initUrl(urlStr);
   const url = new URL(urlStr);
@@ -861,13 +904,13 @@ function amazon_getCleanUrl(urlStr) {
 
   const cleanUrl = url.toString();
 
-  // console.debug('[Utils][amazon_getCleanUrl] return:', cleanUrl);
+  // debug('amazon_getCleanUrl', 'return', cleanUrl);
   return cleanUrl;
 }
 
 
 function amazon_getProductId(urlStr) {
-  console.debug('[Utils][amazon_getProductId] called');
+  debug('amazon_getProductId', undefined, urlStr);
 
   urlStr = initUrl(urlStr);
   const url = new URL(urlStr);
@@ -875,7 +918,7 @@ function amazon_getProductId(urlStr) {
   match = url.pathname.match(RE_AMAZON_PRODUCT_ID);
   const productId = match ? match[2] : null;
 
-  // console.debug('[Utils][amazon_getProductId] return:', productId);
+  // debug('amazon_getProductId', 'return', productId);
   return productId;
 }
 
@@ -883,14 +926,14 @@ function amazon_getProductId(urlStr) {
 // YOUTUBE -----------------------------------------------------------------------------------------
 
 function youtube_getShortVideoUrl(videoId) {
-  // console.debug('[Utils][youtube_getShortVideoUrl] called');
+  // debug('youtube_getShortVideoUrl', undefined, videoId);
 
   return `https://youtu.be/${videoId}`;
 }
 
 
 function youtube_toShortVideoUrl(urlStr) {
-  // console.debug('[Utils][youtube_toShortVideoUrl] called');
+  // debug('youtube_toShortVideoUrl', undefined, urlStr);
 
   urlStr = initUrl(urlStr);
   let shortUrl = null;
@@ -900,23 +943,23 @@ function youtube_toShortVideoUrl(urlStr) {
     const videoId = match[2];
     shortUrl = youtube_getShortVideoUrl(videoId);
   } else {
-    console.error('[Utils][youtube_toShortVideoUrl] Not a video URL', urlStr);
+    console.error(`${_DEBUG_PREFIX}[youtube_toShortVideoUrl] Not a video URL`, urlStr);
   }
 
-  console.debug('[Utils][youtube_toShortVideoUrl] return:', shortUrl);
+  debug('youtube_toShortVideoUrl', 'return', shortUrl);
   return shortUrl;
 }
 
 
 function youtube_cleanDescription(description) {
-  // console.debug('[Utils][youtube_cleanDescription] called');
+  // debug('youtube_cleanDescription', undefined, description);
 
   return description.trim();
 }
 
 
 function youtube_cleanTitle(title) {
-  // console.debug('[Utils][youtube_cleanTitle] called');
+  // debug('youtube_cleanTitle', undefined, title);
 
   title = cleanString(title);
   title = convertUpperCaseWords(title);
@@ -925,16 +968,16 @@ function youtube_cleanTitle(title) {
 
 
 function youtube_getVideo() {
-  console.debug('[Utils][youtube_getVideo] called');
+  debug('youtube_getVideo');
 
   const player = document.getElementById('movie_player');
   if (!player) {
-    console.error('[Utils][youtube_getVideo] No video player', player);
+    console.error(`${_DEBUG_PREFIX}[youtube_getVideo] No video player`, player);
     return;
   }
 
   const data = player.getPlayerResponse();
-  console.debug('[Utils][youtube_getVideo] data:', data);
+  debug('youtube_getVideo', 'data:', data);
 
   const video = {
     player,
@@ -945,17 +988,17 @@ function youtube_getVideo() {
     thumbnails: data.microformat?.thumbnail?.thumbnails || [],
   };
 
-  console.debug('[Utils][youtube_getVideo] return:', video);
+  debug('youtube_getVideo', 'return', video);
   return video;
 }
 
 
 function youtube_getVideoData() {
-  console.debug('[Utils][youtube_getVideoData] called');
+  debug('youtube_getVideoData');
 
   const video = youtube_getVideo();
   if (!video) {
-    console.debug('[Utils][youtube_getVideoData] youtube_getVideo():', video);
+    debug('youtube_getVideoData', 'youtube_getVideo():', {video});
     return;
   }
 
@@ -979,13 +1022,13 @@ function youtube_getVideoData() {
   data.humanized.date = formatDateTime('compact-date', data.date) || '?';
   data.humanized.duration = formatDuration(data.duration);
 
-  console.debug('[Utils][youtube_getVideoData] return:', data);
+  debug('youtube_getVideoData', 'return', data);
   return data;
 }
 
 
 function youtube_isVideoPage(url) {
-  // console.debug('[Utils][youtube_isVideoPage] called');
+  // debug('youtube_isVideoPage', undefined, url);
 
   url = initUrl(url);
   return RE_YOUTUBE_VIDEO_ID.test(url);

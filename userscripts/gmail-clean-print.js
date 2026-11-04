@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gmail Clean Print
 // @description  Remove the email headers to print only the body part.
-// @version      260530.01
+// @version      261105.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://mail.google.com/mail/*&view=pt&*
@@ -20,7 +20,7 @@
 
 
 function main() {
-  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
+  debug('main');
 
   [
     'body > div > table',

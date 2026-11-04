@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Amazon UX
 // @description  Improve Amazon UX.
-// @version      260530.01
+// @version      261105.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
-// @match        *://www.amazon.*/*/dp/*
+// @match        *://www.amazon.tld/*/dp/*
 // @run-at       document-idle
 // @require      https://raw.githubusercontent.com/ppo/gist/main/userscripts/_utils.js
 // @downloadURL  https://raw.githubusercontent.com/ppo/gist/main/userscripts/amazon-ux.js
@@ -17,7 +17,7 @@
 // HELPERS =========================================================================================
 
 function mustCleanCurrentUrl() {
-  console.debug(`[${GM_info.script.name}][mustCleanCurrentUrl] called`);
+  debug('mustCleanCurrentUrl');
 
   if (RE_AMAZON_SEO_URL.test(window.location.pathname)) return true;
   const url = new URL(window.location.href);
@@ -28,16 +28,16 @@ function mustCleanCurrentUrl() {
 // MAIN ============================================================================================
 
 function main() {
-  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
+  debug('main');
 
   // Note: If current URL is changed, the page is reloaded.
   if (mustCleanCurrentUrl()) {
-    console.debug(`[${GM_info.script.name}][main] mustCleanCurrentUrl === true`);
+    debug('main', 'mustCleanCurrentUrl === true');
     window.location.href = amazon_getCleanUrl();
   } else {
-    console.debug(`[${GM_info.script.name}][main] mustCleanCurrentUrl === false`);
+    debug('main', 'mustCleanCurrentUrl === false');
     document.querySelectorAll('a[href*="/dp/"], a[href*="/gp/product/"]').forEach(elem => {
-      console.debug(`[${GM_info.script.name}][main] elem:`, elem);
+      debug('main', null, {elem});
       elem.href = amazon_getCleanUrl(elem.href);
     });
   }

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IMDb UX
 // @description  Improve IMDb UX.
-// @version      261020.01
+// @version      261105.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.imdb.com/*
@@ -17,20 +17,20 @@
 // MAIN ============================================================================================
 
 function main() {
-  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
+  debug('main');
 
   const mustCleanUrl = (new URLSearchParams(window.location.search)).has(IMDB_UNCLEAN_PARAM);
 
   // Redirect to clean URL.
   if (mustCleanUrl) {
-    console.debug(`[${GM_info.script.name}][main] mustCleanUrl === true`);
+    debug('main', 'mustCleanUrl === true');
     window.location.href = getCleanUrl();
 
   // Clean all links.
   } else {
-    console.debug(`[${GM_info.script.name}][main] mustCleanUrl === false`);
+    debug('main', 'mustCleanUrl === false');
     document.querySelectorAll(`a[href*="${IMDB_UNCLEAN_PARAM}="]`).forEach(elem => {
-      // console.debug(`[${GM_info.script.name}][main] elem:`, elem);
+      // debug('main', null, {elem});
       elem.href = getCleanUrl(elem.href);
     });
   }

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Transcript
 // @description  Copy YouTube Transcript.
-// @version      261101.01
+// @version      261105.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -78,7 +78,7 @@ const TRANSCRIPT_REPLACEMENTS = [
 // HELPERS =========================================================================================
 
 function processData(elem) {
-  console.debug(`[${GM_info.script.name}][processData] called; elem:`, elem);
+  debug('processData', undefined, elem);
 
   const data = youtube_getVideoData();
   const date = formatDateTime('date', data.date) || 'null';
@@ -133,6 +133,7 @@ channel:
 ${transcript}
 `;
 
+  // debug('main', null, {result});
   copyToClipboard(result);
 
   // Close transcript panel.
@@ -143,7 +144,7 @@ ${transcript}
 // MAIN ============================================================================================
 
 function main() {
-  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
+  debug('main');
 
   // Redirect Shorts page to Watch.
   if (window.location.pathname.startsWith('/shorts/')) {

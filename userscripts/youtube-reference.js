@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Reference
 // @description  Create a Markdown link to the video at current time, and copy it to the clipboard.
-// @version      261018.03
+// @version      261105.01
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.youtube.com/*
@@ -20,7 +20,7 @@
 
 
 function main() {
-  console.debug(`[${GM_info.script.name} v${GM_info.script.version}][main] called`);
+  debug('main');
 
   // `@match` on the whole site for SPA using fake navigation.
   if (!youtube_isVideoPage()) {
@@ -32,7 +32,7 @@ function main() {
 
   const result = `[${channel.name}](${url}?t=${currentTime})`;
 
-  console.debug(`[${GM_info.script.name}][main] result:`, result);
+  debug('main', null, {result});
   copyToClipboard(result);
 }
 
