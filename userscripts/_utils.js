@@ -20,7 +20,7 @@ const KNOWN_SITES_CONFIG = {
   YOUTUBE:    { name: 'YouTube',    host: 'youtube.com',             prefix: null, features: F_DATE  },
 }
 var KNOWN_SITE;
-var KNOWN_SITE_CONFIG;
+var KNOWN_SITE_CONFIG = {};
 
 const KEEP_UPPERCASE = [
   '3D', 'AI', 'BMW', 'CEO', 'CNC', 'CTO', 'DCF', 'DIY', 'GPS', 'GPX', 'HQ', 'HVAC', 'IA', 'LWB',
