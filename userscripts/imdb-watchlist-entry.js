@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IMDb Watchlist Entry
 // @description  Generate entry for my watchlist.
-// @version      261105.01
+// @version      261105.02
 // @namespace    ppo
 // @author       Pascal Polleunus <https://pascal.polleunus.be>
 // @match        *://www.imdb.com/title/*
