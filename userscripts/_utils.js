@@ -941,6 +941,44 @@ function amazon_getProductId(urlStr) {
 }
 
 
+// IMDB --------------------------------------------------------------------------------------------
+
+function imdb_getMovieData() {
+  debug('imdb_getMovieData');
+
+  const urlStr = initUrl();
+  const match = urlStr.match(RE_IMDB_MOVIE_ID);
+  const movieId = match ? match[1] : null;
+
+  const header = document.querySelector('section.ipc-page-section h1').parentElement;
+  const mainTitle = header.querySelector('h1')?.textContent.trim();
+  const originalTitle = header.querySelector('h1 + div')?.textContent.replace('Original title: ', '').trim();
+  const title = originalTitle || mainTitle;
+  const titleEn = originalTitle ? mainTitle : null;
+  const year = document.querySelector('ul a[href*="/releaseinfo/"]')?.textContent.trim();
+
+  const data = {
+    id: movieId,
+    url: getCleanUrl(urlStr),
+    title,
+    titleEn,
+    year,
+    fullTitle: `${title} (${year})`,
+  };
+
+  debug('imdb_getMovieData', 'return', data);
+  return data;
+}
+
+
+function imdb_isMoviePage(url) {
+  // debug('imdb_isMoviePage', undefined, url);
+
+  urlStr = initUrl(url);
+  return RE_IMDB_MOVIE_ID.test(urlStr);
+}
+
+
 // YOUTUBE -----------------------------------------------------------------------------------------
 
 function youtube_getShortVideoUrl(videoId) {

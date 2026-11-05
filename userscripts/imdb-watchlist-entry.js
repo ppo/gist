@@ -21,18 +21,11 @@
 function main() {
   debug('main');
 
-  const urlStr = initUrl();
-  const match = urlStr.match(RE_IMDB_MOVIE_ID);
-  const movieId = match ? match[1] : null;
+  const { id, title, titleEn, year } = imdb_getMovieData();
 
-  const header = document.querySelector('section.ipc-page-section h1').parentElement;
-  const title = header.querySelector('h1')?.textContent.trim();
-  const originalTitle = header.querySelector('h1 + div')?.textContent.replace('Original title: ', '').trim();
-  const year = document.querySelector('ul a[href*="/releaseinfo/"]')?.textContent.trim();
-
-  const slug = slugify(`${title}-${year}`);
-  const result = `{ slug: '${slug}', imdbId: ${JSON.stringify(movieId).replaceAll('"', "'")} },`
-      + (originalTitle ? `  // ${originalTitle}` : '');
+  const slug = slugify(titleEn || title, year);
+  const result = `{ slug: '${slug}', imdbId: ${JSON.stringify(id).replaceAll('"', "'")} },`
+      + (titleEn ? `  // ${title}` : '');
 
   debug('main', null, {result});
   copyToClipboard(result);

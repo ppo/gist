@@ -177,8 +177,9 @@ function getTitle() {
       break;
 
     case 'IKEA': e = document.querySelector('h1'); break;
+    case 'IMDB': title = imdb_getMovieData()?.fullTitle; break;
     case 'WIKIPEDIA': e = document.querySelector('#firstHeading > span'); break;
-    case 'YOUTUBE': title = youtube_getVideoData().title; break;
+    case 'YOUTUBE': title = youtube_getVideoData()?.title; break;
 
     default: e = findFirstElement(HEADING_SELECTORS, NAMESPACES);
   }
