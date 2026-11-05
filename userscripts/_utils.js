@@ -1,4 +1,4 @@
-const DEBUG = false;
+var DEBUG = false;
 
 _VERSION = '261105.01';
 _DEBUG_PREFIX = `[Utils v${_VERSION}]`
@@ -977,7 +977,7 @@ function youtube_getVideo() {
   }
 
   const data = player.getPlayerResponse();
-  debug('youtube_getVideo', 'data:', data);
+  debug('youtube_getVideo', null, {data});
 
   const video = {
     player,
@@ -998,7 +998,7 @@ function youtube_getVideoData() {
 
   const video = youtube_getVideo();
   if (!video) {
-    debug('youtube_getVideoData', 'youtube_getVideo():', {video});
+    debug('youtube_getVideoData', 'youtube_getVideo()', video);
     return;
   }
 
@@ -1030,8 +1030,8 @@ function youtube_getVideoData() {
 function youtube_isVideoPage(url) {
   // debug('youtube_isVideoPage', undefined, url);
 
-  url = initUrl(url);
-  return RE_YOUTUBE_VIDEO_ID.test(url);
+  urlStr = initUrl(url);
+  return RE_YOUTUBE_VIDEO_ID.test(urlStr);
 }
 
 

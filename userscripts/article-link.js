@@ -196,8 +196,7 @@ function getTitle() {
 function main() {
   debug('main');
 
-  let title = getSelectedText();
-  if (!title) title = getTitle();
+  const title = getSelectedText() || getTitle();
   if (!title) {
     debug('main', 'title not found');
     alert('Article title not found. Select it.');
