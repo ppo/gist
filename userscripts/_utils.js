@@ -65,6 +65,16 @@ const SNACKBAR_CSS = {
 
 // GENERAL =========================================================================================
 
+function isArray(value) {
+  return Array.isArray(value);
+}
+
+
+function isObject(value) {
+  return value && value.constructor.name === 'Object';
+}
+
+
 function debug(origin, label=undefined, args=undefined) {
   if (!DEBUG) return;
 
@@ -74,7 +84,7 @@ function debug(origin, label=undefined, args=undefined) {
   const message = `[${GM_info.script.name} v${GM_info.script.version}][${origin}] ${label || ''}`.trim();
 
   const displayType = args
-  ? (args.constructor.name === 'Object'
+  ? (isObject(args)
     ? (Object.keys(args).length === 1
     ? 'single-key-value'
     : 'grouped-key-value')
@@ -766,10 +776,18 @@ function replaceMap(text, replacements) {
 
 
 // Generate a slug based on the given value.
-function slugify(value) {
-  // debug('slugify', undefined, value);
+function slugify() {
+  debug('slugify', undefined, arguments);
 
-  return value
+  const values = [];
+  for (let arg of arguments) {
+    if (isObject(arg)) arg = Object.values(arg);
+    if (isArray(arg)) arg = arg.join('-');
+
+    values.push(arg);
+  }
+
+  return values.join('-')
     .toString()
     .normalize('NFKD').replace(/\p{Diacritic}/gu, '')  // Normalize
     .toLowerCase()
