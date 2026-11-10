@@ -1,0 +1,63 @@
+# Define coding styles for editors.
+# v261109.1
+#
+# Doc: https://editorconfig.org/#file-format-details
+# Ref: https://github.com/editorconfig/editorconfig/wiki/EditorConfig-Properties
+
+
+# Stop looking for other `.editorconfig` files in parent folders.
+root = true
+
+
+# DEFAULT VALUES
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+max_line_length = 100
+trim_trailing_whitespace = true
+
+
+# DIFF FILES
+[*.{diff,patch}]
+indent_size = 4
+trim_trailing_whitespace = false
+
+# INI FILES (and Python setuptools config)
+[{*.ini,setup.cfg}]
+indent_size = 4
+
+# MAKEFILES
+[Makefile]
+indent_size = 4
+indent_style = tab
+
+# MARKDOWN
+[*.{md,mdx}]
+indent_size = 4
+trim_trailing_whitespace = false
+
+# MINIFIED FILES (should NOT/NEVER be changed!)
+[**.min.{css,html,js}]
+indent_style = unset
+insert_final_newline = unset
+
+# PYTHON
+[*.py]
+indent_size = 4
+
+# RESTRUCTUREDTEXT
+[*.rst]
+indent_size = 4
+
+# TOML
+[*.toml]
+# As usually in Python projects
+indent_size = 4
+
+# TSV FILES (tab-separated)
+[*.tsv]
+indent_style = tab
+trim_trailing_whitespace = false
