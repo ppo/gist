@@ -1,4 +1,4 @@
-_VERSION = '261105.02';
+_VERSION = '261109.01';
 _DEBUG_PREFIX = `[Utils v${_VERSION}]`
 
 console.debug(`${_DEBUG_PREFIX} Loaded`);
@@ -491,7 +491,7 @@ function strToDate(value, withTime=false) {
 function createCssStyle(css) {
   debug('createCssStyle', undefined, css);
 
-  var style = document.createElement('style');
+  let style = document.createElement('style');
   style.type = 'text/css';
   style.innerHTML = css;
   document.getElementsByTagName('head')[0].appendChild(style);
@@ -1039,13 +1039,13 @@ function youtube_getVideo() {
     return;
   }
 
-  const data = player.getPlayerResponse();
+  const data = player.getPlayerResponse() || { videoDetails: player.getVideoData() };
   debug('youtube_getVideo', null, {data});
 
   const video = {
     player,
     data,
-    videoId: data.videoDetails.videoId,
+    videoId: data.videoDetails.videoId || data.videoDetails.video_id,
     videoDetails: data.videoDetails,  // Alternative: `player.getVideoData()`.
     microformat: data.microformat?.playerMicroformatRenderer || {},
     thumbnails: data.microformat?.thumbnail?.thumbnails || [],
