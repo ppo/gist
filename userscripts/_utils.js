@@ -77,6 +77,11 @@ function isObject(value) {
 }
 
 
+function setDebug(value) {
+  DEBUG = value === undefined ? !DEBUG : Boolean(value);
+}
+
+
 function debug(origin, label=undefined, args=undefined) {
   if (!DEBUG) return;
 
