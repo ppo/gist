@@ -1,9 +1,13 @@
-var DEBUG = false;
-
 _VERSION = '261105.02';
 _DEBUG_PREFIX = `[Utils v${_VERSION}]`
 
 console.debug(`${_DEBUG_PREFIX} Loaded`);
+
+
+// Global variables;
+var DEBUG = false;
+var KNOWN_SITE;
+var KNOWN_SITE_CONFIG = {};
 
 
 // Features for known sites.
@@ -23,8 +27,6 @@ const KNOWN_SITES_CONFIG = {
   WIKIPEDIA:  { name: 'Wikipedia',  host: 'wikipedia.org',           prefix: '⍵',  features: 0       },
   YOUTUBE:    { name: 'YouTube',    host: 'youtube.com',             prefix: null, features: F_DATE  },
 }
-var KNOWN_SITE;
-var KNOWN_SITE_CONFIG = {};
 
 const KEEP_UPPERCASE = [
   '3D', 'AI', 'BMW', 'CEO', 'CNC', 'CTO', 'DCF', 'DIY', 'GPS', 'GPX', 'HQ', 'HVAC', 'IA', 'LWB',
@@ -84,32 +86,32 @@ function debug(origin, label=undefined, args=undefined) {
   const message = `[${GM_info.script.name} v${GM_info.script.version}][${origin}] ${label || ''}`.trim();
 
   const displayType = args
-  ? (isObject(args)
-    ? (Object.keys(args).length === 1
-    ? 'single-key-value'
-    : 'grouped-key-value')
-    : 'single-value')
+    ? (isObject(args)
+      ? (Object.keys(args).length === 1
+        ? 'single-key-value'
+        : 'grouped-key-value')
+      : 'single-value')
     : 'no-args';
 
-    switch (displayType) {
-      case 'single-key-value':
-        const [key, value] = Object.entries(args)[0];
-        console.debug(`${message} ${key} =`, value);
-        break;
-      case 'grouped-key-value':
-        console.group(message);
-        for (const [key, value] of Object.entries(args)) {
-          console.debug(`${key} =`, value);
-        }
-        console.groupEnd();
-        break;
-      case 'single-value':
-        console.debug(message, args);
-        break;
-      case 'no-args':
-        console.debug(message);
-        break;
-    }
+  switch (displayType) {
+    case 'single-key-value':
+      const [key, value] = Object.entries(args)[0];
+      console.debug(`${message} ${key} =`, value);
+      break;
+    case 'grouped-key-value':
+      console.group(message);
+      for (const [key, value] of Object.entries(args)) {
+        console.debug(`${key} =`, value);
+      }
+      console.groupEnd();
+      break;
+    case 'single-value':
+      console.debug(message, args);
+      break;
+    case 'no-args':
+      console.debug(message);
+      break;
+  }
 }
 
 
