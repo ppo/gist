@@ -46,7 +46,9 @@ OUTPUT FORMAT
 
     <content>
 
-    Only `+` entries get a `=== FILE: <path> ===` section.
+    Only `+` entries get a `=== FILE: <path> ===` section: header line, blank line, then the
+    content verbatim (trailing newlines and line endings untouched), then 2 newlines before the
+    next header. So extract restores the files byte for byte.
 
 EXTRACT
     Recreate every `=== FILE: <path> ===` section of INPUT (default: `__codebase.txt`)
@@ -82,7 +84,7 @@ ENCODING = "utf-8"
 
 # File headers format
 FILE_HEADER = "=== {label}: {name} ==="
-RE_FILE_HEADER = re.compile(r"^=== ([^:]+): (.*) ===$")
+RE_FILE_HEADER = re.compile(r"^=== ([^:]+): (.*) ===$", re.MULTILINE)
 
 MAX_FILE_SIZE = 200 * 1024  # Bigger text files are listed without content
 
@@ -244,7 +246,8 @@ class CodebaseMerge:
     def run(self):
         listed = [(kind, path) for kind, path in self.entries if kind in LISTED_KINDS]
 
-        with open(self.output_file_path, "w", encoding=ENCODING) as file:
+        # `newline=""` here and below: line endings (e.g. CRLF) are kept as they are.
+        with open(self.output_file_path, "w", encoding=ENCODING, newline="") as file:
             timestamp = NOW.strftime("%Y-%m-%d %H:%M:%S")
             file.write(f"# Created: {timestamp}\n")
             file.write(f"# {LEGEND}\n")
@@ -291,13 +294,12 @@ class CodebaseMerge:
         return summary
 
     def write_file(self, file, path):
-        with open(path, "r", encoding=ENCODING) as f:
-            content = f.read().rstrip("\n")
+        """Section = spacer, header line, blank line, content verbatim (see `CodebaseExtract`)."""
+        with open(path, "r", encoding=ENCODING, newline="") as f:
+            content = f.read()
 
         header = FILE_HEADER.format(label="FILE", name=path)
-        file.write(f"{SPACER}{header}\n")
-        if content:
-            file.write(f"\n{content}\n")
+        file.write(f"{SPACER}{header}\n\n{content}")
 
     def init_ignore(self):
         """Initialize ignore patterns."""
@@ -379,27 +381,25 @@ class CodebaseExtract:
 
     def run(self):
         """Return `False` if some files couldn't be extracted."""
-        current_file = None
-        current_content = []
+        with open(self.input_path, "r", encoding=ENCODING, newline="") as file:
+            text = file.read()
 
         # Everything before the first file header (merge header, contents list) is ignored.
-        with open(self.input_path, "r", encoding=ENCODING) as file:
-            for line in file:
-                file_header_match = RE_FILE_HEADER.match(line)
-                if file_header_match:
-                    # Save previous file if exists
-                    if current_file and current_content:
-                        self.create_file(current_file, current_content)
+        headers = list(RE_FILE_HEADER.finditer(text))
+        for i, header in enumerate(headers):
+            label, file_rel_path = header.groups()
+            is_last = i == len(headers) - 1
+            content = text[header.end() : len(text) if is_last else headers[i + 1].start()]
 
-                    label, file_rel_path = file_header_match.groups()
-                    current_file = file_rel_path if label == "FILE" else None
-                    current_content = []
-                elif current_file is not None:
-                    current_content.append(line)
+            # Remove exactly what the merge added around the content, nothing more:
+            # the spacer before the next header, then the header's line end + the blank line.
+            # (Each removal is optional, to stay lenient with files edited by hand or by an AI.)
+            if not is_last:
+                content = content.removesuffix(SPACER)
+            content = content.removeprefix("\n").removeprefix("\n")
 
-        # Save last file if exists
-        if current_file and current_content:
-            self.create_file(current_file, current_content)
+            if label == "FILE" and file_rel_path:
+                self.create_file(file_rel_path, content)
 
         print()
         print(f"Codebase extracted into: {self.output_path}")
@@ -444,19 +444,8 @@ class CodebaseExtract:
 
     def write_file(self, file_path, content):
         file_path.parent.mkdir(parents=True, exist_ok=True)
-
-        # Remove spacer lines, 1 above and 2 below.
-        if content[0].strip() == "":
-            content.pop(0)
-        for i in range(3):
-            try:
-                if content[-1].strip() == "":
-                    content.pop()
-            except IndexError:
-                break
-
-        with open(file_path, "w", encoding=ENCODING) as file:
-            file.writelines(content)
+        with open(file_path, "w", encoding=ENCODING, newline="") as file:
+            file.write(content)
 
 
 # HELPERS ==========================================================================================
