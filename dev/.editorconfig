@@ -1,5 +1,5 @@
 # Define coding styles for editors.
-# v261109.1
+# v261124.1
 #
 # Doc: https://editorconfig.org/#file-format-details
 # Ref: https://github.com/editorconfig/editorconfig/wiki/EditorConfig-Properties
@@ -19,6 +19,10 @@ insert_final_newline = true
 max_line_length = 100
 trim_trailing_whitespace = true
 
+
+# Git Commit Message
+[COMMIT_EDITMSG]
+max_line_length = 72
 
 # DIFF FILES
 [*.{diff,patch}]
