@@ -1,4 +1,4 @@
-_VERSION = '261109.01';
+_VERSION = '261121.01';
 _DEBUG_PREFIX = `[Utils v${_VERSION}]`
 
 console.debug(`${_DEBUG_PREFIX} Loaded`);
@@ -650,12 +650,11 @@ function cleanFilename(value) {
   // debug('cleanFilename', undefined, value);
 
   const REPLACEMENTS = [
-    [ /[‘’]/g,     "'"   ],  // Smart single quotes
-    [ /[“”«»<>]/g, '"'   ],  // Smart double quotes, guillemets, <>
-    [ /[\/\\–—]/g, '-'   ],  // Slashes (/ & \) and long dashes (–, —)
-    [ / ?: ?/g,    ' - ' ],  // Colon (:)
-    [ /[\x00]/g,   ''    ],  // NUL – just strip
-    [ /[""]/g,     "'"   ],  // Double quotes as single quotes
+    [ /["‘’“”«»<>]/g,  "'"   ],  // Quotes
+    [ /[\/\\\|–—]/g,   '-'   ],  // Slashes and dashes
+    [ /[\?!\*]/g,      ''    ],  // Unwanted
+    [ / ?: ?/g,        ' - ' ],  // Colon (:)
+    [ /[\x00]/g,       ''    ],  // NUL – just strip
   ];
   return replaceMap(value, REPLACEMENTS);
 }
