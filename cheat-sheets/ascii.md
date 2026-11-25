@@ -1,6 +1,6 @@
 # ASCII
 
-```
+```text
 Sup: ¹  ²  ³  ⁴  ⁵  ⁶  ⁷  ⁸  ⁹  ⁰  ⁽  ⁾  ⁿ
 Sub: ₁  ₂  ₃  ₄  ₅  ₆  ₇  ₈  ₉  ₀  ₍  ₎
 
@@ -37,7 +37,7 @@ Sub: ₁  ₂  ₃  ₄  ₅  ₆  ₇  ₈  ₉  ₀  ₍  ₎
 ❤️ 🧡 💛 💚 💙 💜 🖤 🤍 🤎
 📕 📙 📒 📗 📘   📓    📔
 ♠️ ♣️ ♥️ ♦️ 🃏
-```
+```text
 
 
 ## Emojis
@@ -45,14 +45,26 @@ Sub: ₁  ₂  ₃  ₄  ₅  ₆  ₇  ₈  ₉  ₀  ₍  ₎
 [Full Emoji List](https://unicode.org/emoji/charts/full-emoji-list.html)
 
 
+## Tree
+
+```text
+.
+├── foo
+├── foo
+│   ├── foo
+│   └── foo
+└── foo
+```text
+
+
 ## Boxes
 
-```
+```text
 ┌─┬─┐  ┏━┳━┓  ╔═╦═╗  ╭─┬─╮
 ├─┼─┤  ┣━╋━┫  ╠═╬═╣  ├─┼─┤
 │ │ │  ┃ ┃ ┃  ║ ║ ║  │ │ │
 └─┴─┘  ┗━┻━┛  ╚═╩═╝  ╰─┴─╯
-```
+```text
 
 [Browse all 'box' characters](https://unicodes.jessetane.com/?search=box)
 
@@ -66,9 +78,9 @@ HTML: `&nbsp;`, `&NonBreakingSpace;`
 
 ** macOS:** Copy `non-breaking space` to clipboard: 
 
-```
+```text
 printf "\xC2\xA0" | pbcopy
-```
+```text
 
 
 ## Zero-Width Space
@@ -81,14 +93,14 @@ HTML: `&ZeroWidthSpace;`, `&#8203;` or `&#x200B;`
 
 ** macOS:** Copy `zero-width space` to clipboard:
 
-```
+```text
 printf "\u200B" | pbcopy
-```
+```text
 
 
 ## Keyboard Keys
 
-```
+```text
 HTML Entity      GLYPH  NAME
 &#63743;               Apple
 &#8984;          ⌘      Command, Cmd, Clover, (formerly) Apple
@@ -117,7 +129,7 @@ HTML Entity      GLYPH  NAME
 &#8676;          ⇤      Shift Tab, Tab Left, Back-tab
 &#9250;          ␢      Space, Blank
 &#9251;          ␣      Space, Blank
-```
+```text
 
 _Source: https://apple.stackexchange.com/a/55729/6378_
 
