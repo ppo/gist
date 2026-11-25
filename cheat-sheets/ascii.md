@@ -37,7 +37,7 @@ Sub: ₁  ₂  ₃  ₄  ₅  ₆  ₇  ₈  ₉  ₀  ₍  ₎
 ❤️ 🧡 💛 💚 💙 💜 🖤 🤍 🤎
 📕 📙 📒 📗 📘   📓    📔
 ♠️ ♣️ ♥️ ♦️ 🃏
-```text
+```
 
 
 ## Emojis
@@ -54,7 +54,7 @@ Sub: ₁  ₂  ₃  ₄  ₅  ₆  ₇  ₈  ₉  ₀  ₍  ₎
 │   ├── foo
 │   └── foo
 └── foo
-```text
+```
 
 
 ## Boxes
@@ -64,7 +64,7 @@ Sub: ₁  ₂  ₃  ₄  ₅  ₆  ₇  ₈  ₉  ₀  ₍  ₎
 ├─┼─┤  ┣━╋━┫  ╠═╬═╣  ├─┼─┤
 │ │ │  ┃ ┃ ┃  ║ ║ ║  │ │ │
 └─┴─┘  ┗━┻━┛  ╚═╩═╝  ╰─┴─╯
-```text
+```
 
 [Browse all 'box' characters](https://unicodes.jessetane.com/?search=box)
 
@@ -80,7 +80,7 @@ HTML: `&nbsp;`, `&NonBreakingSpace;`
 
 ```text
 printf "\xC2\xA0" | pbcopy
-```text
+```
 
 
 ## Zero-Width Space
@@ -95,7 +95,7 @@ HTML: `&ZeroWidthSpace;`, `&#8203;` or `&#x200B;`
 
 ```text
 printf "\u200B" | pbcopy
-```text
+```
 
 
 ## Keyboard Keys
@@ -129,7 +129,7 @@ HTML Entity      GLYPH  NAME
 &#8676;          ⇤      Shift Tab, Tab Left, Back-tab
 &#9250;          ␢      Space, Blank
 &#9251;          ␣      Space, Blank
-```text
+```
 
 _Source: https://apple.stackexchange.com/a/55729/6378_
 
