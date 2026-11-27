@@ -1,4 +1,4 @@
-_VERSION = '261121.01';
+_VERSION = '261127.01';
 _DEBUG_PREFIX = `[Utils v${_VERSION}]`
 
 console.debug(`${_DEBUG_PREFIX} Loaded`);
@@ -1032,7 +1032,7 @@ function youtube_cleanTitle(title) {
 function youtube_getVideo() {
   debug('youtube_getVideo');
 
-  const player = document.getElementById('movie_player');
+  const player = document.querySelector('#movie_player, #player .html5-video-player');
   if (!player) {
     console.error(`${_DEBUG_PREFIX}[youtube_getVideo] No video player`, player);
     return;
